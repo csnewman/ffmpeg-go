@@ -1,0 +1,34 @@
+linters:
+  enable-all: true
+  disable:
+    - nosnakecase
+    - interfacer
+    - deadcode
+    - exhaustivestruct
+    - ifshort
+    - structcheck
+    - golint
+    - varcheck
+    - maligned
+    - scopelint
+    - structcheck
+    - gomnd
+    - varnamelen
+    - exhaustruct
+    - gocognit
+    - wrapcheck
+    - nestif
+    - cyclop
+    - ireturn
+    - bodyclose
+    - depguard
+linters-settings:
+  gocritic:
+    disabled-checks:
+      - ifElseChain
+  funlen:
+    lines: 160
+    statements: 60
+  gosec:
+    excludes:
+      - G306
