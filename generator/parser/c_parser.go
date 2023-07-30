@@ -32,154 +32,186 @@ var CParserStaticData struct {
 func cParserInit() {
 	staticData := &CParserStaticData
 	staticData.LiteralNames = []string{
-		"", "'='", "'*'", "'-'", "','", "';'", "'('", "')'", "'['", "']'", "'{'",
-		"'}'", "'const'", "'unsigned'", "'void'", "'enum'", "'struct'", "'typedef'",
-		"'attribute_deprecated'",
+		"", "'...'", "'='", "'*'", "'-'", "','", "", "':'", "'('", "')'", "'['",
+		"']'", "'{'", "'}'", "'const'", "'unsigned'", "'void'", "'enum'", "'struct'",
+		"'static'", "'inline'", "'typedef'", "'attribute_deprecated'",
 	}
 	staticData.SymbolicNames = []string{
-		"", "Assign", "Star", "Minus", "Comma", "Semi", "LParen", "RParen",
-		"LBracket", "RBracket", "LBrace", "RBrace", "Const", "Unsigned", "Void",
-		"Enum", "Struct", "Typedef", "AttributeDeprecated", "Ifndef", "Ifdir",
-		"Endif", "Define", "Undef", "Pragma", "Include", "Identifier", "Whitespace",
-		"Newline", "Constant", "DigitSequence", "StringLiteral", "BlockComment",
-		"LineComment",
+		"", "", "Assign", "Star", "Minus", "Comma", "Semi", "Colon", "LParen",
+		"RParen", "LBracket", "RBracket", "LBrace", "RBrace", "Const", "Unsigned",
+		"Void", "Enum", "Struct", "Static", "Inline", "Typedef", "AttributeDeprecated",
+		"Ifndef", "Ifdir", "Endif", "ElseDir", "Define", "Undef", "Pragma",
+		"Include", "Identifier", "Whitespace", "Newline", "Constant", "DigitSequence",
+		"StringLiteral", "BlockComment", "LineComment",
 	}
 	staticData.RuleNames = []string{
-		"unit", "topLevel", "enumBody", "enumItem", "structItem", "constant",
-		"params", "param", "arraySize", "arraySizeDim", "type", "typeInner",
+		"unit", "topLevel", "elseCond", "enumBody", "enumItem", "structItem",
+		"constant", "params", "param", "arraySize", "arraySizeDim", "type",
+		"typeInner",
 	}
 	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 33, 288, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 1, 38, 349, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
 		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
-		10, 2, 11, 7, 11, 1, 0, 5, 0, 26, 8, 0, 10, 0, 12, 0, 29, 9, 0, 1, 0, 1,
-		0, 1, 1, 1, 1, 5, 1, 35, 8, 1, 10, 1, 12, 1, 38, 9, 1, 1, 1, 1, 1, 1, 1,
-		5, 1, 43, 8, 1, 10, 1, 12, 1, 46, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-		1, 1, 1, 3, 1, 55, 8, 1, 1, 1, 1, 1, 1, 1, 3, 1, 60, 8, 1, 1, 1, 1, 1,
-		1, 1, 1, 1, 3, 1, 66, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 73, 8,
-		1, 10, 1, 12, 1, 76, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 82, 8, 1, 1, 1,
-		1, 1, 3, 1, 86, 8, 1, 1, 1, 1, 1, 1, 1, 5, 1, 91, 8, 1, 10, 1, 12, 1, 94,
-		9, 1, 1, 1, 1, 1, 1, 1, 3, 1, 99, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-		1, 3, 1, 107, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-		1, 1, 1, 1, 1, 1, 1, 3, 1, 121, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-		1, 1, 1, 3, 1, 130, 8, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 4, 2, 138,
-		8, 2, 11, 2, 12, 2, 139, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2,
-		3, 2, 150, 8, 2, 1, 3, 1, 3, 1, 3, 1, 3, 3, 3, 156, 8, 3, 1, 4, 3, 4, 159,
-		8, 4, 1, 4, 1, 4, 1, 4, 5, 4, 164, 8, 4, 10, 4, 12, 4, 167, 9, 4, 1, 4,
-		1, 4, 1, 4, 1, 4, 3, 4, 173, 8, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4,
-		3, 4, 181, 8, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4,
-		1, 4, 5, 4, 193, 8, 4, 10, 4, 12, 4, 196, 9, 4, 1, 4, 1, 4, 1, 4, 1, 4,
-		1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 3, 4, 210, 8, 4, 1, 5,
-		3, 5, 213, 8, 5, 1, 5, 1, 5, 1, 6, 1, 6, 1, 6, 1, 6, 5, 6, 221, 8, 6, 10,
-		6, 12, 6, 224, 9, 6, 1, 6, 3, 6, 227, 8, 6, 1, 7, 1, 7, 1, 7, 1, 7, 1,
-		7, 1, 7, 1, 7, 1, 7, 1, 7, 1, 7, 1, 7, 1, 7, 1, 7, 1, 7, 1, 7, 1, 7, 1,
-		7, 3, 7, 246, 8, 7, 1, 8, 4, 8, 249, 8, 8, 11, 8, 12, 8, 250, 1, 9, 1,
-		9, 1, 9, 1, 9, 1, 9, 1, 9, 3, 9, 259, 8, 9, 1, 10, 1, 10, 1, 10, 1, 10,
-		1, 10, 1, 10, 1, 10, 1, 10, 5, 10, 269, 8, 10, 10, 10, 12, 10, 272, 9,
-		10, 1, 11, 1, 11, 1, 11, 1, 11, 1, 11, 1, 11, 1, 11, 3, 11, 281, 8, 11,
-		1, 11, 1, 11, 1, 11, 3, 11, 286, 8, 11, 1, 11, 0, 1, 20, 12, 0, 2, 4, 6,
-		8, 10, 12, 14, 16, 18, 20, 22, 0, 0, 330, 0, 27, 1, 0, 0, 0, 2, 129, 1,
-		0, 0, 0, 4, 149, 1, 0, 0, 0, 6, 155, 1, 0, 0, 0, 8, 209, 1, 0, 0, 0, 10,
-		212, 1, 0, 0, 0, 12, 226, 1, 0, 0, 0, 14, 245, 1, 0, 0, 0, 16, 248, 1,
-		0, 0, 0, 18, 258, 1, 0, 0, 0, 20, 260, 1, 0, 0, 0, 22, 285, 1, 0, 0, 0,
-		24, 26, 3, 2, 1, 0, 25, 24, 1, 0, 0, 0, 26, 29, 1, 0, 0, 0, 27, 25, 1,
-		0, 0, 0, 27, 28, 1, 0, 0, 0, 28, 30, 1, 0, 0, 0, 29, 27, 1, 0, 0, 0, 30,
-		31, 5, 0, 0, 1, 31, 1, 1, 0, 0, 0, 32, 36, 5, 19, 0, 0, 33, 35, 3, 2, 1,
-		0, 34, 33, 1, 0, 0, 0, 35, 38, 1, 0, 0, 0, 36, 34, 1, 0, 0, 0, 36, 37,
-		1, 0, 0, 0, 37, 39, 1, 0, 0, 0, 38, 36, 1, 0, 0, 0, 39, 130, 5, 21, 0,
-		0, 40, 44, 5, 20, 0, 0, 41, 43, 3, 2, 1, 0, 42, 41, 1, 0, 0, 0, 43, 46,
-		1, 0, 0, 0, 44, 42, 1, 0, 0, 0, 44, 45, 1, 0, 0, 0, 45, 47, 1, 0, 0, 0,
-		46, 44, 1, 0, 0, 0, 47, 130, 5, 21, 0, 0, 48, 130, 5, 22, 0, 0, 49, 130,
-		5, 23, 0, 0, 50, 130, 5, 25, 0, 0, 51, 130, 5, 24, 0, 0, 52, 54, 5, 15,
-		0, 0, 53, 55, 5, 26, 0, 0, 54, 53, 1, 0, 0, 0, 54, 55, 1, 0, 0, 0, 55,
-		56, 1, 0, 0, 0, 56, 57, 5, 10, 0, 0, 57, 59, 3, 4, 2, 0, 58, 60, 5, 4,
-		0, 0, 59, 58, 1, 0, 0, 0, 59, 60, 1, 0, 0, 0, 60, 61, 1, 0, 0, 0, 61, 62,
-		5, 11, 0, 0, 62, 63, 5, 5, 0, 0, 63, 130, 1, 0, 0, 0, 64, 66, 5, 18, 0,
-		0, 65, 64, 1, 0, 0, 0, 65, 66, 1, 0, 0, 0, 66, 67, 1, 0, 0, 0, 67, 68,
-		5, 17, 0, 0, 68, 69, 5, 16, 0, 0, 69, 70, 5, 26, 0, 0, 70, 74, 5, 10, 0,
-		0, 71, 73, 3, 8, 4, 0, 72, 71, 1, 0, 0, 0, 73, 76, 1, 0, 0, 0, 74, 72,
-		1, 0, 0, 0, 74, 75, 1, 0, 0, 0, 75, 77, 1, 0, 0, 0, 76, 74, 1, 0, 0, 0,
-		77, 78, 5, 11, 0, 0, 78, 79, 5, 26, 0, 0, 79, 130, 5, 5, 0, 0, 80, 82,
-		5, 18, 0, 0, 81, 80, 1, 0, 0, 0, 81, 82, 1, 0, 0, 0, 82, 83, 1, 0, 0, 0,
-		83, 85, 5, 16, 0, 0, 84, 86, 5, 18, 0, 0, 85, 84, 1, 0, 0, 0, 85, 86, 1,
-		0, 0, 0, 86, 87, 1, 0, 0, 0, 87, 88, 5, 26, 0, 0, 88, 92, 5, 10, 0, 0,
-		89, 91, 3, 8, 4, 0, 90, 89, 1, 0, 0, 0, 91, 94, 1, 0, 0, 0, 92, 90, 1,
-		0, 0, 0, 92, 93, 1, 0, 0, 0, 93, 95, 1, 0, 0, 0, 94, 92, 1, 0, 0, 0, 95,
-		96, 5, 11, 0, 0, 96, 130, 5, 5, 0, 0, 97, 99, 5, 18, 0, 0, 98, 97, 1, 0,
-		0, 0, 98, 99, 1, 0, 0, 0, 99, 100, 1, 0, 0, 0, 100, 101, 5, 17, 0, 0, 101,
-		102, 3, 20, 10, 0, 102, 103, 5, 26, 0, 0, 103, 104, 5, 5, 0, 0, 104, 130,
-		1, 0, 0, 0, 105, 107, 5, 18, 0, 0, 106, 105, 1, 0, 0, 0, 106, 107, 1, 0,
-		0, 0, 107, 108, 1, 0, 0, 0, 108, 109, 5, 17, 0, 0, 109, 110, 3, 20, 10,
-		0, 110, 111, 5, 6, 0, 0, 111, 112, 5, 2, 0, 0, 112, 113, 5, 26, 0, 0, 113,
-		114, 5, 7, 0, 0, 114, 115, 5, 6, 0, 0, 115, 116, 3, 12, 6, 0, 116, 117,
-		5, 7, 0, 0, 117, 118, 5, 5, 0, 0, 118, 130, 1, 0, 0, 0, 119, 121, 5, 18,
-		0, 0, 120, 119, 1, 0, 0, 0, 120, 121, 1, 0, 0, 0, 121, 122, 1, 0, 0, 0,
-		122, 123, 3, 20, 10, 0, 123, 124, 5, 26, 0, 0, 124, 125, 5, 6, 0, 0, 125,
-		126, 3, 12, 6, 0, 126, 127, 5, 7, 0, 0, 127, 128, 5, 5, 0, 0, 128, 130,
-		1, 0, 0, 0, 129, 32, 1, 0, 0, 0, 129, 40, 1, 0, 0, 0, 129, 48, 1, 0, 0,
-		0, 129, 49, 1, 0, 0, 0, 129, 50, 1, 0, 0, 0, 129, 51, 1, 0, 0, 0, 129,
-		52, 1, 0, 0, 0, 129, 65, 1, 0, 0, 0, 129, 81, 1, 0, 0, 0, 129, 98, 1, 0,
-		0, 0, 129, 106, 1, 0, 0, 0, 129, 120, 1, 0, 0, 0, 130, 3, 1, 0, 0, 0, 131,
-		132, 5, 22, 0, 0, 132, 150, 3, 4, 2, 0, 133, 137, 5, 20, 0, 0, 134, 135,
-		3, 6, 3, 0, 135, 136, 5, 4, 0, 0, 136, 138, 1, 0, 0, 0, 137, 134, 1, 0,
-		0, 0, 138, 139, 1, 0, 0, 0, 139, 137, 1, 0, 0, 0, 139, 140, 1, 0, 0, 0,
-		140, 141, 1, 0, 0, 0, 141, 142, 5, 21, 0, 0, 142, 143, 3, 4, 2, 0, 143,
-		150, 1, 0, 0, 0, 144, 145, 3, 6, 3, 0, 145, 146, 5, 4, 0, 0, 146, 147,
-		3, 4, 2, 0, 147, 150, 1, 0, 0, 0, 148, 150, 3, 6, 3, 0, 149, 131, 1, 0,
-		0, 0, 149, 133, 1, 0, 0, 0, 149, 144, 1, 0, 0, 0, 149, 148, 1, 0, 0, 0,
-		150, 5, 1, 0, 0, 0, 151, 156, 5, 26, 0, 0, 152, 153, 5, 26, 0, 0, 153,
-		154, 5, 1, 0, 0, 154, 156, 3, 10, 5, 0, 155, 151, 1, 0, 0, 0, 155, 152,
-		1, 0, 0, 0, 156, 7, 1, 0, 0, 0, 157, 159, 5, 18, 0, 0, 158, 157, 1, 0,
-		0, 0, 158, 159, 1, 0, 0, 0, 159, 160, 1, 0, 0, 0, 160, 165, 3, 20, 10,
-		0, 161, 162, 5, 26, 0, 0, 162, 164, 5, 4, 0, 0, 163, 161, 1, 0, 0, 0, 164,
-		167, 1, 0, 0, 0, 165, 163, 1, 0, 0, 0, 165, 166, 1, 0, 0, 0, 166, 168,
-		1, 0, 0, 0, 167, 165, 1, 0, 0, 0, 168, 169, 5, 26, 0, 0, 169, 170, 5, 5,
-		0, 0, 170, 210, 1, 0, 0, 0, 171, 173, 5, 18, 0, 0, 172, 171, 1, 0, 0, 0,
-		172, 173, 1, 0, 0, 0, 173, 174, 1, 0, 0, 0, 174, 175, 3, 20, 10, 0, 175,
-		176, 5, 26, 0, 0, 176, 177, 3, 16, 8, 0, 177, 178, 5, 5, 0, 0, 178, 210,
-		1, 0, 0, 0, 179, 181, 5, 18, 0, 0, 180, 179, 1, 0, 0, 0, 180, 181, 1, 0,
-		0, 0, 181, 182, 1, 0, 0, 0, 182, 183, 3, 20, 10, 0, 183, 184, 5, 6, 0,
-		0, 184, 185, 5, 2, 0, 0, 185, 186, 5, 26, 0, 0, 186, 187, 5, 7, 0, 0, 187,
-		188, 3, 16, 8, 0, 188, 189, 5, 5, 0, 0, 189, 210, 1, 0, 0, 0, 190, 194,
-		5, 20, 0, 0, 191, 193, 3, 8, 4, 0, 192, 191, 1, 0, 0, 0, 193, 196, 1, 0,
-		0, 0, 194, 192, 1, 0, 0, 0, 194, 195, 1, 0, 0, 0, 195, 197, 1, 0, 0, 0,
-		196, 194, 1, 0, 0, 0, 197, 210, 5, 21, 0, 0, 198, 210, 5, 22, 0, 0, 199,
-		200, 3, 20, 10, 0, 200, 201, 5, 6, 0, 0, 201, 202, 5, 2, 0, 0, 202, 203,
-		5, 26, 0, 0, 203, 204, 5, 7, 0, 0, 204, 205, 5, 6, 0, 0, 205, 206, 3, 12,
-		6, 0, 206, 207, 5, 7, 0, 0, 207, 208, 5, 5, 0, 0, 208, 210, 1, 0, 0, 0,
-		209, 158, 1, 0, 0, 0, 209, 172, 1, 0, 0, 0, 209, 180, 1, 0, 0, 0, 209,
-		190, 1, 0, 0, 0, 209, 198, 1, 0, 0, 0, 209, 199, 1, 0, 0, 0, 210, 9, 1,
-		0, 0, 0, 211, 213, 5, 3, 0, 0, 212, 211, 1, 0, 0, 0, 212, 213, 1, 0, 0,
-		0, 213, 214, 1, 0, 0, 0, 214, 215, 5, 29, 0, 0, 215, 11, 1, 0, 0, 0, 216,
-		227, 5, 14, 0, 0, 217, 218, 3, 14, 7, 0, 218, 219, 5, 4, 0, 0, 219, 221,
-		1, 0, 0, 0, 220, 217, 1, 0, 0, 0, 221, 224, 1, 0, 0, 0, 222, 220, 1, 0,
-		0, 0, 222, 223, 1, 0, 0, 0, 223, 225, 1, 0, 0, 0, 224, 222, 1, 0, 0, 0,
-		225, 227, 3, 14, 7, 0, 226, 216, 1, 0, 0, 0, 226, 222, 1, 0, 0, 0, 227,
-		13, 1, 0, 0, 0, 228, 229, 3, 20, 10, 0, 229, 230, 5, 26, 0, 0, 230, 246,
-		1, 0, 0, 0, 231, 232, 3, 20, 10, 0, 232, 233, 5, 26, 0, 0, 233, 234, 3,
-		16, 8, 0, 234, 246, 1, 0, 0, 0, 235, 246, 3, 20, 10, 0, 236, 237, 3, 20,
-		10, 0, 237, 238, 5, 6, 0, 0, 238, 239, 5, 2, 0, 0, 239, 240, 5, 26, 0,
-		0, 240, 241, 5, 7, 0, 0, 241, 242, 5, 6, 0, 0, 242, 243, 3, 12, 6, 0, 243,
-		244, 5, 7, 0, 0, 244, 246, 1, 0, 0, 0, 245, 228, 1, 0, 0, 0, 245, 231,
-		1, 0, 0, 0, 245, 235, 1, 0, 0, 0, 245, 236, 1, 0, 0, 0, 246, 15, 1, 0,
-		0, 0, 247, 249, 3, 18, 9, 0, 248, 247, 1, 0, 0, 0, 249, 250, 1, 0, 0, 0,
-		250, 248, 1, 0, 0, 0, 250, 251, 1, 0, 0, 0, 251, 17, 1, 0, 0, 0, 252, 253,
-		5, 8, 0, 0, 253, 254, 5, 26, 0, 0, 254, 259, 5, 9, 0, 0, 255, 256, 5, 8,
-		0, 0, 256, 257, 5, 29, 0, 0, 257, 259, 5, 9, 0, 0, 258, 252, 1, 0, 0, 0,
-		258, 255, 1, 0, 0, 0, 259, 19, 1, 0, 0, 0, 260, 261, 6, 10, -1, 0, 261,
-		262, 3, 22, 11, 0, 262, 270, 1, 0, 0, 0, 263, 264, 10, 2, 0, 0, 264, 269,
-		5, 2, 0, 0, 265, 266, 10, 1, 0, 0, 266, 267, 5, 2, 0, 0, 267, 269, 5, 12,
-		0, 0, 268, 263, 1, 0, 0, 0, 268, 265, 1, 0, 0, 0, 269, 272, 1, 0, 0, 0,
-		270, 268, 1, 0, 0, 0, 270, 271, 1, 0, 0, 0, 271, 21, 1, 0, 0, 0, 272, 270,
-		1, 0, 0, 0, 273, 286, 5, 26, 0, 0, 274, 275, 5, 15, 0, 0, 275, 286, 5,
-		26, 0, 0, 276, 277, 5, 16, 0, 0, 277, 286, 5, 26, 0, 0, 278, 280, 5, 13,
-		0, 0, 279, 281, 5, 26, 0, 0, 280, 279, 1, 0, 0, 0, 280, 281, 1, 0, 0, 0,
-		281, 286, 1, 0, 0, 0, 282, 286, 5, 14, 0, 0, 283, 284, 5, 12, 0, 0, 284,
-		286, 3, 22, 11, 0, 285, 273, 1, 0, 0, 0, 285, 274, 1, 0, 0, 0, 285, 276,
-		1, 0, 0, 0, 285, 278, 1, 0, 0, 0, 285, 282, 1, 0, 0, 0, 285, 283, 1, 0,
-		0, 0, 286, 23, 1, 0, 0, 0, 33, 27, 36, 44, 54, 59, 65, 74, 81, 85, 92,
-		98, 106, 120, 129, 139, 149, 155, 158, 165, 172, 180, 194, 209, 212, 222,
-		226, 245, 250, 258, 268, 270, 280, 285,
+		10, 2, 11, 7, 11, 2, 12, 7, 12, 1, 0, 5, 0, 28, 8, 0, 10, 0, 12, 0, 31,
+		9, 0, 1, 0, 1, 0, 1, 1, 1, 1, 5, 1, 37, 8, 1, 10, 1, 12, 1, 40, 9, 1, 1,
+		1, 3, 1, 43, 8, 1, 1, 1, 1, 1, 1, 1, 5, 1, 48, 8, 1, 10, 1, 12, 1, 51,
+		9, 1, 1, 1, 3, 1, 54, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3,
+		1, 63, 8, 1, 1, 1, 1, 1, 1, 1, 3, 1, 68, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 78, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3,
+		1, 85, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 92, 8, 1, 10, 1, 12, 1,
+		95, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 101, 8, 1, 1, 1, 1, 1, 3, 1, 105,
+		8, 1, 1, 1, 1, 1, 1, 1, 5, 1, 110, 8, 1, 10, 1, 12, 1, 113, 9, 1, 1, 1,
+		3, 1, 116, 8, 1, 1, 1, 1, 1, 3, 1, 120, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 1, 1, 3, 1, 128, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 142, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 153, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 1, 1, 3, 1, 161, 8, 1, 1, 2, 1, 2, 5, 2, 165, 8, 2, 10, 2, 12, 2, 168,
+		9, 2, 1, 3, 1, 3, 3, 3, 172, 8, 3, 1, 3, 1, 3, 1, 3, 1, 3, 4, 3, 178, 8,
+		3, 11, 3, 12, 3, 179, 1, 3, 1, 3, 3, 3, 184, 8, 3, 1, 3, 1, 3, 1, 3, 3,
+		3, 189, 8, 3, 3, 3, 191, 8, 3, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4,
+		3, 4, 200, 8, 4, 1, 5, 3, 5, 203, 8, 5, 1, 5, 1, 5, 1, 5, 5, 5, 208, 8,
+		5, 10, 5, 12, 5, 211, 9, 5, 1, 5, 1, 5, 1, 5, 1, 5, 3, 5, 217, 8, 5, 1,
+		5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 3, 5, 225, 8, 5, 1, 5, 1, 5, 1, 5, 1,
+		5, 1, 5, 1, 5, 1, 5, 3, 5, 234, 8, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1,
+		5, 1, 5, 1, 5, 1, 5, 1, 5, 5, 5, 246, 8, 5, 10, 5, 12, 5, 249, 9, 5, 1,
+		5, 1, 5, 1, 5, 3, 5, 254, 8, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1,
+		5, 1, 5, 1, 5, 1, 5, 3, 5, 266, 8, 5, 1, 6, 3, 6, 269, 8, 6, 1, 6, 1, 6,
+		1, 7, 1, 7, 1, 7, 1, 7, 5, 7, 277, 8, 7, 10, 7, 12, 7, 280, 9, 7, 1, 7,
+		1, 7, 3, 7, 284, 8, 7, 3, 7, 286, 8, 7, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1,
+		8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 3,
+		8, 305, 8, 8, 1, 9, 4, 9, 308, 8, 9, 11, 9, 12, 9, 309, 1, 10, 1, 10, 1,
+		10, 1, 10, 1, 10, 1, 10, 1, 10, 1, 10, 3, 10, 320, 8, 10, 1, 11, 1, 11,
+		1, 11, 1, 11, 1, 11, 1, 11, 1, 11, 1, 11, 5, 11, 330, 8, 11, 10, 11, 12,
+		11, 333, 9, 11, 1, 12, 1, 12, 1, 12, 1, 12, 1, 12, 1, 12, 1, 12, 3, 12,
+		342, 8, 12, 1, 12, 1, 12, 1, 12, 3, 12, 347, 8, 12, 1, 12, 0, 1, 22, 13,
+		0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 0, 0, 406, 0, 29, 1, 0,
+		0, 0, 2, 160, 1, 0, 0, 0, 4, 162, 1, 0, 0, 0, 6, 190, 1, 0, 0, 0, 8, 199,
+		1, 0, 0, 0, 10, 265, 1, 0, 0, 0, 12, 268, 1, 0, 0, 0, 14, 285, 1, 0, 0,
+		0, 16, 304, 1, 0, 0, 0, 18, 307, 1, 0, 0, 0, 20, 319, 1, 0, 0, 0, 22, 321,
+		1, 0, 0, 0, 24, 346, 1, 0, 0, 0, 26, 28, 3, 2, 1, 0, 27, 26, 1, 0, 0, 0,
+		28, 31, 1, 0, 0, 0, 29, 27, 1, 0, 0, 0, 29, 30, 1, 0, 0, 0, 30, 32, 1,
+		0, 0, 0, 31, 29, 1, 0, 0, 0, 32, 33, 5, 0, 0, 1, 33, 1, 1, 0, 0, 0, 34,
+		38, 5, 23, 0, 0, 35, 37, 3, 2, 1, 0, 36, 35, 1, 0, 0, 0, 37, 40, 1, 0,
+		0, 0, 38, 36, 1, 0, 0, 0, 38, 39, 1, 0, 0, 0, 39, 42, 1, 0, 0, 0, 40, 38,
+		1, 0, 0, 0, 41, 43, 3, 4, 2, 0, 42, 41, 1, 0, 0, 0, 42, 43, 1, 0, 0, 0,
+		43, 44, 1, 0, 0, 0, 44, 161, 5, 25, 0, 0, 45, 49, 5, 24, 0, 0, 46, 48,
+		3, 2, 1, 0, 47, 46, 1, 0, 0, 0, 48, 51, 1, 0, 0, 0, 49, 47, 1, 0, 0, 0,
+		49, 50, 1, 0, 0, 0, 50, 53, 1, 0, 0, 0, 51, 49, 1, 0, 0, 0, 52, 54, 3,
+		4, 2, 0, 53, 52, 1, 0, 0, 0, 53, 54, 1, 0, 0, 0, 54, 55, 1, 0, 0, 0, 55,
+		161, 5, 25, 0, 0, 56, 161, 5, 27, 0, 0, 57, 161, 5, 28, 0, 0, 58, 161,
+		5, 30, 0, 0, 59, 161, 5, 29, 0, 0, 60, 62, 5, 17, 0, 0, 61, 63, 5, 31,
+		0, 0, 62, 61, 1, 0, 0, 0, 62, 63, 1, 0, 0, 0, 63, 64, 1, 0, 0, 0, 64, 65,
+		5, 12, 0, 0, 65, 67, 3, 6, 3, 0, 66, 68, 5, 5, 0, 0, 67, 66, 1, 0, 0, 0,
+		67, 68, 1, 0, 0, 0, 68, 69, 1, 0, 0, 0, 69, 70, 5, 13, 0, 0, 70, 71, 5,
+		6, 0, 0, 71, 161, 1, 0, 0, 0, 72, 73, 5, 21, 0, 0, 73, 74, 5, 17, 0, 0,
+		74, 75, 5, 12, 0, 0, 75, 77, 3, 6, 3, 0, 76, 78, 5, 5, 0, 0, 77, 76, 1,
+		0, 0, 0, 77, 78, 1, 0, 0, 0, 78, 79, 1, 0, 0, 0, 79, 80, 5, 13, 0, 0, 80,
+		81, 5, 31, 0, 0, 81, 82, 5, 6, 0, 0, 82, 161, 1, 0, 0, 0, 83, 85, 5, 22,
+		0, 0, 84, 83, 1, 0, 0, 0, 84, 85, 1, 0, 0, 0, 85, 86, 1, 0, 0, 0, 86, 87,
+		5, 21, 0, 0, 87, 88, 5, 18, 0, 0, 88, 89, 5, 31, 0, 0, 89, 93, 5, 12, 0,
+		0, 90, 92, 3, 10, 5, 0, 91, 90, 1, 0, 0, 0, 92, 95, 1, 0, 0, 0, 93, 91,
+		1, 0, 0, 0, 93, 94, 1, 0, 0, 0, 94, 96, 1, 0, 0, 0, 95, 93, 1, 0, 0, 0,
+		96, 97, 5, 13, 0, 0, 97, 98, 5, 31, 0, 0, 98, 161, 5, 6, 0, 0, 99, 101,
+		5, 22, 0, 0, 100, 99, 1, 0, 0, 0, 100, 101, 1, 0, 0, 0, 101, 102, 1, 0,
+		0, 0, 102, 104, 5, 18, 0, 0, 103, 105, 5, 22, 0, 0, 104, 103, 1, 0, 0,
+		0, 104, 105, 1, 0, 0, 0, 105, 106, 1, 0, 0, 0, 106, 115, 5, 31, 0, 0, 107,
+		111, 5, 12, 0, 0, 108, 110, 3, 10, 5, 0, 109, 108, 1, 0, 0, 0, 110, 113,
+		1, 0, 0, 0, 111, 109, 1, 0, 0, 0, 111, 112, 1, 0, 0, 0, 112, 114, 1, 0,
+		0, 0, 113, 111, 1, 0, 0, 0, 114, 116, 5, 13, 0, 0, 115, 107, 1, 0, 0, 0,
+		115, 116, 1, 0, 0, 0, 116, 117, 1, 0, 0, 0, 117, 161, 5, 6, 0, 0, 118,
+		120, 5, 22, 0, 0, 119, 118, 1, 0, 0, 0, 119, 120, 1, 0, 0, 0, 120, 121,
+		1, 0, 0, 0, 121, 122, 5, 21, 0, 0, 122, 123, 3, 22, 11, 0, 123, 124, 5,
+		31, 0, 0, 124, 125, 5, 6, 0, 0, 125, 161, 1, 0, 0, 0, 126, 128, 5, 22,
+		0, 0, 127, 126, 1, 0, 0, 0, 127, 128, 1, 0, 0, 0, 128, 129, 1, 0, 0, 0,
+		129, 130, 5, 21, 0, 0, 130, 131, 3, 22, 11, 0, 131, 132, 5, 8, 0, 0, 132,
+		133, 5, 3, 0, 0, 133, 134, 5, 31, 0, 0, 134, 135, 5, 9, 0, 0, 135, 136,
+		5, 8, 0, 0, 136, 137, 3, 14, 7, 0, 137, 138, 5, 9, 0, 0, 138, 139, 5, 6,
+		0, 0, 139, 161, 1, 0, 0, 0, 140, 142, 5, 22, 0, 0, 141, 140, 1, 0, 0, 0,
+		141, 142, 1, 0, 0, 0, 142, 143, 1, 0, 0, 0, 143, 144, 3, 22, 11, 0, 144,
+		145, 5, 31, 0, 0, 145, 146, 5, 8, 0, 0, 146, 147, 3, 14, 7, 0, 147, 148,
+		5, 9, 0, 0, 148, 149, 5, 6, 0, 0, 149, 161, 1, 0, 0, 0, 150, 152, 5, 19,
+		0, 0, 151, 153, 5, 20, 0, 0, 152, 151, 1, 0, 0, 0, 152, 153, 1, 0, 0, 0,
+		153, 154, 1, 0, 0, 0, 154, 155, 3, 22, 11, 0, 155, 156, 5, 31, 0, 0, 156,
+		157, 5, 8, 0, 0, 157, 158, 3, 14, 7, 0, 158, 159, 5, 9, 0, 0, 159, 161,
+		1, 0, 0, 0, 160, 34, 1, 0, 0, 0, 160, 45, 1, 0, 0, 0, 160, 56, 1, 0, 0,
+		0, 160, 57, 1, 0, 0, 0, 160, 58, 1, 0, 0, 0, 160, 59, 1, 0, 0, 0, 160,
+		60, 1, 0, 0, 0, 160, 72, 1, 0, 0, 0, 160, 84, 1, 0, 0, 0, 160, 100, 1,
+		0, 0, 0, 160, 119, 1, 0, 0, 0, 160, 127, 1, 0, 0, 0, 160, 141, 1, 0, 0,
+		0, 160, 150, 1, 0, 0, 0, 161, 3, 1, 0, 0, 0, 162, 166, 5, 26, 0, 0, 163,
+		165, 3, 2, 1, 0, 164, 163, 1, 0, 0, 0, 165, 168, 1, 0, 0, 0, 166, 164,
+		1, 0, 0, 0, 166, 167, 1, 0, 0, 0, 167, 5, 1, 0, 0, 0, 168, 166, 1, 0, 0,
+		0, 169, 171, 5, 27, 0, 0, 170, 172, 3, 6, 3, 0, 171, 170, 1, 0, 0, 0, 171,
+		172, 1, 0, 0, 0, 172, 191, 1, 0, 0, 0, 173, 177, 5, 24, 0, 0, 174, 175,
+		3, 8, 4, 0, 175, 176, 5, 5, 0, 0, 176, 178, 1, 0, 0, 0, 177, 174, 1, 0,
+		0, 0, 178, 179, 1, 0, 0, 0, 179, 177, 1, 0, 0, 0, 179, 180, 1, 0, 0, 0,
+		180, 181, 1, 0, 0, 0, 181, 183, 5, 25, 0, 0, 182, 184, 3, 6, 3, 0, 183,
+		182, 1, 0, 0, 0, 183, 184, 1, 0, 0, 0, 184, 191, 1, 0, 0, 0, 185, 188,
+		3, 8, 4, 0, 186, 187, 5, 5, 0, 0, 187, 189, 3, 6, 3, 0, 188, 186, 1, 0,
+		0, 0, 188, 189, 1, 0, 0, 0, 189, 191, 1, 0, 0, 0, 190, 169, 1, 0, 0, 0,
+		190, 173, 1, 0, 0, 0, 190, 185, 1, 0, 0, 0, 191, 7, 1, 0, 0, 0, 192, 200,
+		5, 31, 0, 0, 193, 194, 5, 31, 0, 0, 194, 195, 5, 2, 0, 0, 195, 200, 3,
+		12, 6, 0, 196, 197, 5, 31, 0, 0, 197, 198, 5, 2, 0, 0, 198, 200, 5, 31,
+		0, 0, 199, 192, 1, 0, 0, 0, 199, 193, 1, 0, 0, 0, 199, 196, 1, 0, 0, 0,
+		200, 9, 1, 0, 0, 0, 201, 203, 5, 22, 0, 0, 202, 201, 1, 0, 0, 0, 202, 203,
+		1, 0, 0, 0, 203, 204, 1, 0, 0, 0, 204, 209, 3, 22, 11, 0, 205, 206, 5,
+		31, 0, 0, 206, 208, 5, 5, 0, 0, 207, 205, 1, 0, 0, 0, 208, 211, 1, 0, 0,
+		0, 209, 207, 1, 0, 0, 0, 209, 210, 1, 0, 0, 0, 210, 212, 1, 0, 0, 0, 211,
+		209, 1, 0, 0, 0, 212, 213, 5, 31, 0, 0, 213, 214, 5, 6, 0, 0, 214, 266,
+		1, 0, 0, 0, 215, 217, 5, 22, 0, 0, 216, 215, 1, 0, 0, 0, 216, 217, 1, 0,
+		0, 0, 217, 218, 1, 0, 0, 0, 218, 219, 3, 22, 11, 0, 219, 220, 5, 31, 0,
+		0, 220, 221, 3, 18, 9, 0, 221, 222, 5, 6, 0, 0, 222, 266, 1, 0, 0, 0, 223,
+		225, 5, 22, 0, 0, 224, 223, 1, 0, 0, 0, 224, 225, 1, 0, 0, 0, 225, 226,
+		1, 0, 0, 0, 226, 227, 3, 22, 11, 0, 227, 228, 5, 31, 0, 0, 228, 229, 5,
+		7, 0, 0, 229, 230, 5, 34, 0, 0, 230, 231, 5, 6, 0, 0, 231, 266, 1, 0, 0,
+		0, 232, 234, 5, 22, 0, 0, 233, 232, 1, 0, 0, 0, 233, 234, 1, 0, 0, 0, 234,
+		235, 1, 0, 0, 0, 235, 236, 3, 22, 11, 0, 236, 237, 5, 8, 0, 0, 237, 238,
+		5, 3, 0, 0, 238, 239, 5, 31, 0, 0, 239, 240, 5, 9, 0, 0, 240, 241, 3, 18,
+		9, 0, 241, 242, 5, 6, 0, 0, 242, 266, 1, 0, 0, 0, 243, 247, 5, 24, 0, 0,
+		244, 246, 3, 10, 5, 0, 245, 244, 1, 0, 0, 0, 246, 249, 1, 0, 0, 0, 247,
+		245, 1, 0, 0, 0, 247, 248, 1, 0, 0, 0, 248, 250, 1, 0, 0, 0, 249, 247,
+		1, 0, 0, 0, 250, 266, 5, 25, 0, 0, 251, 266, 5, 27, 0, 0, 252, 254, 5,
+		22, 0, 0, 253, 252, 1, 0, 0, 0, 253, 254, 1, 0, 0, 0, 254, 255, 1, 0, 0,
+		0, 255, 256, 3, 22, 11, 0, 256, 257, 5, 8, 0, 0, 257, 258, 5, 3, 0, 0,
+		258, 259, 5, 31, 0, 0, 259, 260, 5, 9, 0, 0, 260, 261, 5, 8, 0, 0, 261,
+		262, 3, 14, 7, 0, 262, 263, 5, 9, 0, 0, 263, 264, 5, 6, 0, 0, 264, 266,
+		1, 0, 0, 0, 265, 202, 1, 0, 0, 0, 265, 216, 1, 0, 0, 0, 265, 224, 1, 0,
+		0, 0, 265, 233, 1, 0, 0, 0, 265, 243, 1, 0, 0, 0, 265, 251, 1, 0, 0, 0,
+		265, 253, 1, 0, 0, 0, 266, 11, 1, 0, 0, 0, 267, 269, 5, 4, 0, 0, 268, 267,
+		1, 0, 0, 0, 268, 269, 1, 0, 0, 0, 269, 270, 1, 0, 0, 0, 270, 271, 5, 34,
+		0, 0, 271, 13, 1, 0, 0, 0, 272, 286, 5, 16, 0, 0, 273, 274, 3, 16, 8, 0,
+		274, 275, 5, 5, 0, 0, 275, 277, 1, 0, 0, 0, 276, 273, 1, 0, 0, 0, 277,
+		280, 1, 0, 0, 0, 278, 276, 1, 0, 0, 0, 278, 279, 1, 0, 0, 0, 279, 283,
+		1, 0, 0, 0, 280, 278, 1, 0, 0, 0, 281, 284, 3, 16, 8, 0, 282, 284, 5, 1,
+		0, 0, 283, 281, 1, 0, 0, 0, 283, 282, 1, 0, 0, 0, 284, 286, 1, 0, 0, 0,
+		285, 272, 1, 0, 0, 0, 285, 278, 1, 0, 0, 0, 286, 15, 1, 0, 0, 0, 287, 288,
+		3, 22, 11, 0, 288, 289, 5, 31, 0, 0, 289, 305, 1, 0, 0, 0, 290, 291, 3,
+		22, 11, 0, 291, 292, 5, 31, 0, 0, 292, 293, 3, 18, 9, 0, 293, 305, 1, 0,
+		0, 0, 294, 305, 3, 22, 11, 0, 295, 296, 3, 22, 11, 0, 296, 297, 5, 8, 0,
+		0, 297, 298, 5, 3, 0, 0, 298, 299, 5, 31, 0, 0, 299, 300, 5, 9, 0, 0, 300,
+		301, 5, 8, 0, 0, 301, 302, 3, 14, 7, 0, 302, 303, 5, 9, 0, 0, 303, 305,
+		1, 0, 0, 0, 304, 287, 1, 0, 0, 0, 304, 290, 1, 0, 0, 0, 304, 294, 1, 0,
+		0, 0, 304, 295, 1, 0, 0, 0, 305, 17, 1, 0, 0, 0, 306, 308, 3, 20, 10, 0,
+		307, 306, 1, 0, 0, 0, 308, 309, 1, 0, 0, 0, 309, 307, 1, 0, 0, 0, 309,
+		310, 1, 0, 0, 0, 310, 19, 1, 0, 0, 0, 311, 312, 5, 10, 0, 0, 312, 320,
+		5, 11, 0, 0, 313, 314, 5, 10, 0, 0, 314, 315, 5, 31, 0, 0, 315, 320, 5,
+		11, 0, 0, 316, 317, 5, 10, 0, 0, 317, 318, 5, 34, 0, 0, 318, 320, 5, 11,
+		0, 0, 319, 311, 1, 0, 0, 0, 319, 313, 1, 0, 0, 0, 319, 316, 1, 0, 0, 0,
+		320, 21, 1, 0, 0, 0, 321, 322, 6, 11, -1, 0, 322, 323, 3, 24, 12, 0, 323,
+		331, 1, 0, 0, 0, 324, 325, 10, 2, 0, 0, 325, 330, 5, 3, 0, 0, 326, 327,
+		10, 1, 0, 0, 327, 328, 5, 3, 0, 0, 328, 330, 5, 14, 0, 0, 329, 324, 1,
+		0, 0, 0, 329, 326, 1, 0, 0, 0, 330, 333, 1, 0, 0, 0, 331, 329, 1, 0, 0,
+		0, 331, 332, 1, 0, 0, 0, 332, 23, 1, 0, 0, 0, 333, 331, 1, 0, 0, 0, 334,
+		347, 5, 31, 0, 0, 335, 336, 5, 17, 0, 0, 336, 347, 5, 31, 0, 0, 337, 338,
+		5, 18, 0, 0, 338, 347, 5, 31, 0, 0, 339, 341, 5, 15, 0, 0, 340, 342, 5,
+		31, 0, 0, 341, 340, 1, 0, 0, 0, 341, 342, 1, 0, 0, 0, 342, 347, 1, 0, 0,
+		0, 343, 347, 5, 16, 0, 0, 344, 345, 5, 14, 0, 0, 345, 347, 3, 24, 12, 0,
+		346, 334, 1, 0, 0, 0, 346, 335, 1, 0, 0, 0, 346, 337, 1, 0, 0, 0, 346,
+		339, 1, 0, 0, 0, 346, 343, 1, 0, 0, 0, 346, 344, 1, 0, 0, 0, 347, 25, 1,
+		0, 0, 0, 45, 29, 38, 42, 49, 53, 62, 67, 77, 84, 93, 100, 104, 111, 115,
+		119, 127, 141, 152, 160, 166, 171, 179, 183, 188, 190, 199, 202, 209, 216,
+		224, 233, 247, 253, 265, 268, 278, 283, 285, 304, 309, 319, 329, 331, 341,
+		346,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -218,55 +250,61 @@ func NewCParser(input antlr.TokenStream) *CParser {
 // CParser tokens.
 const (
 	CParserEOF                 = antlr.TokenEOF
-	CParserAssign              = 1
-	CParserStar                = 2
-	CParserMinus               = 3
-	CParserComma               = 4
-	CParserSemi                = 5
-	CParserLParen              = 6
-	CParserRParen              = 7
-	CParserLBracket            = 8
-	CParserRBracket            = 9
-	CParserLBrace              = 10
-	CParserRBrace              = 11
-	CParserConst               = 12
-	CParserUnsigned            = 13
-	CParserVoid                = 14
-	CParserEnum                = 15
-	CParserStruct              = 16
-	CParserTypedef             = 17
-	CParserAttributeDeprecated = 18
-	CParserIfndef              = 19
-	CParserIfdir               = 20
-	CParserEndif               = 21
-	CParserDefine              = 22
-	CParserUndef               = 23
-	CParserPragma              = 24
-	CParserInclude             = 25
-	CParserIdentifier          = 26
-	CParserWhitespace          = 27
-	CParserNewline             = 28
-	CParserConstant            = 29
-	CParserDigitSequence       = 30
-	CParserStringLiteral       = 31
-	CParserBlockComment        = 32
-	CParserLineComment         = 33
+	CParserT__0                = 1
+	CParserAssign              = 2
+	CParserStar                = 3
+	CParserMinus               = 4
+	CParserComma               = 5
+	CParserSemi                = 6
+	CParserColon               = 7
+	CParserLParen              = 8
+	CParserRParen              = 9
+	CParserLBracket            = 10
+	CParserRBracket            = 11
+	CParserLBrace              = 12
+	CParserRBrace              = 13
+	CParserConst               = 14
+	CParserUnsigned            = 15
+	CParserVoid                = 16
+	CParserEnum                = 17
+	CParserStruct              = 18
+	CParserStatic              = 19
+	CParserInline              = 20
+	CParserTypedef             = 21
+	CParserAttributeDeprecated = 22
+	CParserIfndef              = 23
+	CParserIfdir               = 24
+	CParserEndif               = 25
+	CParserElseDir             = 26
+	CParserDefine              = 27
+	CParserUndef               = 28
+	CParserPragma              = 29
+	CParserInclude             = 30
+	CParserIdentifier          = 31
+	CParserWhitespace          = 32
+	CParserNewline             = 33
+	CParserConstant            = 34
+	CParserDigitSequence       = 35
+	CParserStringLiteral       = 36
+	CParserBlockComment        = 37
+	CParserLineComment         = 38
 )
 
 // CParser rules.
 const (
 	CParserRULE_unit         = 0
 	CParserRULE_topLevel     = 1
-	CParserRULE_enumBody     = 2
-	CParserRULE_enumItem     = 3
-	CParserRULE_structItem   = 4
-	CParserRULE_constant     = 5
-	CParserRULE_params       = 6
-	CParserRULE_param        = 7
-	CParserRULE_arraySize    = 8
-	CParserRULE_arraySizeDim = 9
-	CParserRULE_type         = 10
-	CParserRULE_typeInner    = 11
+	CParserRULE_elseCond     = 2
+	CParserRULE_enumBody     = 3
+	CParserRULE_enumItem     = 4
+	CParserRULE_structItem   = 5
+	CParserRULE_constant     = 6
+	CParserRULE_params       = 7
+	CParserRULE_param        = 8
+	CParserRULE_arraySize    = 9
+	CParserRULE_arraySizeDim = 10
+	CParserRULE_type         = 11
+	CParserRULE_typeInner    = 12
 )
 
 // IUnitContext is an interface to support dynamic dispatch.
@@ -376,20 +414,20 @@ func (p *CParser) Unit() (localctx IUnitContext) {
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(27)
+	p.SetState(29)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 	_la = p.GetTokenStream().LA(1)
 
-	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&132116480) != 0 {
+	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&4193239040) != 0 {
 		{
-			p.SetState(24)
+			p.SetState(26)
 			p.TopLevel()
 		}
 
-		p.SetState(29)
+		p.SetState(31)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -397,7 +435,7 @@ func (p *CParser) Unit() (localctx IUnitContext) {
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(30)
+		p.SetState(32)
 		p.Match(CParserEOF)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -539,6 +577,22 @@ func (s *TopLevelIfdirContext) TopLevel(i int) ITopLevelContext {
 	return t.(ITopLevelContext)
 }
 
+func (s *TopLevelIfdirContext) ElseCond() IElseCondContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IElseCondContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IElseCondContext)
+}
+
 type TopLevelIncludeContext struct {
 	TopLevelContext
 }
@@ -561,12 +615,13 @@ func (s *TopLevelIncludeContext) Include() antlr.TerminalNode {
 	return s.GetToken(CParserInclude, 0)
 }
 
-type TopLevelUndefContext struct {
+type TopLevelEnumTypedefContext struct {
 	TopLevelContext
+	itemname antlr.Token
 }
 
-func NewTopLevelUndefContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *TopLevelUndefContext {
-	var p = new(TopLevelUndefContext)
+func NewTopLevelEnumTypedefContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *TopLevelEnumTypedefContext {
+	var p = new(TopLevelEnumTypedefContext)
 
 	InitEmptyTopLevelContext(&p.TopLevelContext)
 	p.parser = parser
@@ -575,12 +630,56 @@ func NewTopLevelUndefContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *
 	return p
 }
 
-func (s *TopLevelUndefContext) GetRuleContext() antlr.RuleContext {
+func (s *TopLevelEnumTypedefContext) GetItemname() antlr.Token { return s.itemname }
+
+func (s *TopLevelEnumTypedefContext) SetItemname(v antlr.Token) { s.itemname = v }
+
+func (s *TopLevelEnumTypedefContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
 
-func (s *TopLevelUndefContext) Undef() antlr.TerminalNode {
-	return s.GetToken(CParserUndef, 0)
+func (s *TopLevelEnumTypedefContext) Typedef() antlr.TerminalNode {
+	return s.GetToken(CParserTypedef, 0)
+}
+
+func (s *TopLevelEnumTypedefContext) Enum() antlr.TerminalNode {
+	return s.GetToken(CParserEnum, 0)
+}
+
+func (s *TopLevelEnumTypedefContext) LBrace() antlr.TerminalNode {
+	return s.GetToken(CParserLBrace, 0)
+}
+
+func (s *TopLevelEnumTypedefContext) EnumBody() IEnumBodyContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IEnumBodyContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IEnumBodyContext)
+}
+
+func (s *TopLevelEnumTypedefContext) RBrace() antlr.TerminalNode {
+	return s.GetToken(CParserRBrace, 0)
+}
+
+func (s *TopLevelEnumTypedefContext) Semi() antlr.TerminalNode {
+	return s.GetToken(CParserSemi, 0)
+}
+
+func (s *TopLevelEnumTypedefContext) Identifier() antlr.TerminalNode {
+	return s.GetToken(CParserIdentifier, 0)
+}
+
+func (s *TopLevelEnumTypedefContext) Comma() antlr.TerminalNode {
+	return s.GetToken(CParserComma, 0)
 }
 
 type TopLevelStructContext struct {
@@ -610,14 +709,6 @@ func (s *TopLevelStructContext) Struct() antlr.TerminalNode {
 	return s.GetToken(CParserStruct, 0)
 }
 
-func (s *TopLevelStructContext) LBrace() antlr.TerminalNode {
-	return s.GetToken(CParserLBrace, 0)
-}
-
-func (s *TopLevelStructContext) RBrace() antlr.TerminalNode {
-	return s.GetToken(CParserRBrace, 0)
-}
-
 func (s *TopLevelStructContext) Semi() antlr.TerminalNode {
 	return s.GetToken(CParserSemi, 0)
 }
@@ -632,6 +723,14 @@ func (s *TopLevelStructContext) AllAttributeDeprecated() []antlr.TerminalNode {
 
 func (s *TopLevelStructContext) AttributeDeprecated(i int) antlr.TerminalNode {
 	return s.GetToken(CParserAttributeDeprecated, i)
+}
+
+func (s *TopLevelStructContext) LBrace() antlr.TerminalNode {
+	return s.GetToken(CParserLBrace, 0)
+}
+
+func (s *TopLevelStructContext) RBrace() antlr.TerminalNode {
+	return s.GetToken(CParserRBrace, 0)
 }
 
 func (s *TopLevelStructContext) AllStructItem() []IStructItemContext {
@@ -742,12 +841,29 @@ func (s *TopLevelIfndefContext) TopLevel(i int) ITopLevelContext {
 	return t.(ITopLevelContext)
 }
 
-type TopLevelDefineContext struct {
-	TopLevelContext
+func (s *TopLevelIfndefContext) ElseCond() IElseCondContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IElseCondContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IElseCondContext)
 }
 
-func NewTopLevelDefineContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *TopLevelDefineContext {
-	var p = new(TopLevelDefineContext)
+type TopLevelStaticFunctionContext struct {
+	TopLevelContext
+	itemname antlr.Token
+}
+
+func NewTopLevelStaticFunctionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *TopLevelStaticFunctionContext {
+	var p = new(TopLevelStaticFunctionContext)
 
 	InitEmptyTopLevelContext(&p.TopLevelContext)
 	p.parser = parser
@@ -756,12 +872,64 @@ func NewTopLevelDefineContext(parser antlr.Parser, ctx antlr.ParserRuleContext) 
 	return p
 }
 
-func (s *TopLevelDefineContext) GetRuleContext() antlr.RuleContext {
+func (s *TopLevelStaticFunctionContext) GetItemname() antlr.Token { return s.itemname }
+
+func (s *TopLevelStaticFunctionContext) SetItemname(v antlr.Token) { s.itemname = v }
+
+func (s *TopLevelStaticFunctionContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
 
-func (s *TopLevelDefineContext) Define() antlr.TerminalNode {
-	return s.GetToken(CParserDefine, 0)
+func (s *TopLevelStaticFunctionContext) Static() antlr.TerminalNode {
+	return s.GetToken(CParserStatic, 0)
+}
+
+func (s *TopLevelStaticFunctionContext) Type_() ITypeContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ITypeContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ITypeContext)
+}
+
+func (s *TopLevelStaticFunctionContext) LParen() antlr.TerminalNode {
+	return s.GetToken(CParserLParen, 0)
+}
+
+func (s *TopLevelStaticFunctionContext) Params() IParamsContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IParamsContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IParamsContext)
+}
+
+func (s *TopLevelStaticFunctionContext) RParen() antlr.TerminalNode {
+	return s.GetToken(CParserRParen, 0)
+}
+
+func (s *TopLevelStaticFunctionContext) Identifier() antlr.TerminalNode {
+	return s.GetToken(CParserIdentifier, 0)
+}
+
+func (s *TopLevelStaticFunctionContext) Inline() antlr.TerminalNode {
+	return s.GetToken(CParserInline, 0)
 }
 
 type TopLevelPragmaContext struct {
@@ -1015,6 +1183,50 @@ func (s *TopLevelEnumContext) Identifier() antlr.TerminalNode {
 	return s.GetToken(CParserIdentifier, 0)
 }
 
+type TopLevelUndefContext struct {
+	TopLevelContext
+}
+
+func NewTopLevelUndefContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *TopLevelUndefContext {
+	var p = new(TopLevelUndefContext)
+
+	InitEmptyTopLevelContext(&p.TopLevelContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*TopLevelContext))
+
+	return p
+}
+
+func (s *TopLevelUndefContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *TopLevelUndefContext) Undef() antlr.TerminalNode {
+	return s.GetToken(CParserUndef, 0)
+}
+
+type TopLevelDefineContext struct {
+	TopLevelContext
+}
+
+func NewTopLevelDefineContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *TopLevelDefineContext {
+	var p = new(TopLevelDefineContext)
+
+	InitEmptyTopLevelContext(&p.TopLevelContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*TopLevelContext))
+
+	return p
+}
+
+func (s *TopLevelDefineContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *TopLevelDefineContext) Define() antlr.TerminalNode {
+	return s.GetToken(CParserDefine, 0)
+}
+
 type TopLevelStructTypeDefContext struct {
 	TopLevelContext
 	structname antlr.Token
@@ -1176,46 +1388,60 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 	p.EnterRule(localctx, 2, CParserRULE_topLevel)
 	var _la int
 
-	p.SetState(129)
+	p.SetState(160)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 
-	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 13, p.GetParserRuleContext()) {
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 18, p.GetParserRuleContext()) {
 	case 1:
 		localctx = NewTopLevelIfndefContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(32)
+			p.SetState(34)
 			p.Match(CParserIfndef)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
-		p.SetState(36)
+		p.SetState(38)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&132116480) != 0 {
+		for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&4193239040) != 0 {
 			{
-				p.SetState(33)
+				p.SetState(35)
 				p.TopLevel()
 			}
 
-			p.SetState(38)
+			p.SetState(40)
 			p.GetErrorHandler().Sync(p)
 			if p.HasError() {
 				goto errorExit
 			}
 			_la = p.GetTokenStream().LA(1)
 		}
+		p.SetState(42)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_la = p.GetTokenStream().LA(1)
+
+		if _la == CParserElseDir {
+			{
+				p.SetState(41)
+				p.ElseCond()
+			}
+
+		}
 		{
-			p.SetState(39)
+			p.SetState(44)
 			p.Match(CParserEndif)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1227,35 +1453,49 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 		localctx = NewTopLevelIfdirContext(p, localctx)
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(40)
+			p.SetState(45)
 			p.Match(CParserIfdir)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
-		p.SetState(44)
+		p.SetState(49)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&132116480) != 0 {
+		for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&4193239040) != 0 {
 			{
-				p.SetState(41)
+				p.SetState(46)
 				p.TopLevel()
 			}
 
-			p.SetState(46)
+			p.SetState(51)
 			p.GetErrorHandler().Sync(p)
 			if p.HasError() {
 				goto errorExit
 			}
 			_la = p.GetTokenStream().LA(1)
 		}
+		p.SetState(53)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_la = p.GetTokenStream().LA(1)
+
+		if _la == CParserElseDir {
+			{
+				p.SetState(52)
+				p.ElseCond()
+			}
+
+		}
 		{
-			p.SetState(47)
+			p.SetState(55)
 			p.Match(CParserEndif)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1267,7 +1507,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 		localctx = NewTopLevelDefineContext(p, localctx)
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(48)
+			p.SetState(56)
 			p.Match(CParserDefine)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1279,7 +1519,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 		localctx = NewTopLevelUndefContext(p, localctx)
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(49)
+			p.SetState(57)
 			p.Match(CParserUndef)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1291,7 +1531,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 		localctx = NewTopLevelIncludeContext(p, localctx)
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(50)
+			p.SetState(58)
 			p.Match(CParserInclude)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1303,7 +1543,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 		localctx = NewTopLevelPragmaContext(p, localctx)
 		p.EnterOuterAlt(localctx, 6)
 		{
-			p.SetState(51)
+			p.SetState(59)
 			p.Match(CParserPragma)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1315,14 +1555,14 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 		localctx = NewTopLevelEnumContext(p, localctx)
 		p.EnterOuterAlt(localctx, 7)
 		{
-			p.SetState(52)
+			p.SetState(60)
 			p.Match(CParserEnum)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
-		p.SetState(54)
+		p.SetState(62)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1331,7 +1571,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 
 		if _la == CParserIdentifier {
 			{
-				p.SetState(53)
+				p.SetState(61)
 
 				var _m = p.Match(CParserIdentifier)
 
@@ -1344,7 +1584,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 
 		}
 		{
-			p.SetState(56)
+			p.SetState(64)
 			p.Match(CParserLBrace)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1352,10 +1592,10 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 			}
 		}
 		{
-			p.SetState(57)
+			p.SetState(65)
 			p.EnumBody()
 		}
-		p.SetState(59)
+		p.SetState(67)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1364,7 +1604,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 
 		if _la == CParserComma {
 			{
-				p.SetState(58)
+				p.SetState(66)
 				p.Match(CParserComma)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -1374,7 +1614,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 
 		}
 		{
-			p.SetState(61)
+			p.SetState(69)
 			p.Match(CParserRBrace)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1382,7 +1622,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 			}
 		}
 		{
-			p.SetState(62)
+			p.SetState(70)
 			p.Match(CParserSemi)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1391,9 +1631,86 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 		}
 
 	case 8:
-		localctx = NewTopLevelStructTypeDefContext(p, localctx)
+		localctx = NewTopLevelEnumTypedefContext(p, localctx)
 		p.EnterOuterAlt(localctx, 8)
-		p.SetState(65)
+		{
+			p.SetState(72)
+			p.Match(CParserTypedef)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(73)
+			p.Match(CParserEnum)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(74)
+			p.Match(CParserLBrace)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(75)
+			p.EnumBody()
+		}
+		p.SetState(77)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_la = p.GetTokenStream().LA(1)
+
+		if _la == CParserComma {
+			{
+				p.SetState(76)
+				p.Match(CParserComma)
+				if p.HasError() {
+					// Recognition error - abort rule
+					goto errorExit
+				}
+			}
+
+		}
+		{
+			p.SetState(79)
+			p.Match(CParserRBrace)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(80)
+
+			var _m = p.Match(CParserIdentifier)
+
+			localctx.(*TopLevelEnumTypedefContext).itemname = _m
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(81)
+			p.Match(CParserSemi)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+	case 9:
+		localctx = NewTopLevelStructTypeDefContext(p, localctx)
+		p.EnterOuterAlt(localctx, 9)
+		p.SetState(84)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1402,7 +1719,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 
 		if _la == CParserAttributeDeprecated {
 			{
-				p.SetState(64)
+				p.SetState(83)
 				p.Match(CParserAttributeDeprecated)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -1412,7 +1729,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 
 		}
 		{
-			p.SetState(67)
+			p.SetState(86)
 			p.Match(CParserTypedef)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1420,7 +1737,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 			}
 		}
 		{
-			p.SetState(68)
+			p.SetState(87)
 			p.Match(CParserStruct)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1428,7 +1745,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 			}
 		}
 		{
-			p.SetState(69)
+			p.SetState(88)
 
 			var _m = p.Match(CParserIdentifier)
 
@@ -1439,27 +1756,27 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 			}
 		}
 		{
-			p.SetState(70)
+			p.SetState(89)
 			p.Match(CParserLBrace)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
-		p.SetState(74)
+		p.SetState(93)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&72740864) != 0 {
+		for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&2303180800) != 0 {
 			{
-				p.SetState(71)
+				p.SetState(90)
 				p.StructItem()
 			}
 
-			p.SetState(76)
+			p.SetState(95)
 			p.GetErrorHandler().Sync(p)
 			if p.HasError() {
 				goto errorExit
@@ -1467,7 +1784,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 			_la = p.GetTokenStream().LA(1)
 		}
 		{
-			p.SetState(77)
+			p.SetState(96)
 			p.Match(CParserRBrace)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1475,7 +1792,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 			}
 		}
 		{
-			p.SetState(78)
+			p.SetState(97)
 
 			var _m = p.Match(CParserIdentifier)
 
@@ -1486,7 +1803,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 			}
 		}
 		{
-			p.SetState(79)
+			p.SetState(98)
 			p.Match(CParserSemi)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1494,10 +1811,10 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 			}
 		}
 
-	case 9:
+	case 10:
 		localctx = NewTopLevelStructContext(p, localctx)
-		p.EnterOuterAlt(localctx, 9)
-		p.SetState(81)
+		p.EnterOuterAlt(localctx, 10)
+		p.SetState(100)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1506,7 +1823,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 
 		if _la == CParserAttributeDeprecated {
 			{
-				p.SetState(80)
+				p.SetState(99)
 				p.Match(CParserAttributeDeprecated)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -1516,14 +1833,14 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 
 		}
 		{
-			p.SetState(83)
+			p.SetState(102)
 			p.Match(CParserStruct)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
-		p.SetState(85)
+		p.SetState(104)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1532,7 +1849,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 
 		if _la == CParserAttributeDeprecated {
 			{
-				p.SetState(84)
+				p.SetState(103)
 				p.Match(CParserAttributeDeprecated)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -1542,7 +1859,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 
 		}
 		{
-			p.SetState(87)
+			p.SetState(106)
 
 			var _m = p.Match(CParserIdentifier)
 
@@ -1552,191 +1869,51 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 				goto errorExit
 			}
 		}
-		{
-			p.SetState(88)
-			p.Match(CParserLBrace)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		p.SetState(92)
+		p.SetState(115)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&72740864) != 0 {
+		if _la == CParserLBrace {
 			{
-				p.SetState(89)
-				p.StructItem()
+				p.SetState(107)
+				p.Match(CParserLBrace)
+				if p.HasError() {
+					// Recognition error - abort rule
+					goto errorExit
+				}
 			}
-
-			p.SetState(94)
+			p.SetState(111)
 			p.GetErrorHandler().Sync(p)
 			if p.HasError() {
 				goto errorExit
 			}
 			_la = p.GetTokenStream().LA(1)
-		}
-		{
-			p.SetState(95)
-			p.Match(CParserRBrace)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(96)
-			p.Match(CParserSemi)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
 
-	case 10:
-		localctx = NewTopLevelTypeDefSimpleContext(p, localctx)
-		p.EnterOuterAlt(localctx, 10)
-		p.SetState(98)
-		p.GetErrorHandler().Sync(p)
-		if p.HasError() {
-			goto errorExit
-		}
-		_la = p.GetTokenStream().LA(1)
+			for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&2303180800) != 0 {
+				{
+					p.SetState(108)
+					p.StructItem()
+				}
 
-		if _la == CParserAttributeDeprecated {
+				p.SetState(113)
+				p.GetErrorHandler().Sync(p)
+				if p.HasError() {
+					goto errorExit
+				}
+				_la = p.GetTokenStream().LA(1)
+			}
 			{
-				p.SetState(97)
-				p.Match(CParserAttributeDeprecated)
+				p.SetState(114)
+				p.Match(CParserRBrace)
 				if p.HasError() {
 					// Recognition error - abort rule
 					goto errorExit
 				}
 			}
 
-		}
-		{
-			p.SetState(100)
-			p.Match(CParserTypedef)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(101)
-			p.type_(0)
-		}
-		{
-			p.SetState(102)
-
-			var _m = p.Match(CParserIdentifier)
-
-			localctx.(*TopLevelTypeDefSimpleContext).itemname = _m
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(103)
-			p.Match(CParserSemi)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-
-	case 11:
-		localctx = NewTopLevelTypeDefFuncContext(p, localctx)
-		p.EnterOuterAlt(localctx, 11)
-		p.SetState(106)
-		p.GetErrorHandler().Sync(p)
-		if p.HasError() {
-			goto errorExit
-		}
-		_la = p.GetTokenStream().LA(1)
-
-		if _la == CParserAttributeDeprecated {
-			{
-				p.SetState(105)
-				p.Match(CParserAttributeDeprecated)
-				if p.HasError() {
-					// Recognition error - abort rule
-					goto errorExit
-				}
-			}
-
-		}
-		{
-			p.SetState(108)
-			p.Match(CParserTypedef)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(109)
-			p.type_(0)
-		}
-		{
-			p.SetState(110)
-			p.Match(CParserLParen)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(111)
-			p.Match(CParserStar)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(112)
-
-			var _m = p.Match(CParserIdentifier)
-
-			localctx.(*TopLevelTypeDefFuncContext).itemname = _m
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(113)
-			p.Match(CParserRParen)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(114)
-			p.Match(CParserLParen)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(115)
-			p.Params()
-		}
-		{
-			p.SetState(116)
-			p.Match(CParserRParen)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
 		}
 		{
 			p.SetState(117)
@@ -1747,10 +1924,10 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 			}
 		}
 
-	case 12:
-		localctx = NewTopLevelFunctionContext(p, localctx)
-		p.EnterOuterAlt(localctx, 12)
-		p.SetState(120)
+	case 11:
+		localctx = NewTopLevelTypeDefSimpleContext(p, localctx)
+		p.EnterOuterAlt(localctx, 11)
+		p.SetState(119)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1759,7 +1936,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 
 		if _la == CParserAttributeDeprecated {
 			{
-				p.SetState(119)
+				p.SetState(118)
 				p.Match(CParserAttributeDeprecated)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -1767,6 +1944,14 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 				}
 			}
 
+		}
+		{
+			p.SetState(121)
+			p.Match(CParserTypedef)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 		{
 			p.SetState(122)
@@ -1777,7 +1962,7 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 
 			var _m = p.Match(CParserIdentifier)
 
-			localctx.(*TopLevelFunctionContext).itemname = _m
+			localctx.(*TopLevelTypeDefSimpleContext).itemname = _m
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -1785,6 +1970,48 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 		}
 		{
 			p.SetState(124)
+			p.Match(CParserSemi)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+	case 12:
+		localctx = NewTopLevelTypeDefFuncContext(p, localctx)
+		p.EnterOuterAlt(localctx, 12)
+		p.SetState(127)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_la = p.GetTokenStream().LA(1)
+
+		if _la == CParserAttributeDeprecated {
+			{
+				p.SetState(126)
+				p.Match(CParserAttributeDeprecated)
+				if p.HasError() {
+					// Recognition error - abort rule
+					goto errorExit
+				}
+			}
+
+		}
+		{
+			p.SetState(129)
+			p.Match(CParserTypedef)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(130)
+			p.type_(0)
+		}
+		{
+			p.SetState(131)
 			p.Match(CParserLParen)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1792,11 +2019,26 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 			}
 		}
 		{
-			p.SetState(125)
-			p.Params()
+			p.SetState(132)
+			p.Match(CParserStar)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 		{
-			p.SetState(126)
+			p.SetState(133)
+
+			var _m = p.Match(CParserIdentifier)
+
+			localctx.(*TopLevelTypeDefFuncContext).itemname = _m
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(134)
 			p.Match(CParserRParen)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -1804,8 +2046,158 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 			}
 		}
 		{
-			p.SetState(127)
+			p.SetState(135)
+			p.Match(CParserLParen)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(136)
+			p.Params()
+		}
+		{
+			p.SetState(137)
+			p.Match(CParserRParen)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(138)
 			p.Match(CParserSemi)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+	case 13:
+		localctx = NewTopLevelFunctionContext(p, localctx)
+		p.EnterOuterAlt(localctx, 13)
+		p.SetState(141)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_la = p.GetTokenStream().LA(1)
+
+		if _la == CParserAttributeDeprecated {
+			{
+				p.SetState(140)
+				p.Match(CParserAttributeDeprecated)
+				if p.HasError() {
+					// Recognition error - abort rule
+					goto errorExit
+				}
+			}
+
+		}
+		{
+			p.SetState(143)
+			p.type_(0)
+		}
+		{
+			p.SetState(144)
+
+			var _m = p.Match(CParserIdentifier)
+
+			localctx.(*TopLevelFunctionContext).itemname = _m
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(145)
+			p.Match(CParserLParen)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(146)
+			p.Params()
+		}
+		{
+			p.SetState(147)
+			p.Match(CParserRParen)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(148)
+			p.Match(CParserSemi)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+	case 14:
+		localctx = NewTopLevelStaticFunctionContext(p, localctx)
+		p.EnterOuterAlt(localctx, 14)
+		{
+			p.SetState(150)
+			p.Match(CParserStatic)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		p.SetState(152)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_la = p.GetTokenStream().LA(1)
+
+		if _la == CParserInline {
+			{
+				p.SetState(151)
+				p.Match(CParserInline)
+				if p.HasError() {
+					// Recognition error - abort rule
+					goto errorExit
+				}
+			}
+
+		}
+		{
+			p.SetState(154)
+			p.type_(0)
+		}
+		{
+			p.SetState(155)
+
+			var _m = p.Match(CParserIdentifier)
+
+			localctx.(*TopLevelStaticFunctionContext).itemname = _m
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(156)
+			p.Match(CParserLParen)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(157)
+			p.Params()
+		}
+		{
+			p.SetState(158)
+			p.Match(CParserRParen)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
@@ -1814,6 +2206,155 @@ func (p *CParser) TopLevel() (localctx ITopLevelContext) {
 
 	case antlr.ATNInvalidAltNumber:
 		goto errorExit
+	}
+
+errorExit:
+	if p.HasError() {
+		v := p.GetError()
+		localctx.SetException(v)
+		p.GetErrorHandler().ReportError(p, v)
+		p.GetErrorHandler().Recover(p, v)
+		p.SetError(nil)
+	}
+	p.ExitRule()
+	return localctx
+	goto errorExit // Trick to prevent compiler error if the label is not used
+}
+
+// IElseCondContext is an interface to support dynamic dispatch.
+type IElseCondContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Getter signatures
+	ElseDir() antlr.TerminalNode
+	AllTopLevel() []ITopLevelContext
+	TopLevel(i int) ITopLevelContext
+
+	// IsElseCondContext differentiates from other interfaces.
+	IsElseCondContext()
+}
+
+type ElseCondContext struct {
+	antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyElseCondContext() *ElseCondContext {
+	var p = new(ElseCondContext)
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = CParserRULE_elseCond
+	return p
+}
+
+func InitEmptyElseCondContext(p *ElseCondContext) {
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, nil, -1)
+	p.RuleIndex = CParserRULE_elseCond
+}
+
+func (*ElseCondContext) IsElseCondContext() {}
+
+func NewElseCondContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *ElseCondContext {
+	var p = new(ElseCondContext)
+
+	antlr.InitBaseParserRuleContext(&p.BaseParserRuleContext, parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = CParserRULE_elseCond
+
+	return p
+}
+
+func (s *ElseCondContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *ElseCondContext) ElseDir() antlr.TerminalNode {
+	return s.GetToken(CParserElseDir, 0)
+}
+
+func (s *ElseCondContext) AllTopLevel() []ITopLevelContext {
+	children := s.GetChildren()
+	len := 0
+	for _, ctx := range children {
+		if _, ok := ctx.(ITopLevelContext); ok {
+			len++
+		}
+	}
+
+	tst := make([]ITopLevelContext, len)
+	i := 0
+	for _, ctx := range children {
+		if t, ok := ctx.(ITopLevelContext); ok {
+			tst[i] = t.(ITopLevelContext)
+			i++
+		}
+	}
+
+	return tst
+}
+
+func (s *ElseCondContext) TopLevel(i int) ITopLevelContext {
+	var t antlr.RuleContext
+	j := 0
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ITopLevelContext); ok {
+			if j == i {
+				t = ctx.(antlr.RuleContext)
+				break
+			}
+			j++
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ITopLevelContext)
+}
+
+func (s *ElseCondContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *ElseCondContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (p *CParser) ElseCond() (localctx IElseCondContext) {
+	localctx = NewElseCondContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 4, CParserRULE_elseCond)
+	var _la int
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(162)
+		p.Match(CParserElseDir)
+		if p.HasError() {
+			// Recognition error - abort rule
+			goto errorExit
+		}
+	}
+	p.SetState(166)
+	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
+	_la = p.GetTokenStream().LA(1)
+
+	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&4193239040) != 0 {
+		{
+			p.SetState(163)
+			p.TopLevel()
+		}
+
+		p.SetState(168)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_la = p.GetTokenStream().LA(1)
 	}
 
 errorExit:
@@ -1937,40 +2478,6 @@ func (s *EnumBodyItemContext) EnumBody() IEnumBodyContext {
 	return t.(IEnumBodyContext)
 }
 
-type EnumBodyEndContext struct {
-	EnumBodyContext
-}
-
-func NewEnumBodyEndContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *EnumBodyEndContext {
-	var p = new(EnumBodyEndContext)
-
-	InitEmptyEnumBodyContext(&p.EnumBodyContext)
-	p.parser = parser
-	p.CopyAll(ctx.(*EnumBodyContext))
-
-	return p
-}
-
-func (s *EnumBodyEndContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *EnumBodyEndContext) EnumItem() IEnumItemContext {
-	var t antlr.RuleContext
-	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IEnumItemContext); ok {
-			t = ctx.(antlr.RuleContext)
-			break
-		}
-	}
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(IEnumItemContext)
-}
-
 type EnumBodyDefineContext struct {
 	EnumBodyContext
 }
@@ -2035,22 +2542,6 @@ func (s *EnumBodyIfdirContext) Endif() antlr.TerminalNode {
 	return s.GetToken(CParserEndif, 0)
 }
 
-func (s *EnumBodyIfdirContext) EnumBody() IEnumBodyContext {
-	var t antlr.RuleContext
-	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IEnumBodyContext); ok {
-			t = ctx.(antlr.RuleContext)
-			break
-		}
-	}
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(IEnumBodyContext)
-}
-
 func (s *EnumBodyIfdirContext) AllEnumItem() []IEnumItemContext {
 	children := s.GetChildren()
 	len := 0
@@ -2100,46 +2591,72 @@ func (s *EnumBodyIfdirContext) Comma(i int) antlr.TerminalNode {
 	return s.GetToken(CParserComma, i)
 }
 
+func (s *EnumBodyIfdirContext) EnumBody() IEnumBodyContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IEnumBodyContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IEnumBodyContext)
+}
+
 func (p *CParser) EnumBody() (localctx IEnumBodyContext) {
 	localctx = NewEnumBodyContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 4, CParserRULE_enumBody)
+	p.EnterRule(localctx, 6, CParserRULE_enumBody)
 	var _la int
 
-	p.SetState(149)
+	p.SetState(190)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 
-	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 15, p.GetParserRuleContext()) {
-	case 1:
+	switch p.GetTokenStream().LA(1) {
+	case CParserDefine:
 		localctx = NewEnumBodyDefineContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(131)
+			p.SetState(169)
 			p.Match(CParserDefine)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
-		{
-			p.SetState(132)
-			p.EnumBody()
+		p.SetState(171)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_la = p.GetTokenStream().LA(1)
+
+		if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&2298478592) != 0 {
+			{
+				p.SetState(170)
+				p.EnumBody()
+			}
+
 		}
 
-	case 2:
+	case CParserIfdir:
 		localctx = NewEnumBodyIfdirContext(p, localctx)
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(133)
+			p.SetState(173)
 			p.Match(CParserIfdir)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
-		p.SetState(137)
+		p.SetState(177)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -2148,11 +2665,11 @@ func (p *CParser) EnumBody() (localctx IEnumBodyContext) {
 
 		for ok := true; ok; ok = _la == CParserIdentifier {
 			{
-				p.SetState(134)
+				p.SetState(174)
 				p.EnumItem()
 			}
 			{
-				p.SetState(135)
+				p.SetState(175)
 				p.Match(CParserComma)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -2160,7 +2677,7 @@ func (p *CParser) EnumBody() (localctx IEnumBodyContext) {
 				}
 			}
 
-			p.SetState(139)
+			p.SetState(179)
 			p.GetErrorHandler().Sync(p)
 			if p.HasError() {
 				goto errorExit
@@ -2168,47 +2685,58 @@ func (p *CParser) EnumBody() (localctx IEnumBodyContext) {
 			_la = p.GetTokenStream().LA(1)
 		}
 		{
-			p.SetState(141)
+			p.SetState(181)
 			p.Match(CParserEndif)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
-		{
-			p.SetState(142)
-			p.EnumBody()
+		p.SetState(183)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_la = p.GetTokenStream().LA(1)
+
+		if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&2298478592) != 0 {
+			{
+				p.SetState(182)
+				p.EnumBody()
+			}
+
 		}
 
-	case 3:
+	case CParserIdentifier:
 		localctx = NewEnumBodyItemContext(p, localctx)
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(144)
+			p.SetState(185)
 			p.EnumItem()
 		}
-		{
-			p.SetState(145)
-			p.Match(CParserComma)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
+		p.SetState(188)
+		p.GetErrorHandler().Sync(p)
+
+		if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 23, p.GetParserRuleContext()) == 1 {
+			{
+				p.SetState(186)
+				p.Match(CParserComma)
+				if p.HasError() {
+					// Recognition error - abort rule
+					goto errorExit
+				}
 			}
-		}
-		{
-			p.SetState(146)
-			p.EnumBody()
+			{
+				p.SetState(187)
+				p.EnumBody()
+			}
+
+		} else if p.HasError() { // JIM
+			goto errorExit
 		}
 
-	case 4:
-		localctx = NewEnumBodyEndContext(p, localctx)
-		p.EnterOuterAlt(localctx, 4)
-		{
-			p.SetState(148)
-			p.EnumItem()
-		}
-
-	case antlr.ATNInvalidAltNumber:
+	default:
+		p.SetError(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
 		goto errorExit
 	}
 
@@ -2301,6 +2829,36 @@ func (s *EnumItemNoValueContext) Identifier() antlr.TerminalNode {
 	return s.GetToken(CParserIdentifier, 0)
 }
 
+type EnumItemMappedContext struct {
+	EnumItemContext
+}
+
+func NewEnumItemMappedContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *EnumItemMappedContext {
+	var p = new(EnumItemMappedContext)
+
+	InitEmptyEnumItemContext(&p.EnumItemContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*EnumItemContext))
+
+	return p
+}
+
+func (s *EnumItemMappedContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *EnumItemMappedContext) AllIdentifier() []antlr.TerminalNode {
+	return s.GetTokens(CParserIdentifier)
+}
+
+func (s *EnumItemMappedContext) Identifier(i int) antlr.TerminalNode {
+	return s.GetToken(CParserIdentifier, i)
+}
+
+func (s *EnumItemMappedContext) Assign() antlr.TerminalNode {
+	return s.GetToken(CParserAssign, 0)
+}
+
 type EnumItemConstantContext struct {
 	EnumItemContext
 }
@@ -2345,19 +2903,19 @@ func (s *EnumItemConstantContext) Constant() IConstantContext {
 
 func (p *CParser) EnumItem() (localctx IEnumItemContext) {
 	localctx = NewEnumItemContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 6, CParserRULE_enumItem)
-	p.SetState(155)
+	p.EnterRule(localctx, 8, CParserRULE_enumItem)
+	p.SetState(199)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 
-	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 16, p.GetParserRuleContext()) {
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 25, p.GetParserRuleContext()) {
 	case 1:
 		localctx = NewEnumItemNoValueContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(151)
+			p.SetState(192)
 			p.Match(CParserIdentifier)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2369,7 +2927,7 @@ func (p *CParser) EnumItem() (localctx IEnumItemContext) {
 		localctx = NewEnumItemConstantContext(p, localctx)
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(152)
+			p.SetState(193)
 			p.Match(CParserIdentifier)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2377,7 +2935,7 @@ func (p *CParser) EnumItem() (localctx IEnumItemContext) {
 			}
 		}
 		{
-			p.SetState(153)
+			p.SetState(194)
 			p.Match(CParserAssign)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2385,8 +2943,36 @@ func (p *CParser) EnumItem() (localctx IEnumItemContext) {
 			}
 		}
 		{
-			p.SetState(154)
+			p.SetState(195)
 			p.Constant()
+		}
+
+	case 3:
+		localctx = NewEnumItemMappedContext(p, localctx)
+		p.EnterOuterAlt(localctx, 3)
+		{
+			p.SetState(196)
+			p.Match(CParserIdentifier)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(197)
+			p.Match(CParserAssign)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(198)
+			p.Match(CParserIdentifier)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 
 	case antlr.ATNInvalidAltNumber:
@@ -2527,6 +3113,60 @@ func (s *StructItemIfdirContext) StructItem(i int) IStructItemContext {
 	return t.(IStructItemContext)
 }
 
+type StructItemBitfieldContext struct {
+	StructItemContext
+}
+
+func NewStructItemBitfieldContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *StructItemBitfieldContext {
+	var p = new(StructItemBitfieldContext)
+
+	InitEmptyStructItemContext(&p.StructItemContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*StructItemContext))
+
+	return p
+}
+
+func (s *StructItemBitfieldContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *StructItemBitfieldContext) Type_() ITypeContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ITypeContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ITypeContext)
+}
+
+func (s *StructItemBitfieldContext) Identifier() antlr.TerminalNode {
+	return s.GetToken(CParserIdentifier, 0)
+}
+
+func (s *StructItemBitfieldContext) Colon() antlr.TerminalNode {
+	return s.GetToken(CParserColon, 0)
+}
+
+func (s *StructItemBitfieldContext) Constant() antlr.TerminalNode {
+	return s.GetToken(CParserConstant, 0)
+}
+
+func (s *StructItemBitfieldContext) Semi() antlr.TerminalNode {
+	return s.GetToken(CParserSemi, 0)
+}
+
+func (s *StructItemBitfieldContext) AttributeDeprecated() antlr.TerminalNode {
+	return s.GetToken(CParserAttributeDeprecated, 0)
+}
+
 type StructItemFunctionContext struct {
 	StructItemContext
 }
@@ -2603,6 +3243,10 @@ func (s *StructItemFunctionContext) Params() IParamsContext {
 
 func (s *StructItemFunctionContext) Semi() antlr.TerminalNode {
 	return s.GetToken(CParserSemi, 0)
+}
+
+func (s *StructItemFunctionContext) AttributeDeprecated() antlr.TerminalNode {
+	return s.GetToken(CParserAttributeDeprecated, 0)
 }
 
 type StructItemDefineContext struct {
@@ -2823,22 +3467,22 @@ func (s *StructItemArrayPtrContext) AttributeDeprecated() antlr.TerminalNode {
 
 func (p *CParser) StructItem() (localctx IStructItemContext) {
 	localctx = NewStructItemContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 8, CParserRULE_structItem)
+	p.EnterRule(localctx, 10, CParserRULE_structItem)
 	var _la int
 
 	var _alt int
 
-	p.SetState(209)
+	p.SetState(265)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 
-	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 22, p.GetParserRuleContext()) {
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 33, p.GetParserRuleContext()) {
 	case 1:
 		localctx = NewStructItemMemberContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
-		p.SetState(158)
+		p.SetState(202)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -2847,7 +3491,7 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 
 		if _la == CParserAttributeDeprecated {
 			{
-				p.SetState(157)
+				p.SetState(201)
 				p.Match(CParserAttributeDeprecated)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -2857,22 +3501,22 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 
 		}
 		{
-			p.SetState(160)
+			p.SetState(204)
 			p.type_(0)
 		}
-		p.SetState(165)
+		p.SetState(209)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
-		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 18, p.GetParserRuleContext())
+		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 27, p.GetParserRuleContext())
 		if p.HasError() {
 			goto errorExit
 		}
 		for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 			if _alt == 1 {
 				{
-					p.SetState(161)
+					p.SetState(205)
 					p.Match(CParserIdentifier)
 					if p.HasError() {
 						// Recognition error - abort rule
@@ -2880,7 +3524,7 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 					}
 				}
 				{
-					p.SetState(162)
+					p.SetState(206)
 					p.Match(CParserComma)
 					if p.HasError() {
 						// Recognition error - abort rule
@@ -2889,18 +3533,18 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 				}
 
 			}
-			p.SetState(167)
+			p.SetState(211)
 			p.GetErrorHandler().Sync(p)
 			if p.HasError() {
 				goto errorExit
 			}
-			_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 18, p.GetParserRuleContext())
+			_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 27, p.GetParserRuleContext())
 			if p.HasError() {
 				goto errorExit
 			}
 		}
 		{
-			p.SetState(168)
+			p.SetState(212)
 			p.Match(CParserIdentifier)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2908,7 +3552,7 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 			}
 		}
 		{
-			p.SetState(169)
+			p.SetState(213)
 			p.Match(CParserSemi)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2919,7 +3563,7 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 	case 2:
 		localctx = NewStructItemArrayContext(p, localctx)
 		p.EnterOuterAlt(localctx, 2)
-		p.SetState(172)
+		p.SetState(216)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -2928,7 +3572,7 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 
 		if _la == CParserAttributeDeprecated {
 			{
-				p.SetState(171)
+				p.SetState(215)
 				p.Match(CParserAttributeDeprecated)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -2938,11 +3582,11 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 
 		}
 		{
-			p.SetState(174)
+			p.SetState(218)
 			p.type_(0)
 		}
 		{
-			p.SetState(175)
+			p.SetState(219)
 			p.Match(CParserIdentifier)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2950,11 +3594,11 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 			}
 		}
 		{
-			p.SetState(176)
+			p.SetState(220)
 			p.ArraySize()
 		}
 		{
-			p.SetState(177)
+			p.SetState(221)
 			p.Match(CParserSemi)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -2963,9 +3607,9 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 		}
 
 	case 3:
-		localctx = NewStructItemArrayPtrContext(p, localctx)
+		localctx = NewStructItemBitfieldContext(p, localctx)
 		p.EnterOuterAlt(localctx, 3)
-		p.SetState(180)
+		p.SetState(224)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -2974,7 +3618,7 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 
 		if _la == CParserAttributeDeprecated {
 			{
-				p.SetState(179)
+				p.SetState(223)
 				p.Match(CParserAttributeDeprecated)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -2984,27 +3628,11 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 
 		}
 		{
-			p.SetState(182)
+			p.SetState(226)
 			p.type_(0)
 		}
 		{
-			p.SetState(183)
-			p.Match(CParserLParen)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(184)
-			p.Match(CParserStar)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(185)
+			p.SetState(227)
 			p.Match(CParserIdentifier)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3012,19 +3640,23 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 			}
 		}
 		{
-			p.SetState(186)
-			p.Match(CParserRParen)
+			p.SetState(228)
+			p.Match(CParserColon)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
 		{
-			p.SetState(187)
-			p.ArraySize()
+			p.SetState(229)
+			p.Match(CParserConstant)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 		{
-			p.SetState(188)
+			p.SetState(230)
 			p.Match(CParserSemi)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3033,66 +3665,32 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 		}
 
 	case 4:
-		localctx = NewStructItemIfdirContext(p, localctx)
+		localctx = NewStructItemArrayPtrContext(p, localctx)
 		p.EnterOuterAlt(localctx, 4)
-		{
-			p.SetState(190)
-			p.Match(CParserIfdir)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		p.SetState(194)
+		p.SetState(233)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
 		_la = p.GetTokenStream().LA(1)
 
-		for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&72740864) != 0 {
+		if _la == CParserAttributeDeprecated {
 			{
-				p.SetState(191)
-				p.StructItem()
+				p.SetState(232)
+				p.Match(CParserAttributeDeprecated)
+				if p.HasError() {
+					// Recognition error - abort rule
+					goto errorExit
+				}
 			}
 
-			p.SetState(196)
-			p.GetErrorHandler().Sync(p)
-			if p.HasError() {
-				goto errorExit
-			}
-			_la = p.GetTokenStream().LA(1)
 		}
 		{
-			p.SetState(197)
-			p.Match(CParserEndif)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-
-	case 5:
-		localctx = NewStructItemDefineContext(p, localctx)
-		p.EnterOuterAlt(localctx, 5)
-		{
-			p.SetState(198)
-			p.Match(CParserDefine)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-
-	case 6:
-		localctx = NewStructItemFunctionContext(p, localctx)
-		p.EnterOuterAlt(localctx, 6)
-		{
-			p.SetState(199)
+			p.SetState(235)
 			p.type_(0)
 		}
 		{
-			p.SetState(200)
+			p.SetState(236)
 			p.Match(CParserLParen)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3100,7 +3698,7 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 			}
 		}
 		{
-			p.SetState(201)
+			p.SetState(237)
 			p.Match(CParserStar)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3108,7 +3706,7 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 			}
 		}
 		{
-			p.SetState(202)
+			p.SetState(238)
 			p.Match(CParserIdentifier)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3116,7 +3714,7 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 			}
 		}
 		{
-			p.SetState(203)
+			p.SetState(239)
 			p.Match(CParserRParen)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3124,7 +3722,97 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 			}
 		}
 		{
-			p.SetState(204)
+			p.SetState(240)
+			p.ArraySize()
+		}
+		{
+			p.SetState(241)
+			p.Match(CParserSemi)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+	case 5:
+		localctx = NewStructItemIfdirContext(p, localctx)
+		p.EnterOuterAlt(localctx, 5)
+		{
+			p.SetState(243)
+			p.Match(CParserIfdir)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		p.SetState(247)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_la = p.GetTokenStream().LA(1)
+
+		for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&2303180800) != 0 {
+			{
+				p.SetState(244)
+				p.StructItem()
+			}
+
+			p.SetState(249)
+			p.GetErrorHandler().Sync(p)
+			if p.HasError() {
+				goto errorExit
+			}
+			_la = p.GetTokenStream().LA(1)
+		}
+		{
+			p.SetState(250)
+			p.Match(CParserEndif)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+	case 6:
+		localctx = NewStructItemDefineContext(p, localctx)
+		p.EnterOuterAlt(localctx, 6)
+		{
+			p.SetState(251)
+			p.Match(CParserDefine)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+	case 7:
+		localctx = NewStructItemFunctionContext(p, localctx)
+		p.EnterOuterAlt(localctx, 7)
+		p.SetState(253)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+		_la = p.GetTokenStream().LA(1)
+
+		if _la == CParserAttributeDeprecated {
+			{
+				p.SetState(252)
+				p.Match(CParserAttributeDeprecated)
+				if p.HasError() {
+					// Recognition error - abort rule
+					goto errorExit
+				}
+			}
+
+		}
+		{
+			p.SetState(255)
+			p.type_(0)
+		}
+		{
+			p.SetState(256)
 			p.Match(CParserLParen)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3132,11 +3820,23 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 			}
 		}
 		{
-			p.SetState(205)
-			p.Params()
+			p.SetState(257)
+			p.Match(CParserStar)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
 		}
 		{
-			p.SetState(206)
+			p.SetState(258)
+			p.Match(CParserIdentifier)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(259)
 			p.Match(CParserRParen)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3144,7 +3844,27 @@ func (p *CParser) StructItem() (localctx IStructItemContext) {
 			}
 		}
 		{
-			p.SetState(207)
+			p.SetState(260)
+			p.Match(CParserLParen)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(261)
+			p.Params()
+		}
+		{
+			p.SetState(262)
+			p.Match(CParserRParen)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(263)
 			p.Match(CParserSemi)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3245,11 +3965,11 @@ func (s *ConstantContext) ToStringTree(ruleNames []string, recog antlr.Recognize
 
 func (p *CParser) Constant() (localctx IConstantContext) {
 	localctx = NewConstantContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 10, CParserRULE_constant)
+	p.EnterRule(localctx, 12, CParserRULE_constant)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(212)
+	p.SetState(268)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -3258,7 +3978,7 @@ func (p *CParser) Constant() (localctx IConstantContext) {
 
 	if _la == CParserMinus {
 		{
-			p.SetState(211)
+			p.SetState(267)
 
 			var _m = p.Match(CParserMinus)
 
@@ -3271,7 +3991,7 @@ func (p *CParser) Constant() (localctx IConstantContext) {
 
 	}
 	{
-		p.SetState(214)
+		p.SetState(270)
 		p.Match(CParserConstant)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -3348,6 +4068,7 @@ func (s *ParamsContext) ToStringTree(ruleNames []string, recog antlr.Recognizer)
 
 type ParamsValuesContext struct {
 	ParamsContext
+	vararg antlr.Token
 }
 
 func NewParamsValuesContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *ParamsValuesContext {
@@ -3359,6 +4080,10 @@ func NewParamsValuesContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *P
 
 	return p
 }
+
+func (s *ParamsValuesContext) GetVararg() antlr.Token { return s.vararg }
+
+func (s *ParamsValuesContext) SetVararg(v antlr.Token) { s.vararg = v }
 
 func (s *ParamsValuesContext) GetRuleContext() antlr.RuleContext {
 	return s
@@ -3437,21 +4162,21 @@ func (s *ParamsVoidContext) Void() antlr.TerminalNode {
 
 func (p *CParser) Params() (localctx IParamsContext) {
 	localctx = NewParamsContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 12, CParserRULE_params)
+	p.EnterRule(localctx, 14, CParserRULE_params)
 	var _alt int
 
-	p.SetState(226)
+	p.SetState(285)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 
-	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 25, p.GetParserRuleContext()) {
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 37, p.GetParserRuleContext()) {
 	case 1:
 		localctx = NewParamsVoidContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(216)
+			p.SetState(272)
 			p.Match(CParserVoid)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3462,23 +4187,23 @@ func (p *CParser) Params() (localctx IParamsContext) {
 	case 2:
 		localctx = NewParamsValuesContext(p, localctx)
 		p.EnterOuterAlt(localctx, 2)
-		p.SetState(222)
+		p.SetState(278)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
-		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 24, p.GetParserRuleContext())
+		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 35, p.GetParserRuleContext())
 		if p.HasError() {
 			goto errorExit
 		}
 		for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 			if _alt == 1 {
 				{
-					p.SetState(217)
+					p.SetState(273)
 					p.Param()
 				}
 				{
-					p.SetState(218)
+					p.SetState(274)
 					p.Match(CParserComma)
 					if p.HasError() {
 						// Recognition error - abort rule
@@ -3487,19 +4212,45 @@ func (p *CParser) Params() (localctx IParamsContext) {
 				}
 
 			}
-			p.SetState(224)
+			p.SetState(280)
 			p.GetErrorHandler().Sync(p)
 			if p.HasError() {
 				goto errorExit
 			}
-			_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 24, p.GetParserRuleContext())
+			_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 35, p.GetParserRuleContext())
 			if p.HasError() {
 				goto errorExit
 			}
 		}
-		{
-			p.SetState(225)
-			p.Param()
+		p.SetState(283)
+		p.GetErrorHandler().Sync(p)
+		if p.HasError() {
+			goto errorExit
+		}
+
+		switch p.GetTokenStream().LA(1) {
+		case CParserConst, CParserUnsigned, CParserVoid, CParserEnum, CParserStruct, CParserIdentifier:
+			{
+				p.SetState(281)
+				p.Param()
+			}
+
+		case CParserT__0:
+			{
+				p.SetState(282)
+
+				var _m = p.Match(CParserT__0)
+
+				localctx.(*ParamsValuesContext).vararg = _m
+				if p.HasError() {
+					// Recognition error - abort rule
+					goto errorExit
+				}
+			}
+
+		default:
+			p.SetError(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+			goto errorExit
 		}
 
 	case antlr.ATNInvalidAltNumber:
@@ -3775,23 +4526,23 @@ func (s *ParamFunctionContext) Params() IParamsContext {
 
 func (p *CParser) Param() (localctx IParamContext) {
 	localctx = NewParamContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 14, CParserRULE_param)
-	p.SetState(245)
+	p.EnterRule(localctx, 16, CParserRULE_param)
+	p.SetState(304)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 
-	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 26, p.GetParserRuleContext()) {
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 38, p.GetParserRuleContext()) {
 	case 1:
 		localctx = NewParamSimpleContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(228)
+			p.SetState(287)
 			p.type_(0)
 		}
 		{
-			p.SetState(229)
+			p.SetState(288)
 			p.Match(CParserIdentifier)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3803,11 +4554,11 @@ func (p *CParser) Param() (localctx IParamContext) {
 		localctx = NewParamArrayContext(p, localctx)
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(231)
+			p.SetState(290)
 			p.type_(0)
 		}
 		{
-			p.SetState(232)
+			p.SetState(291)
 			p.Match(CParserIdentifier)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3815,7 +4566,7 @@ func (p *CParser) Param() (localctx IParamContext) {
 			}
 		}
 		{
-			p.SetState(233)
+			p.SetState(292)
 			p.ArraySize()
 		}
 
@@ -3823,7 +4574,7 @@ func (p *CParser) Param() (localctx IParamContext) {
 		localctx = NewParamAnonContext(p, localctx)
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(235)
+			p.SetState(294)
 			p.type_(0)
 		}
 
@@ -3831,11 +4582,11 @@ func (p *CParser) Param() (localctx IParamContext) {
 		localctx = NewParamFunctionContext(p, localctx)
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(236)
+			p.SetState(295)
 			p.type_(0)
 		}
 		{
-			p.SetState(237)
+			p.SetState(296)
 			p.Match(CParserLParen)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3843,7 +4594,7 @@ func (p *CParser) Param() (localctx IParamContext) {
 			}
 		}
 		{
-			p.SetState(238)
+			p.SetState(297)
 			p.Match(CParserStar)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3851,7 +4602,7 @@ func (p *CParser) Param() (localctx IParamContext) {
 			}
 		}
 		{
-			p.SetState(239)
+			p.SetState(298)
 			p.Match(CParserIdentifier)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3859,7 +4610,7 @@ func (p *CParser) Param() (localctx IParamContext) {
 			}
 		}
 		{
-			p.SetState(240)
+			p.SetState(299)
 			p.Match(CParserRParen)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3867,7 +4618,7 @@ func (p *CParser) Param() (localctx IParamContext) {
 			}
 		}
 		{
-			p.SetState(241)
+			p.SetState(300)
 			p.Match(CParserLParen)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -3875,11 +4626,11 @@ func (p *CParser) Param() (localctx IParamContext) {
 			}
 		}
 		{
-			p.SetState(242)
+			p.SetState(301)
 			p.Params()
 		}
 		{
-			p.SetState(243)
+			p.SetState(302)
 			p.Match(CParserRParen)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4002,11 +4753,11 @@ func (s *ArraySizeContext) ToStringTree(ruleNames []string, recog antlr.Recogniz
 
 func (p *CParser) ArraySize() (localctx IArraySizeContext) {
 	localctx = NewArraySizeContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 16, CParserRULE_arraySize)
+	p.EnterRule(localctx, 18, CParserRULE_arraySize)
 	var _la int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(248)
+	p.SetState(307)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -4015,11 +4766,11 @@ func (p *CParser) ArraySize() (localctx IArraySizeContext) {
 
 	for ok := true; ok; ok = _la == CParserLBracket {
 		{
-			p.SetState(247)
+			p.SetState(306)
 			p.ArraySizeDim()
 		}
 
-		p.SetState(250)
+		p.SetState(309)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -4094,6 +4845,32 @@ func (s *ArraySizeDimContext) ToStringTree(ruleNames []string, recog antlr.Recog
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
+type ArraySizeDimUnsizedContext struct {
+	ArraySizeDimContext
+}
+
+func NewArraySizeDimUnsizedContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *ArraySizeDimUnsizedContext {
+	var p = new(ArraySizeDimUnsizedContext)
+
+	InitEmptyArraySizeDimContext(&p.ArraySizeDimContext)
+	p.parser = parser
+	p.CopyAll(ctx.(*ArraySizeDimContext))
+
+	return p
+}
+
+func (s *ArraySizeDimUnsizedContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *ArraySizeDimUnsizedContext) LBracket() antlr.TerminalNode {
+	return s.GetToken(CParserLBracket, 0)
+}
+
+func (s *ArraySizeDimUnsizedContext) RBracket() antlr.TerminalNode {
+	return s.GetToken(CParserRBracket, 0)
+}
+
 type ArraySizeDimConstContext struct {
 	ArraySizeDimContext
 }
@@ -4156,19 +4933,19 @@ func (s *ArraySizeDimIdenContext) RBracket() antlr.TerminalNode {
 
 func (p *CParser) ArraySizeDim() (localctx IArraySizeDimContext) {
 	localctx = NewArraySizeDimContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 18, CParserRULE_arraySizeDim)
-	p.SetState(258)
+	p.EnterRule(localctx, 20, CParserRULE_arraySizeDim)
+	p.SetState(319)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
 
-	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 28, p.GetParserRuleContext()) {
+	switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 40, p.GetParserRuleContext()) {
 	case 1:
-		localctx = NewArraySizeDimIdenContext(p, localctx)
+		localctx = NewArraySizeDimUnsizedContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(252)
+			p.SetState(311)
 			p.Match(CParserLBracket)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4176,15 +4953,7 @@ func (p *CParser) ArraySizeDim() (localctx IArraySizeDimContext) {
 			}
 		}
 		{
-			p.SetState(253)
-			p.Match(CParserIdentifier)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
-			}
-		}
-		{
-			p.SetState(254)
+			p.SetState(312)
 			p.Match(CParserRBracket)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4193,10 +4962,10 @@ func (p *CParser) ArraySizeDim() (localctx IArraySizeDimContext) {
 		}
 
 	case 2:
-		localctx = NewArraySizeDimConstContext(p, localctx)
+		localctx = NewArraySizeDimIdenContext(p, localctx)
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(255)
+			p.SetState(313)
 			p.Match(CParserLBracket)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4204,7 +4973,35 @@ func (p *CParser) ArraySizeDim() (localctx IArraySizeDimContext) {
 			}
 		}
 		{
-			p.SetState(256)
+			p.SetState(314)
+			p.Match(CParserIdentifier)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(315)
+			p.Match(CParserRBracket)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+	case 3:
+		localctx = NewArraySizeDimConstContext(p, localctx)
+		p.EnterOuterAlt(localctx, 3)
+		{
+			p.SetState(316)
+			p.Match(CParserLBracket)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+		{
+			p.SetState(317)
 			p.Match(CParserConstant)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4212,7 +5009,7 @@ func (p *CParser) ArraySizeDim() (localctx IArraySizeDimContext) {
 			}
 		}
 		{
-			p.SetState(257)
+			p.SetState(318)
 			p.Match(CParserRBracket)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4416,8 +5213,8 @@ func (p *CParser) type_(_p int) (localctx ITypeContext) {
 	localctx = NewTypeContext(p, p.GetParserRuleContext(), _parentState)
 	var _prevctx ITypeContext = localctx
 	var _ antlr.ParserRuleContext = _prevctx // TODO: To prevent unused variable warning.
-	_startState := 20
-	p.EnterRecursionRule(localctx, 20, CParserRULE_type, _p)
+	_startState := 22
+	p.EnterRecursionRule(localctx, 22, CParserRULE_type, _p)
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
@@ -4426,17 +5223,17 @@ func (p *CParser) type_(_p int) (localctx ITypeContext) {
 	_prevctx = localctx
 
 	{
-		p.SetState(261)
+		p.SetState(322)
 		p.TypeInner()
 	}
 
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(270)
+	p.SetState(331)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
-	_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 30, p.GetParserRuleContext())
+	_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 42, p.GetParserRuleContext())
 	if p.HasError() {
 		goto errorExit
 	}
@@ -4446,24 +5243,24 @@ func (p *CParser) type_(_p int) (localctx ITypeContext) {
 				p.TriggerExitRuleEvent()
 			}
 			_prevctx = localctx
-			p.SetState(268)
+			p.SetState(329)
 			p.GetErrorHandler().Sync(p)
 			if p.HasError() {
 				goto errorExit
 			}
 
-			switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 29, p.GetParserRuleContext()) {
+			switch p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 41, p.GetParserRuleContext()) {
 			case 1:
 				localctx = NewTypePtrContext(p, NewTypeContext(p, _parentctx, _parentState))
 				p.PushNewRecursionContext(localctx, _startState, CParserRULE_type)
-				p.SetState(263)
+				p.SetState(324)
 
 				if !(p.Precpred(p.GetParserRuleContext(), 2)) {
 					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 2)", ""))
 					goto errorExit
 				}
 				{
-					p.SetState(264)
+					p.SetState(325)
 					p.Match(CParserStar)
 					if p.HasError() {
 						// Recognition error - abort rule
@@ -4474,14 +5271,14 @@ func (p *CParser) type_(_p int) (localctx ITypeContext) {
 			case 2:
 				localctx = NewTypePtrConstContext(p, NewTypeContext(p, _parentctx, _parentState))
 				p.PushNewRecursionContext(localctx, _startState, CParserRULE_type)
-				p.SetState(265)
+				p.SetState(326)
 
 				if !(p.Precpred(p.GetParserRuleContext(), 1)) {
 					p.SetError(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 1)", ""))
 					goto errorExit
 				}
 				{
-					p.SetState(266)
+					p.SetState(327)
 					p.Match(CParserStar)
 					if p.HasError() {
 						// Recognition error - abort rule
@@ -4489,7 +5286,7 @@ func (p *CParser) type_(_p int) (localctx ITypeContext) {
 					}
 				}
 				{
-					p.SetState(267)
+					p.SetState(328)
 					p.Match(CParserConst)
 					if p.HasError() {
 						// Recognition error - abort rule
@@ -4502,12 +5299,12 @@ func (p *CParser) type_(_p int) (localctx ITypeContext) {
 			}
 
 		}
-		p.SetState(272)
+		p.SetState(333)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
-		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 30, p.GetParserRuleContext())
+		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 42, p.GetParserRuleContext())
 		if p.HasError() {
 			goto errorExit
 		}
@@ -4742,8 +5539,8 @@ func (s *TypeInnerStructContext) Identifier() antlr.TerminalNode {
 
 func (p *CParser) TypeInner() (localctx ITypeInnerContext) {
 	localctx = NewTypeInnerContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 22, CParserRULE_typeInner)
-	p.SetState(285)
+	p.EnterRule(localctx, 24, CParserRULE_typeInner)
+	p.SetState(346)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -4754,7 +5551,7 @@ func (p *CParser) TypeInner() (localctx ITypeInnerContext) {
 		localctx = NewTypeInnerIdentContext(p, localctx)
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(273)
+			p.SetState(334)
 			p.Match(CParserIdentifier)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4766,7 +5563,7 @@ func (p *CParser) TypeInner() (localctx ITypeInnerContext) {
 		localctx = NewTypeInnerEnumContext(p, localctx)
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(274)
+			p.SetState(335)
 			p.Match(CParserEnum)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4774,7 +5571,7 @@ func (p *CParser) TypeInner() (localctx ITypeInnerContext) {
 			}
 		}
 		{
-			p.SetState(275)
+			p.SetState(336)
 			p.Match(CParserIdentifier)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4786,7 +5583,7 @@ func (p *CParser) TypeInner() (localctx ITypeInnerContext) {
 		localctx = NewTypeInnerStructContext(p, localctx)
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(276)
+			p.SetState(337)
 			p.Match(CParserStruct)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4794,7 +5591,7 @@ func (p *CParser) TypeInner() (localctx ITypeInnerContext) {
 			}
 		}
 		{
-			p.SetState(277)
+			p.SetState(338)
 			p.Match(CParserIdentifier)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4806,19 +5603,19 @@ func (p *CParser) TypeInner() (localctx ITypeInnerContext) {
 		localctx = NewTypeInnerUnsignedContext(p, localctx)
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(278)
+			p.SetState(339)
 			p.Match(CParserUnsigned)
 			if p.HasError() {
 				// Recognition error - abort rule
 				goto errorExit
 			}
 		}
-		p.SetState(280)
+		p.SetState(341)
 		p.GetErrorHandler().Sync(p)
 
-		if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 31, p.GetParserRuleContext()) == 1 {
+		if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 43, p.GetParserRuleContext()) == 1 {
 			{
-				p.SetState(279)
+				p.SetState(340)
 				p.Match(CParserIdentifier)
 				if p.HasError() {
 					// Recognition error - abort rule
@@ -4834,7 +5631,7 @@ func (p *CParser) TypeInner() (localctx ITypeInnerContext) {
 		localctx = NewTypeInnerVoidContext(p, localctx)
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(282)
+			p.SetState(343)
 			p.Match(CParserVoid)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4846,7 +5643,7 @@ func (p *CParser) TypeInner() (localctx ITypeInnerContext) {
 		localctx = NewTypeInnerConstContext(p, localctx)
 		p.EnterOuterAlt(localctx, 6)
 		{
-			p.SetState(283)
+			p.SetState(344)
 			p.Match(CParserConst)
 			if p.HasError() {
 				// Recognition error - abort rule
@@ -4854,7 +5651,7 @@ func (p *CParser) TypeInner() (localctx ITypeInnerContext) {
 			}
 		}
 		{
-			p.SetState(284)
+			p.SetState(345)
 			p.TypeInner()
 		}
 
@@ -4878,7 +5675,7 @@ errorExit:
 
 func (p *CParser) Sempred(localctx antlr.RuleContext, ruleIndex, predIndex int) bool {
 	switch ruleIndex {
-	case 10:
+	case 11:
 		var t *TypeContext = nil
 		if localctx != nil {
 			t = localctx.(*TypeContext)

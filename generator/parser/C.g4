@@ -5,41 +5,48 @@ unit
     ;
 
 topLevel
-    : Ifndef topLevel* Endif #topLevelIfndef
-    | Ifdir topLevel* Endif #topLevelIfdir
+    : Ifndef topLevel* elseCond? Endif #topLevelIfndef
+    | Ifdir topLevel* elseCond? Endif #topLevelIfdir
     | Define #topLevelDefine
     | Undef #topLevelUndef
     | Include #topLevelInclude
     | Pragma #topLevelPragma
     | Enum (itemname=Identifier)? LBrace enumBody Comma? RBrace Semi #topLevelEnum
+    | Typedef Enum LBrace enumBody Comma? RBrace itemname=Identifier Semi #topLevelEnumTypedef
     | AttributeDeprecated? Typedef Struct structname=Identifier LBrace structItem* RBrace itemname=Identifier Semi #topLevelStructTypeDef
 //    | AttributeDeprecated? Typedef Struct Identifier Identifier Semi #topLevelStructTypeDefOpaque
-    | AttributeDeprecated? Struct AttributeDeprecated? itemname=Identifier LBrace structItem* RBrace Semi #topLevelStruct
+    | AttributeDeprecated? Struct AttributeDeprecated? itemname=Identifier (LBrace structItem* RBrace)? Semi #topLevelStruct
 //    | AttributeDeprecated? Struct AttributeDeprecated? Identifier Semi #topLevelStructOpaque
     | AttributeDeprecated? Typedef type itemname=Identifier Semi #topLevelTypeDefSimple
     | AttributeDeprecated? Typedef type LParen Star itemname=Identifier RParen LParen params RParen Semi #topLevelTypeDefFunc
     | AttributeDeprecated? type itemname=Identifier LParen params RParen Semi #topLevelFunction
+    | Static Inline? type itemname=Identifier LParen params RParen #topLevelStaticFunction
+    ;
+
+elseCond
+    : ElseDir topLevel*
     ;
 
 enumBody
-    : Define enumBody #enumBodyDefine
-    | Ifdir (enumItem Comma)+ Endif enumBody #enumBodyIfdir
-    | enumItem Comma enumBody #enumBodyItem
-    | enumItem #enumBodyEnd
+    : Define enumBody? #enumBodyDefine
+    | Ifdir (enumItem Comma)+ Endif enumBody? #enumBodyIfdir
+    | enumItem (Comma enumBody)? #enumBodyItem
     ;
 
 enumItem
     : Identifier #enumItemNoValue
     | Identifier Assign constant #enumItemConstant
+    | Identifier Assign Identifier #enumItemMapped
     ;
 
 structItem
     : AttributeDeprecated? type (Identifier Comma)* Identifier Semi #structItemMember
     | AttributeDeprecated? type Identifier arraySize Semi #structItemArray
+    | AttributeDeprecated? type Identifier Colon Constant Semi #structItemBitfield
     | AttributeDeprecated? type LParen Star Identifier RParen arraySize Semi #structItemArrayPtr
     | Ifdir structItem* Endif #structItemIfdir
     | Define #structItemDefine
-    | type LParen Star Identifier RParen LParen params RParen Semi #structItemFunction
+    | AttributeDeprecated? type LParen Star Identifier RParen LParen params RParen Semi #structItemFunction
     ;
 
 constant
@@ -48,7 +55,7 @@ constant
 
 params
     : Void #paramsVoid
-    | (param Comma)* param #paramsValues
+    | (param Comma)* (param | vararg='...') #paramsValues
     ;
 
 param
@@ -63,7 +70,8 @@ arraySize
     ;
 
 arraySizeDim
-    : LBracket Identifier RBracket #arraySizeDimIden
+    : LBracket RBracket #arraySizeDimUnsized
+    | LBracket Identifier RBracket #arraySizeDimIden
     | LBracket Constant RBracket #arraySizeDimConst
     ;
 
@@ -87,7 +95,8 @@ Star: '*';
 Minus: '-';
 
 Comma: ',';
-Semi: ';';
+Semi: ';' | 'av_pure;';
+Colon: ':';
 
 LParen: '(';
 RParen: ')';
@@ -102,6 +111,8 @@ Unsigned: 'unsigned';
 Void: 'void';
 Enum: 'enum';
 Struct: 'struct';
+Static: 'static';
+Inline: 'inline';
 
 Typedef: 'typedef';
 
@@ -123,10 +134,14 @@ Endif
     : '#endif' ~[\r\n]* NewlineFrag
     ;
 
+ElseDir
+    : '#else' ~[\r\n]* NewlineFrag
+    ;
+
 Define
 //    : '#define' WhitespaceFrag IdentifierFrag WhitespaceFrag? NewlineFrag
 //    : '#define' ~[\r\n]* NewlineFrag
-    : '#define' (~[\r\n]* (('\\' NewlineFrag) | ( '/*' .*? '*/')))* ~[\r\n]* NewlineFrag
+    : '#' [ ]* 'define' (~[\r\n]* (('\\' NewlineFrag) | ( '/*' .*? '*/')))* ~[\r\n]* NewlineFrag
     ;
 
 Undef
@@ -138,8 +153,9 @@ Pragma
     ;
 
 Include
-    : '#include' WhitespaceFrag '<' (IdentifierFrag '/')* IdentifierFrag '.h>' WhitespaceFrag? NewlineFrag
-    | '#include' WhitespaceFrag '"' (IdentifierFrag '/')* IdentifierFrag '.h"' WhitespaceFrag? NewlineFrag
+    : '#include' (~[\r\n]* ('/*' .*? '*/'))* ~[\r\n]* NewlineFrag
+//    : '#include' WhitespaceFrag '<' (IdentifierFrag '/')* IdentifierFrag '.h>' WhitespaceFrag? NewlineFrag
+//    | '#include' WhitespaceFrag '"' (IdentifierFrag '/')* IdentifierFrag '.h"' WhitespaceFrag? NewlineFrag
     ;
 
 Identifier
