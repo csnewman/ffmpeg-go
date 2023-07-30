@@ -2,8 +2,10 @@ package generator
 
 import (
 	"bufio"
+	"github.com/antlr4-go/antlr/v4"
 	"log"
 	"os"
+	"path"
 	"reflect"
 	"regexp"
 	"strings"
@@ -13,10 +15,11 @@ import (
 
 var printfMatcher = regexp.MustCompile(`av_printf_format\(\d+,\s+\d+\)`)
 
-func readFile(path string) (string, error) {
-	file, err := os.Open(path)
+func parseFile(filePath string) (*File, error) {
+	// Read file
+	file, err := os.Open(filePath)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	defer file.Close()
 
@@ -27,6 +30,7 @@ func readFile(path string) (string, error) {
 
 	content := ""
 
+	// Remove static function bodies
 	for scanner.Scan() {
 		lastStatic++
 
@@ -62,14 +66,38 @@ func readFile(path string) (string, error) {
 	}
 
 	if err := scanner.Err(); err != nil {
-		return "", err
+		return nil, err
 	}
 
+	// Remove unsupported attributes
 	content = strings.ReplaceAll(content, "av_warn_unused_result", "")
 	content = strings.ReplaceAll(content, "av_always_inline", "")
 	content = printfMatcher.ReplaceAllString(content, "")
 
-	return content, nil
+	// Parse file to AST
+	input := antlr.NewInputStream(content)
+	lexer := parser.NewCLexer(input)
+	stream := antlr.NewCommonTokenStream(lexer, 0)
+	p := parser.NewCParser(stream)
+	p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
+	p.BuildParseTrees = true
+	u := p.Unit()
+
+	// Process ASt
+	f := &File{
+		functions: map[string]*Func{},
+		structs:   map[string]*Struct{},
+		enums:     map[string]*Enum{},
+	}
+	f.processUnit(u)
+
+	_, name := path.Split(filePath)
+
+	if err := os.WriteFile(path.Join("temp", name), []byte(content), 0644); err != nil {
+		return nil, err
+	}
+
+	return f, nil
 }
 
 func (f *File) processUnit(unit parser.IUnitContext) {

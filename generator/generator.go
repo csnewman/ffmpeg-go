@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path"
 	"strings"
 
-	"github.com/antlr4-go/antlr/v4"
-	"github.com/csnewman/ffmpeg-go/generator/parser"
 	"github.com/iancoleman/strcase"
 	"golang.org/x/exp/slices"
 )
@@ -96,126 +95,93 @@ var Files = []GenIn{
 }
 
 func Testing() {
-	goMapped := map[string]string{}
+	g := &Generator{
+		skipList: []string{
+			"av_buffer_ref", "av_hex_dump", "av_pkt_dump2", "av_log", "avio_printf",
+		},
+	}
 
 	for _, file := range Files {
-		err := ProcessFile(
-			AVLibPath+"lib"+file.Pkg+"/"+file.HeaderName+".h",
-			file.Pkg,
-			"lib"+file.Pkg,
-			[]string{"lib" + file.Pkg + "/" + file.HeaderName + ".h"},
-			[]string{
-				"av_buffer_ref", "av_hex_dump", "av_pkt_dump2", "av_log", "avio_printf",
-			},
-			"av/"+file.Pkg+"_"+file.HeaderName+".gen.go",
-			goMapped,
-		)
+		g.neededPackages = nil
+
+		f, err := parseFile(path.Join(AVLibPath, "lib"+file.Pkg, file.HeaderName+".h"))
 		if err != nil {
-			log.Fatalln(err)
+			log.Fatalln("Failed to parse file", err)
+		}
+
+		w := g.process(f, file.Pkg, path.Join("lib"+file.Pkg, file.HeaderName+".h"))
+
+		dst := path.Join("av", file.Pkg+"_"+file.HeaderName+".gen.go")
+
+		if err := os.WriteFile(dst, []byte(w.Output()), 0644); err != nil {
+			log.Fatalln("Failed to write file", f)
 		}
 	}
 
-	log.Println("done")
-}
-
-func ProcessFile(
-	path string,
-	pkg string,
-	lib string,
-	imports []string,
-	skipList []string,
-	dst string,
-	goMapped map[string]string,
-) error {
-	content, err := readFile(path)
-	if err != nil {
-		return err
-	}
-
-	if err := os.WriteFile(dst+".temp", []byte(content), 0644); err != nil {
-		return err
-	}
-
-	input := antlr.NewInputStream(content)
-
-	lexer := parser.NewCLexer(input)
-	stream := antlr.NewCommonTokenStream(lexer, 0)
-	p := parser.NewCParser(stream)
-	p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
-	p.BuildParseTrees = true
-	u := p.Unit()
-
-	f := &File{
-		functions: map[string]*Func{},
-		structs:   map[string]*Struct{},
-		enums:     map[string]*Enum{},
-	}
-	f.processUnit(u)
-
-	g := &Generator{
-		pkg:      pkg,
-		lib:      lib,
-		imports:  imports,
-		skipList: skipList,
-		goMapped: goMapped,
-	}
-	g.process(f)
-
-	if err := os.WriteFile(dst, []byte(g.output), 0644); err != nil {
-		return err
-	}
-
-	return nil
+	log.Println("Complete")
 }
 
 type Generator struct {
-	output         string
-	indent         int
-	pkg            string
-	lib            string
-	imports        []string
+	w              *Writer
 	skipList       []string
 	neededPackages []string
-	goMapped       map[string]string
 }
 
-func (g *Generator) process(f *File) {
+func (g *Generator) process(f *File, pkg string, imp string) *Writer {
+	body := NewWriter()
+
 	for _, name := range f.enumOrder {
-		g.WriteLine("")
+		g.w = NewWriter()
+
 		g.processEnum(f.enums[name])
+
+		body.WriteLine("")
+		body.WriteWriter(g.w)
 	}
 
 	for _, name := range f.structOrder {
-		g.WriteLine("")
+		g.w = NewWriter()
+
 		g.processStruct(f.structs[name])
+
+		body.WriteLine("")
+		body.WriteWriter(g.w)
 	}
 
 	for _, name := range f.functionOrder {
-		g.WriteLine("")
-		g.processFuncHandleError(f.functions[name])
+		g.w = NewWriter()
+		oldNeeded := g.neededPackages
+
+		err := g.processFunc(f.functions[name])
+
+		body.WriteLine("")
+
+		if err != nil {
+			g.neededPackages = oldNeeded
+
+			body.WriteLine("// Skipping " + name + " due to error.")
+			body.WriteLine("// Error: " + err.Error())
+		} else {
+			body.WriteWriter(g.w)
+		}
 	}
 
-	body := g.output
-	g.output = ""
-
-	g.WriteLine("package av")
-	g.WriteLine("")
-	g.WriteLine("/*")
-	g.WriteLine("#cgo pkg-config: " + g.lib)
-
-	for _, imp := range g.imports {
-		g.WriteLine("#include <" + imp + ">")
-	}
-
-	g.WriteLine("*/")
-	g.WriteLine("import \"C\"")
+	w := NewWriter()
+	w.WriteLine("package av")
+	w.WriteLine("")
+	w.WriteLine("/*")
+	w.WriteLine("#cgo pkg-config: lib" + pkg)
+	w.WriteLine("#include <" + imp + ">")
+	w.WriteLine("*/")
+	w.WriteLine("import \"C\"")
 
 	for _, np := range g.neededPackages {
-		g.WriteLine("import \"" + np + "\"")
+		w.WriteLine("import \"" + np + "\"")
 	}
 
-	g.output += body
+	w.WriteWriter(body)
 
+	return w
 }
 
 func (g *Generator) AddPkg(pkg string) {
@@ -226,116 +192,65 @@ func (g *Generator) AddPkg(pkg string) {
 	g.neededPackages = append(g.neededPackages, pkg)
 }
 
-func (g *Generator) WriteLine(line string) {
-	for i := 0; i < g.indent; i++ {
-		g.output += "    "
-	}
-
-	g.output += line
-	g.output += "\n"
-}
-
-func (g *Generator) Indent(by int) {
-	g.indent += by
-}
-
 func CleanName(name string) string {
-	return strings.TrimPrefix(name, "AV")
+	goName := name
+	goName = strings.TrimPrefix(goName, "AV_")
+	goName = strings.TrimPrefix(goName, "AV")
+	goName = strings.TrimPrefix(goName, "av_")
+	goName = strings.TrimPrefix(goName, "av")
+
+	return goName
 }
 
 func (g *Generator) processEnum(e *Enum) {
 	goName := CleanName(e.Name)
-	g.goMapped[goName] = g.pkg
 
-	g.WriteLine("// " + goName + " wraps " + e.Name + ".")
+	g.w.WriteLine("// " + goName + " wraps " + e.Name + ".")
 
 	if e.IsAnonName {
-		g.WriteLine("type " + goName + " C." + e.Name)
+		g.w.WriteLine("type " + goName + " C." + e.Name)
 	} else {
-		g.WriteLine("type " + goName + " C.enum_" + e.Name)
+		g.w.WriteLine("type " + goName + " C.enum_" + e.Name)
 	}
 
-	g.WriteLine("")
-	g.WriteLine("const (")
-	g.Indent(1)
+	g.w.WriteLine("")
+	g.w.WriteLine("const (")
+	g.w.Indent(1)
 
 	for _, value := range e.Values {
-		goValue := strings.TrimPrefix(value, "AV_")
-		goValue = strings.TrimPrefix(goValue, "AV")
+		goValue := CleanName(value)
 		goValue = strcase.ToCamel(goValue)
 
-		g.WriteLine(goValue + " " + goName + " = C." + value)
+		g.w.WriteLine(goValue + " " + goName + " = C." + value)
 	}
 
-	g.Indent(-1)
-	g.WriteLine(")")
+	g.w.Indent(-1)
+	g.w.WriteLine(")")
+	g.w.WriteLine("")
 
-	g.WriteLine("")
-	g.WriteLine("func (s " + goName + ") String() string {")
-	g.Indent(1)
-
-	//g.WriteLine("switch s {")
-	//g.Indent(1)
-
-	//g.WriteLine("default:")
-	//g.Indent(1)
-	//g.WriteLine("return \"" + e.Name + "::UNKNOWN\"")
-	//g.Indent(-1)
-
-	//g.Indent(-1)
-	//g.WriteLine("}")
-	//g.WriteLine("")
-
+	g.w.WriteLine("func (s " + goName + ") String() string {")
+	g.w.Indent(1)
 	g.AddPkg("fmt")
-	g.WriteLine("return fmt.Sprintf(\"" + e.Name + "(%d)\", s)")
-
-	g.Indent(-1)
-	g.WriteLine("}")
-
+	g.w.WriteLine("return fmt.Sprintf(\"" + e.Name + "(%d)\", s)")
+	g.w.Indent(-1)
+	g.w.WriteLine("}")
 }
 
 func (g *Generator) processStruct(s *Struct) {
 	goName := CleanName(s.Name)
-	g.goMapped[goName] = g.pkg
 
-	g.WriteLine("// " + goName + " wraps " + s.Name + ".")
-	g.WriteLine("type " + goName + " C.struct_" + s.Name)
+	g.w.WriteLine("// " + goName + " wraps " + s.Name + ".")
+	g.w.WriteLine("type " + goName + " C.struct_" + s.Name)
 }
 
-func (g *Generator) processFuncHandleError(f *Func) {
-	oldOutput := g.output
-	oldIndent := g.indent
-	oldNeeded := g.neededPackages
-
-	defer func() {
-		if err := recover(); err != nil {
-			log.Println("panic occurred:", err)
-
-			g.output = oldOutput
-			g.indent = oldIndent
-			g.neededPackages = oldNeeded
-
-			g.WriteLine("// Skipping " + f.Name + " due to error.")
-
-			errLines := strings.Split(strings.TrimSpace(fmt.Sprint(err)), "\n")
-			for _, line := range errLines {
-				g.WriteLine("// " + line)
-			}
-		}
-	}()
-
-	g.processFunc(f)
-}
-
-func (g *Generator) processFunc(f *Func) {
+func (g *Generator) processFunc(f *Func) error {
 	if slices.Contains(g.skipList, f.Name) {
-		g.WriteLine("// Skipping " + f.Name + " due to skip list.")
-		return
+		g.w.WriteLine("// Skipping " + f.Name + " due to skip list.")
+
+		return nil
 	}
 
-	goName := strings.TrimPrefix(f.Name, "av_")
-	goName = strings.TrimPrefix(goName, "av")
-	//goName = strings.TrimPrefix(goName, g.pkg+"_")
+	goName := CleanName(f.Name)
 
 	params := ""
 	hasThis := false
@@ -343,7 +258,7 @@ func (g *Generator) processFunc(f *Func) {
 	var thisType *Type
 
 	for i, param := range f.Params {
-		if i == 0 && g.pkg == "avcodec" && param.Name == "pkt" && param.Type.Namespace == IdentNamespacePtr &&
+		if i == 0 && param.Name == "pkt" && param.Type.Namespace == IdentNamespacePtr &&
 			((param.Type.Inner.Namespace == IdentNamespaceDefault &&
 				param.Type.Inner.Name == "AVPacket") ||
 				(param.Type.Inner.Namespace == IdentNamespaceConst &&
@@ -364,12 +279,22 @@ func (g *Generator) processFunc(f *Func) {
 			newName = "type_"
 		}
 
-		params += newName + " " + g.genType(param.Type)
+		genType, err := g.genType(param.Type)
+		if err != nil {
+			return err
+		}
+
+		params += newName + " " + genType
 	}
 
 	thisParam := ""
 	if hasThis {
-		thisParam = "(self " + g.genType(thisType) + ") "
+		genType, err := g.genType(thisType)
+		if err != nil {
+			return err
+		}
+
+		thisParam = "(self " + genType + ") "
 	}
 
 	if hasThis {
@@ -379,22 +304,26 @@ func (g *Generator) processFunc(f *Func) {
 
 	goName = strcase.ToCamel(goName)
 
-	g.WriteLine("// " + goName + " wraps " + f.Name + ".")
+	g.w.WriteLine("// " + goName + " wraps " + f.Name + ".")
 
 	if f.ReturnType.Namespace == IdentNamespaceVoid {
-		g.WriteLine("func " + thisParam + goName + "(" + params + ") {")
+		g.w.WriteLine("func " + thisParam + goName + "(" + params + ") {")
 	} else {
-		ret := g.genType(f.ReturnType)
-		g.WriteLine("func " + thisParam + goName + "(" + params + ") " + ret + " {")
+		ret, err := g.genType(f.ReturnType)
+		if err != nil {
+			return err
+		}
+
+		g.w.WriteLine("func " + thisParam + goName + "(" + params + ") " + ret + " {")
 	}
 
-	g.Indent(1)
+	g.w.Indent(1)
 
 	args := ""
 	var postProcessArgs []string
 
 	for i, param := range f.Params {
-		if i == 0 && g.pkg == "avcodec" && param.Name == "pkt" && param.Type.Namespace == IdentNamespacePtr &&
+		if i == 0 && param.Name == "pkt" && param.Type.Namespace == IdentNamespacePtr &&
 			((param.Type.Inner.Namespace == IdentNamespaceDefault &&
 				param.Type.Inner.Name == "AVPacket") ||
 				(param.Type.Inner.Namespace == IdentNamespaceConst &&
@@ -440,13 +369,13 @@ func (g *Generator) processFunc(f *Func) {
 
 			case IdentNamespaceDefault:
 				if inner.Name == "char" {
-					g.WriteLine("var mapped" + newName + " *C." + inner.Name)
-					g.WriteLine("if " + newName + " != nil {")
-					g.Indent(1)
-					g.WriteLine("mapped" + newName + " = C.CString(*" + newName + ")")
-					g.WriteLine("// TODO: Fix string mem leak")
-					g.Indent(-1)
-					g.WriteLine("}")
+					g.w.WriteLine("var mapped" + newName + " *C." + inner.Name)
+					g.w.WriteLine("if " + newName + " != nil {")
+					g.w.Indent(1)
+					g.w.WriteLine("mapped" + newName + " = C.CString(*" + newName + ")")
+					g.w.WriteLine("// TODO: Fix string mem leak")
+					g.w.Indent(-1)
+					g.w.WriteLine("}")
 
 					args += "mapped" + newName
 					break
@@ -464,45 +393,50 @@ func (g *Generator) processFunc(f *Func) {
 
 				switch ip.Namespace {
 				case IdentNamespaceDefault:
-					g.WriteLine("var " + newName + "Outer **C." + ip.Name)
-					g.WriteLine("var " + newName + "Inner *C." + ip.Name)
-					g.WriteLine("if " + newName + " != nil {")
-					g.Indent(1)
-					g.WriteLine(newName + "Inner = (*C." + ip.Name + ")(*" + newName + ")")
-					g.WriteLine(newName + "Outer = &" + newName + "Inner")
-					g.Indent(-1)
-					g.WriteLine("}")
+					g.w.WriteLine("var " + newName + "Outer **C." + ip.Name)
+					g.w.WriteLine("var " + newName + "Inner *C." + ip.Name)
+					g.w.WriteLine("if " + newName + " != nil {")
+					g.w.Indent(1)
+					g.w.WriteLine(newName + "Inner = (*C." + ip.Name + ")(*" + newName + ")")
+					g.w.WriteLine(newName + "Outer = &" + newName + "Inner")
+					g.w.Indent(-1)
+					g.w.WriteLine("}")
+
+					innerType, err := g.genType(inner)
+					if err != nil {
+						return err
+					}
 
 					postProcessArgs = append(postProcessArgs,
 						"if "+newName+" != nil {",
-						"    *"+newName+" = ("+g.genType(inner)+")("+newName+"Inner)",
+						"    *"+newName+" = ("+innerType+")("+newName+"Inner)",
 						"}",
 					)
 
 					args += newName + "Outer"
 				default:
-					log.Panicln("Unknown namespace", ip.Namespace)
+					return fmt.Errorf("unknown namespace: %s", ip.Namespace)
 				}
 
 			default:
-				log.Panicln("Unknown namespace", inner.Namespace)
+				return fmt.Errorf("unknown namespace: %s", inner.Namespace)
 			}
 
 		default:
-			log.Panicln("Unknown namespace", pt.Namespace)
+			return fmt.Errorf("unknown namespace: %s", pt.Namespace)
 		}
 	}
 
 	funcCall := "C." + f.Name + "(" + args + ")"
 
 	if f.ReturnType.Namespace == IdentNamespaceVoid {
-		g.WriteLine(funcCall)
+		g.w.WriteLine(funcCall)
 	} else {
-		g.WriteLine("res := " + funcCall)
+		g.w.WriteLine("res := " + funcCall)
 	}
 
 	for _, arg := range postProcessArgs {
-		g.WriteLine(arg)
+		g.w.WriteLine(arg)
 	}
 
 	ret := f.ReturnType
@@ -511,12 +445,20 @@ func (g *Generator) processFunc(f *Func) {
 	case IdentNamespaceVoid:
 
 	case IdentNamespaceDefault:
-		mapped := g.genType(ret)
-		g.WriteLine("return " + mapped + "(res)")
+		mapped, err := g.genType(ret)
+		if err != nil {
+			return err
+		}
+
+		g.w.WriteLine("return " + mapped + "(res)")
 
 	case IdentNamespaceEnum:
-		mapped := g.genType(ret)
-		g.WriteLine("return " + mapped + "(res)")
+		mapped, err := g.genType(ret)
+		if err != nil {
+			return err
+		}
+
+		g.w.WriteLine("return " + mapped + "(res)")
 
 	case IdentNamespacePtr:
 		inner := ret.Inner
@@ -530,38 +472,43 @@ func (g *Generator) processFunc(f *Func) {
 		case IdentNamespaceDefault:
 			if inner.Name == "uint8_t" {
 				g.AddPkg("unsafe")
-				g.WriteLine("return unsafe.Pointer(res)")
+				g.w.WriteLine("return unsafe.Pointer(res)")
 			} else if inner.Name == "char" {
-				g.WriteLine("var mappedRes *string")
-				g.WriteLine("if res != nil {")
-				g.Indent(1)
-				g.WriteLine("resStr := C.GoString(res)")
-				g.WriteLine("mappedRes = &resStr")
-				g.Indent(-1)
-				g.WriteLine("}")
+				g.w.WriteLine("var mappedRes *string")
+				g.w.WriteLine("if res != nil {")
+				g.w.Indent(1)
+				g.w.WriteLine("resStr := C.GoString(res)")
+				g.w.WriteLine("mappedRes = &resStr")
+				g.w.Indent(-1)
+				g.w.WriteLine("}")
 
-				g.WriteLine("return mappedRes")
+				g.w.WriteLine("return mappedRes")
 			} else {
-				mapped := g.genType(ret)
+				mapped, err := g.genType(ret)
+				if err != nil {
+					return err
+				}
 
-				g.WriteLine("return (" + mapped + ")(res)")
+				g.w.WriteLine("return (" + mapped + ")(res)")
 			}
 		default:
-			log.Panicln("Unknown namespace", inner.Namespace)
+			return fmt.Errorf("unknown namespace: %s", inner.Namespace)
 		}
 
 	default:
-		log.Panicln("Unknown namespace", ret.Namespace)
+		return fmt.Errorf("unknown namespace: %s", ret.Namespace)
 	}
 
-	g.Indent(-1)
-	g.WriteLine("}")
+	g.w.Indent(-1)
+	g.w.WriteLine("}")
+
+	return nil
 }
 
-func (g *Generator) genType(t *Type) string {
+func (g *Generator) genType(t *Type) (string, error) {
 	switch t.Namespace {
 	case IdentNamespaceVoid:
-		return ""
+		return "", nil
 	case IdentNamespacePtr:
 		inner := t.Inner
 
@@ -573,57 +520,56 @@ func (g *Generator) genType(t *Type) string {
 		switch inner.Namespace {
 		case IdentNamespaceVoid:
 			g.AddPkg("unsafe")
-			return "unsafe.Pointer"
+			return "unsafe.Pointer", nil
 
 		case IdentNamespaceDefault:
 			if inner.Name == "uint8_t" {
 				g.AddPkg("unsafe")
-				return "unsafe.Pointer"
+				return "unsafe.Pointer", nil
 			} else if inner.Name == "char" {
-				return "*string"
+				return "*string", nil
 			}
-			//else if inner.Name == "size_t" {
-			//	return "*uintptr"
-			//}
 
 			_, hasMap := CTypeMap[inner.Name]
 			if hasMap {
-				log.Panicln("Unsupported pointer to native type", inner.Name)
+				return "", fmt.Errorf("unsupported pointer to native type: %s", inner.Name)
 			}
 
 			goName := CleanName(inner.Name)
-
-			return "*" + goName
+			return "*" + goName, nil
 
 		case IdentNamespacePtr:
-			return "*" + g.genType(inner)
+			gen, err := g.genType(inner)
+			if err != nil {
+				return "", err
+			}
+
+			return "*" + gen, nil
 
 		default:
-			return "not_imp:*" + string(inner.Namespace)
+			return "", fmt.Errorf("unknown namespace: %s", inner.Namespace)
 		}
 
 	case IdentNamespaceDefault:
 		if t.Name == "va_list" {
-			log.Panicln("va_list detected")
+			return "", fmt.Errorf("va_list detected")
 		}
 
 		mapped, hasMap := CTypeMap[t.Name]
 		if hasMap {
-			return mapped
+			return mapped, nil
 		}
 
 		goName := CleanName(t.Name)
 
-		return goName
+		return goName, nil
 
 	case IdentNamespaceEnum:
 		goName := CleanName(t.Name)
 
-		return goName
+		return goName, nil
 
 	default:
-		log.Panicln("Unknown namespace", t.Namespace)
-		return "not_imp" + string(t.Namespace)
+		return "", fmt.Errorf("unknown namespace: %s", t.Namespace)
 	}
-
 }
