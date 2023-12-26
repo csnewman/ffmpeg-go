@@ -1,2 +1,6 @@
+github.com/dave/jennifer v1.7.0 h1:uRbSBH9UTS64yXbh4FrMHfgfY762RD+C7bUPKODpSJE=
+github.com/dave/jennifer v1.7.0/go.mod h1:nXbxhEmQfOZhWml3D1cDK5M1FLnMSozpbFN/m3RmGZc=
 github.com/go-clang/bootstrap v0.14.0 h1:pT2dHsqEfW3zxzNibo1svrtpbh+s/ET6SNohFaIakYM=
 github.com/go-clang/bootstrap v0.14.0/go.mod h1:a4EmDb8BXcdDBkMbvviEzrDd2LNZXqY7PwHmeyHKy1k=
+github.com/iancoleman/strcase v0.3.0 h1:nTXanmYxhfFAMjZL34Ov6gkzEsSJZ5DbhxWjvSASxEI=
+github.com/iancoleman/strcase v0.3.0/go.mod h1:iwCmte+B7n89clKwxIoIXy/HfoL7AsD47ZCWhYzw7ho=
