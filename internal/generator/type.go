@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type Type interface {
 	typeMarker()
 
@@ -18,7 +20,7 @@ type PointerType struct {
 }
 
 func (t *PointerType) typeMarker()    {}
-func (t *PointerType) String() string { return "*" + t.Inner.String() }
+func (t *PointerType) String() string { return fmt.Sprintf("*%v", t.Inner) }
 
 type FuncType struct {
 	Args   []Type
@@ -27,3 +29,11 @@ type FuncType struct {
 
 func (t *FuncType) typeMarker()    {}
 func (t *FuncType) String() string { return "func" }
+
+type ConstArray struct {
+	Inner Type
+	Size  int64
+}
+
+func (t *ConstArray) typeMarker()    {}
+func (t *ConstArray) String() string { return fmt.Sprintf("%v[%v]", t.Inner, t.Size) }

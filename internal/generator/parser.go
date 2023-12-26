@@ -19,6 +19,8 @@ func Parse() *Module {
 	p := &Parser{
 		mod: &Module{
 			functions: make(map[string]*Function),
+			structs:   make(map[string]*Struct),
+			enums:     make(map[string]*Enum),
 		},
 	}
 
@@ -76,20 +78,7 @@ func (p *Parser) parseTopLevel(indent string, c clang.Cursor) {
 
 	switch c.Kind() {
 	case clang.Cursor_TypedefDecl:
-		log.Println("typedef", "name", c.Spelling())
-
-		log.Println(" ", c.TypedefDeclUnderlyingType().Spelling())
-		log.Println(" ", c.TypedefDeclUnderlyingType().Kind())
-		log.Println(" ", c.TypedefDeclUnderlyingType().CanonicalType().Spelling())
-		log.Println(" ", c.TypedefDeclUnderlyingType().CanonicalType().Kind())
-
-		dec := c.TypedefDeclUnderlyingType().CanonicalType().Declaration()
-
-		dec.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
-			log.Println("  Inner ", "kind", cursor.Kind().String(), "name", cursor.Spelling())
-
-			return clang.ChildVisit_Continue
-		})
+		p.parseTypedef(indent, c)
 
 	case clang.Cursor_VarDecl:
 		log.Println("vardecl", "name", c.Spelling())
@@ -105,12 +94,50 @@ func (p *Parser) parseTopLevel(indent string, c clang.Cursor) {
 
 		log.Println("macro def", "name", c.Spelling())
 
-	case clang.Cursor_MacroExpansion, clang.Cursor_InclusionDirective, clang.Cursor_EnumDecl, clang.Cursor_StructDecl,
-		clang.Cursor_UnionDecl:
+	case clang.Cursor_EnumDecl:
+		p.parseEnum(indent, c)
+
+	case clang.Cursor_StructDecl:
+		p.parseStruct(indent, c)
+
+	case clang.Cursor_MacroExpansion, clang.Cursor_InclusionDirective, clang.Cursor_UnionDecl:
+		// ignore
 
 	default:
 		log.Panicln("Unexpected top level", "kind", c.Kind().String())
 	}
+}
+
+func (p *Parser) parseTypedef(indent string, c clang.Cursor) {
+	name := c.Spelling()
+	indent = fmt.Sprintf("%v[%v]", indent, name)
+
+	log.Println("typedef", "name", c.Spelling())
+
+	log.Println(" ", c.TypedefDeclUnderlyingType().Spelling())
+	log.Println(" ", c.TypedefDeclUnderlyingType().Kind())
+	log.Println(" ", c.TypedefDeclUnderlyingType().CanonicalType().Spelling())
+	log.Println(" ", c.TypedefDeclUnderlyingType().CanonicalType().Kind())
+
+	log.Println("dec, ", c.TypedefDeclUnderlyingType().Spelling())
+	log.Println("dec, ", c.TypedefDeclUnderlyingType().Declaration().Kind())
+
+	dec := c.TypedefDeclUnderlyingType().Declaration()
+
+	dec.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+		log.Println("  Inner ", "kind", cursor.Kind().String(), "name", cursor.Spelling())
+
+		return clang.ChildVisit_Continue
+	})
+
+	switch dec.Kind() {
+	case clang.Cursor_StructDecl:
+		p.parseStruct(indent, dec)
+
+	default:
+		log.Panicln("Unknown typedef", "kind", dec.Kind())
+	}
+
 }
 
 func (p *Parser) parseFunction(indent string, c clang.Cursor) {
@@ -162,7 +189,8 @@ func (p *Parser) parseType(indent string, t clang.Type) Type {
 		log.Println(indent, "Parsing type", t.Spelling(), "as void")
 		return nil
 
-	case clang.Type_Int, clang.Type_UInt, clang.Type_UChar, clang.Type_Char_S, clang.Type_Enum, clang.Type_Record:
+	case clang.Type_Int, clang.Type_UInt, clang.Type_UChar, clang.Type_Char_S, clang.Type_Float, clang.Type_Double,
+		clang.Type_Enum, clang.Type_Record:
 		log.Println(indent, "Parsing type", t.Spelling(), "as ident")
 		name := t.CanonicalType().Spelling()
 		name = strings.TrimPrefix(name, "const ")
@@ -228,9 +256,83 @@ func (p *Parser) parseType(indent string, t clang.Type) Type {
 			Result: result,
 		}
 
+	case clang.Type_ConstantArray:
+		log.Println(indent, "Parsing type", t.Spelling(), "as const array")
+		inner := p.parseType(indent, t.ArrayElementType())
+
+		return &ConstArray{
+			Inner: inner,
+			Size:  t.ArraySize(),
+		}
 	default:
 		log.Println(indent, "Parsing type", t.Spelling(), "as ???")
 		log.Panicln(indent, "Unknown type", t.Kind().Spelling())
 		return nil
 	}
+}
+
+func (p *Parser) parseEnum(indent string, c clang.Cursor) {
+	log.Println("enum", "name", c.Spelling())
+
+	name := c.Spelling()
+
+	if _, ok := p.mod.enums[name]; ok {
+		log.Println("already exists")
+
+		return
+	}
+
+	enum := &Enum{
+		Name: name,
+	}
+
+	c.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+		if cursor.Kind() != clang.Cursor_EnumConstantDecl {
+			log.Panicln("Unknown enum type", "kind", cursor.Kind().String())
+		}
+
+		enum.Constants = append(enum.Constants, cursor.Spelling())
+
+		return clang.ChildVisit_Continue
+	})
+
+	p.mod.enums[name] = enum
+	p.mod.enumOrder = append(p.mod.enumOrder, name)
+}
+
+func (p *Parser) parseStruct(indent string, c clang.Cursor) {
+	log.Println("struct", "name", c.Spelling())
+
+	name := c.Spelling()
+
+	if _, ok := p.mod.structs[name]; ok {
+		log.Println("already exists")
+
+		return
+	}
+
+	s := &Struct{
+		Name: name,
+	}
+
+	c.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+		if cursor.Kind() == clang.Cursor_FieldDecl {
+			name := cursor.Spelling()
+			if name == "" {
+				log.Fatal("no field name")
+			}
+
+			ty := p.parseType(fmt.Sprintf("%v[%v]", indent, name), cursor.Type())
+
+			s.Fields = append(s.Fields, &Field{
+				Name: name,
+				Type: ty,
+			})
+		}
+
+		return clang.ChildVisit_Continue
+	})
+
+	p.mod.structs[name] = s
+	p.mod.structOrder = append(p.mod.structOrder, name)
 }
