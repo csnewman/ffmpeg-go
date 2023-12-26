@@ -9,6 +9,9 @@ type Module struct {
 
 	enumOrder []string
 	enums     map[string]*Enum
+
+	callbackOrder []string
+	callbacks     map[string]*Function
 }
 
 type Function struct {

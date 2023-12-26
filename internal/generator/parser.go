@@ -12,7 +12,8 @@ import (
 const AVLibPath = "/opt/homebrew/Cellar/ffmpeg/6.0_1/include/"
 
 var files = []string{
-	"libavcodec/avcodec.h",
+	//"libavcodec/avcodec.h",
+	"libavformat/avformat.h",
 }
 
 func Parse() *Module {
@@ -21,6 +22,7 @@ func Parse() *Module {
 			functions: make(map[string]*Function),
 			structs:   make(map[string]*Struct),
 			enums:     make(map[string]*Enum),
+			callbacks: make(map[string]*Function),
 		},
 	}
 
@@ -114,13 +116,60 @@ func (p *Parser) parseTypedef(indent string, c clang.Cursor) {
 
 	log.Println("typedef", "name", c.Spelling())
 
-	log.Println(" ", c.TypedefDeclUnderlyingType().Spelling())
-	log.Println(" ", c.TypedefDeclUnderlyingType().Kind())
-	log.Println(" ", c.TypedefDeclUnderlyingType().CanonicalType().Spelling())
-	log.Println(" ", c.TypedefDeclUnderlyingType().CanonicalType().Kind())
+	var params []*Param
 
-	log.Println("dec, ", c.TypedefDeclUnderlyingType().Spelling())
-	log.Println("dec, ", c.TypedefDeclUnderlyingType().Declaration().Kind())
+	c.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+		log.Println("  --- ", "kind", cursor.Kind().String(), "name", cursor.Spelling())
+
+		if cursor.Kind() == clang.Cursor_ParmDecl {
+			name := cursor.Spelling()
+			if name == "" {
+				log.Fatal("no param name")
+			}
+
+			ty := p.parseType(fmt.Sprintf("%v[%v]", indent, name), cursor.Type())
+
+			params = append(params, &Param{
+				Name: name,
+				Type: ty,
+			})
+		}
+
+		return clang.ChildVisit_Continue
+	})
+
+	log.Println("dk ", c.Definition().Kind())
+	log.Println("ds ", c.Definition().Spelling())
+	log.Println("s ", c.TypedefDeclUnderlyingType().Spelling())
+	log.Println("k ", c.TypedefDeclUnderlyingType().Kind())
+	log.Println("cs ", c.TypedefDeclUnderlyingType().CanonicalType().Spelling())
+	log.Println("ck ", c.TypedefDeclUnderlyingType().CanonicalType().Kind())
+
+	if len(params) > 0 {
+		ut := c.TypedefDeclUnderlyingType()
+		pt := ut.PointeeType()
+
+		if pt.NumArgTypes() != int32(len(params)) {
+			log.Panicln("arg mismatch")
+		}
+
+		result := p.parseType(fmt.Sprintf("%v[%v]", indent, name), pt.ResultType())
+
+		if _, ok := p.mod.callbacks[name]; ok {
+			log.Panicln("callback already exists")
+
+			return
+		}
+
+		p.mod.callbacks[name] = &Function{
+			Name:   name,
+			Args:   params,
+			Result: result,
+		}
+		p.mod.callbackOrder = append(p.mod.callbackOrder, name)
+
+		return
+	}
 
 	dec := c.TypedefDeclUnderlyingType().Declaration()
 
@@ -264,6 +313,15 @@ func (p *Parser) parseType(indent string, t clang.Type) Type {
 			Inner: inner,
 			Size:  t.ArraySize(),
 		}
+
+	case clang.Type_IncompleteArray:
+		log.Println(indent, "Parsing type", t.Spelling(), "as array")
+		inner := p.parseType(indent, t.ArrayElementType())
+
+		return &Array{
+			Inner: inner,
+		}
+
 	default:
 		log.Println(indent, "Parsing type", t.Spelling(), "as ???")
 		log.Panicln(indent, "Unknown type", t.Kind().Spelling())

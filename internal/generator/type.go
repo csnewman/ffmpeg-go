@@ -37,3 +37,10 @@ type ConstArray struct {
 
 func (t *ConstArray) typeMarker()    {}
 func (t *ConstArray) String() string { return fmt.Sprintf("%v[%v]", t.Inner, t.Size) }
+
+type Array struct {
+	Inner Type
+}
+
+func (t *Array) typeMarker()    {}
+func (t *Array) String() string { return fmt.Sprintf("%v[?]", t.Inner) }
