@@ -7,5 +7,7 @@ import (
 func main() {
 	log.Println("Bindings generator")
 
-	Parse()
+	m := Parse()
+
+	Gen(m)
 }
