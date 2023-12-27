@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"path"
+	"slices"
 	"strings"
 
 	"github.com/go-clang/bootstrap/clang"
@@ -12,6 +13,7 @@ import (
 const AVLibPath = "/opt/homebrew/Cellar/ffmpeg/6.0_1/include/"
 
 var files = []string{
+	"libavcodec/codec_id.h",
 	//"libavcodec/avcodec.h",
 	"libavformat/avformat.h",
 }
@@ -334,7 +336,7 @@ func (p *Parser) parseEnum(indent string, c clang.Cursor) {
 
 	name := c.Spelling()
 
-	if _, ok := p.mod.enums[name]; ok {
+	if val, ok := p.mod.enums[name]; ok && len(val.Constants) > 0 {
 		log.Println("already exists")
 
 		return
@@ -354,6 +356,10 @@ func (p *Parser) parseEnum(indent string, c clang.Cursor) {
 		return clang.ChildVisit_Continue
 	})
 
+	p.mod.enumOrder = slices.DeleteFunc(p.mod.enumOrder, func(s string) bool {
+		return s == name
+	})
+
 	p.mod.enums[name] = enum
 	p.mod.enumOrder = append(p.mod.enumOrder, name)
 }
@@ -363,7 +369,7 @@ func (p *Parser) parseStruct(indent string, c clang.Cursor) {
 
 	name := c.Spelling()
 
-	if _, ok := p.mod.structs[name]; ok {
+	if val, ok := p.mod.structs[name]; ok && len(val.Fields) > 0 {
 		log.Println("already exists")
 
 		return
@@ -389,6 +395,10 @@ func (p *Parser) parseStruct(indent string, c clang.Cursor) {
 		}
 
 		return clang.ChildVisit_Continue
+	})
+
+	p.mod.structOrder = slices.DeleteFunc(p.mod.structOrder, func(s string) bool {
+		return s == name
 	})
 
 	p.mod.structs[name] = s
