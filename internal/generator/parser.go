@@ -2,20 +2,21 @@ package main
 
 import (
 	"fmt"
+	"github.com/go-clang/bootstrap/clang"
 	"log"
 	"path"
 	"slices"
-	"strings"
-
-	"github.com/go-clang/bootstrap/clang"
 )
 
 const AVLibPath = "/opt/homebrew/Cellar/ffmpeg/6.0_1/include/"
 
 var files = []string{
 	"libavcodec/codec_id.h",
+	"libavcodec/packet.h",
 	//"libavcodec/avcodec.h",
+	"libavformat/avio.h",
 	"libavformat/avformat.h",
+	"libavutil/samplefmt.h",
 }
 
 func Parse() *Module {
@@ -42,6 +43,7 @@ func Parse() *Module {
 type Parser struct {
 	path string
 	mod  *Module
+	tu   clang.TranslationUnit
 }
 
 func (p *Parser) parseFile(indent string, path string) {
@@ -64,6 +66,8 @@ func (p *Parser) parseFile(indent string, path string) {
 	for _, d := range diagnostics {
 		fmt.Println("PROBLEM:", d.Spelling())
 	}
+
+	p.tu = tu
 
 	tu.
 		TranslationUnitCursor().
@@ -129,7 +133,7 @@ func (p *Parser) parseTypedef(indent string, c clang.Cursor) {
 				log.Fatal("no param name")
 			}
 
-			ty := p.parseType(fmt.Sprintf("%v[%v]", indent, name), cursor.Type())
+			ty := p.parseType(fmt.Sprintf("%v[%v]", indent, name), cursor.Type(), nil)
 
 			params = append(params, &Param{
 				Name: name,
@@ -155,7 +159,7 @@ func (p *Parser) parseTypedef(indent string, c clang.Cursor) {
 			log.Panicln("arg mismatch")
 		}
 
-		result := p.parseType(fmt.Sprintf("%v[%v]", indent, name), pt.ResultType())
+		result := p.parseType(fmt.Sprintf("%v[%v]", indent, name), pt.ResultType(), nil)
 
 		if _, ok := p.mod.callbacks[name]; ok {
 			log.Panicln("callback already exists")
@@ -201,7 +205,7 @@ func (p *Parser) parseFunction(indent string, c clang.Cursor) {
 	log.Println("Parsing function", name)
 	indent = fmt.Sprintf("%v[%v]", indent, name)
 
-	result := p.parseType(fmt.Sprintf("%v[return]", indent), c.ResultType())
+	result := p.parseType(fmt.Sprintf("%v[return]", indent), c.ResultType(), nil)
 
 	var args []*Param
 
@@ -217,7 +221,17 @@ func (p *Parser) parseFunction(indent string, c clang.Cursor) {
 			log.Fatal("no param name")
 		}
 
-		ty := p.parseType(fmt.Sprintf("%v[%v]", indent, name), arg.Type())
+		aIndent := fmt.Sprintf("%v[%v]", indent, name)
+
+		tokens := p.parseTokens(p.tu.Tokenize(arg.Extent()))
+		t := tokens.PopEnd()
+
+		if !t.Is(clang.Token_Identifier, &name) {
+			log.Println(aIndent, "Identifier mismatch, ignoring tokens", tokens)
+			tokens = nil
+		}
+
+		ty := p.parseType(aIndent, arg.Type(), tokens)
 
 		args = append(args, &Param{
 			Name: name,
@@ -231,104 +245,6 @@ func (p *Parser) parseFunction(indent string, c clang.Cursor) {
 		Result: result,
 	}
 	p.mod.functionOrder = append(p.mod.functionOrder, name)
-}
-
-func (p *Parser) parseType(indent string, t clang.Type) Type {
-
-	switch t.Kind() {
-	case clang.Type_Void:
-		log.Println(indent, "Parsing type", t.Spelling(), "as void")
-		return nil
-
-	case clang.Type_Int, clang.Type_UInt, clang.Type_UChar, clang.Type_Char_S, clang.Type_Float, clang.Type_Double,
-		clang.Type_Enum, clang.Type_Record:
-		log.Println(indent, "Parsing type", t.Spelling(), "as ident")
-		name := t.CanonicalType().Spelling()
-		name = strings.TrimPrefix(name, "const ")
-		name = strings.TrimPrefix(name, "struct ")
-		name = strings.TrimPrefix(name, "enum ")
-
-		if strings.HasPrefix(name, "unsigned ") {
-			name = strings.TrimPrefix(name, "unsigned ")
-			name = fmt.Sprintf("u%v", name)
-		}
-
-		if name == "" {
-			log.Panicln(indent, "No name")
-		}
-
-		if strings.Contains(name, " ") {
-			log.Panicln(indent, "name", name, "contains space")
-		}
-
-		return &IdentType{
-			Name: name,
-		}
-
-	case clang.Type_Typedef:
-		log.Println(indent, "Parsing type", t.Spelling(), "as typedef")
-
-		name := t.DefName()
-		if name == "" {
-			log.Panicln(indent, "Unexpected def name", name)
-		}
-
-		return &IdentType{
-			Name: t.DefName(),
-		}
-
-	case clang.Type_Pointer:
-		log.Println(indent, "Parsing type", t.Spelling(), "as pointer")
-		inner := p.parseType(indent, t.PointeeType())
-
-		return &PointerType{
-			Inner: inner,
-		}
-
-	case clang.Type_Elaborated:
-		log.Println(indent, "Parsing type", t.Spelling(), "as elaborated")
-		return p.parseType(indent, t.NamedType())
-
-	case clang.Type_FunctionProto:
-		log.Println(indent, "Parsing type", t.Spelling(), "as funcproto")
-
-		var args []Type
-
-		for i := int32(0); i < t.NumArgTypes(); i++ {
-			arg := t.ArgType(uint32(i))
-			parsed := p.parseType(indent, arg)
-			args = append(args, parsed)
-		}
-
-		result := p.parseType(indent, t.ResultType())
-
-		return &FuncType{
-			Args:   args,
-			Result: result,
-		}
-
-	case clang.Type_ConstantArray:
-		log.Println(indent, "Parsing type", t.Spelling(), "as const array")
-		inner := p.parseType(indent, t.ArrayElementType())
-
-		return &ConstArray{
-			Inner: inner,
-			Size:  t.ArraySize(),
-		}
-
-	case clang.Type_IncompleteArray:
-		log.Println(indent, "Parsing type", t.Spelling(), "as array")
-		inner := p.parseType(indent, t.ArrayElementType())
-
-		return &Array{
-			Inner: inner,
-		}
-
-	default:
-		log.Println(indent, "Parsing type", t.Spelling(), "as ???")
-		log.Panicln(indent, "Unknown type", t.Kind().Spelling())
-		return nil
-	}
 }
 
 func (p *Parser) parseEnum(indent string, c clang.Cursor) {
@@ -386,7 +302,7 @@ func (p *Parser) parseStruct(indent string, c clang.Cursor) {
 				log.Fatal("no field name")
 			}
 
-			ty := p.parseType(fmt.Sprintf("%v[%v]", indent, name), cursor.Type())
+			ty := p.parseType(fmt.Sprintf("%v[%v]", indent, name), cursor.Type(), nil)
 
 			s.Fields = append(s.Fields, &Field{
 				Name: name,
