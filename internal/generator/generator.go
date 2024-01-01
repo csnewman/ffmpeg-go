@@ -181,9 +181,10 @@ outer:
 		o.Commentf("%v wraps %v.", goName, fn.Name)
 
 		var (
-			params []jen.Code
-			args   []jen.Code
-			body   []jen.Code
+			params   []jen.Code
+			args     []jen.Code
+			body     []jen.Code
+			postCall []jen.Code
 		)
 
 		for _, arg := range fn.Args {
@@ -201,6 +202,14 @@ outer:
 					cName = e.CName()
 
 					goType = jen.Id(v.Name)
+				} else if s, ok := g.input.structs[v.Name]; ok {
+					//cName = e.CName()
+					//
+					//goType = jen.Id(v.Name)
+
+					_ = s
+
+					continue outer
 				} else {
 					goType = jen.Id(v.Name)
 				}
@@ -215,6 +224,8 @@ outer:
 				switch iv := v.Inner.(type) {
 				case nil:
 					params = append(params, jen.Id(pName).Id("TODO"))
+
+					continue outer
 
 				case *IdentType:
 					if iv.Name == "char" {
@@ -232,16 +243,20 @@ outer:
 						args = append(args, jen.Id(convName))
 					} else if iv.Name == "uchar" {
 						params = append(params, jen.Id(pName).Qual("unsafe", "Pointer"))
+						continue outer
 
 					} else if iv.Name == "uint8_t" {
 						//retType = []jen.Code{
 						//	jen.Qual("unsafe", "Pointer"),
 						//}
 						params = append(params, jen.Id(pName).Id("TODO"))
+						continue outer
 					} else {
 
 						if m, ok := primTypes[iv.Name]; ok {
 							params = append(params, jen.Id(pName).Op("*").Id(m))
+							continue outer
+
 						} else if s, ok := g.input.structs[iv.Name]; ok {
 							params = append(params, jen.Id(pName).Op("*").Id(iv.Name))
 
@@ -260,6 +275,7 @@ outer:
 							//goType = jen.Id(iv.Name)
 
 							params = append(params, jen.Id(pName).Op("*").Id(iv.Name))
+							continue outer
 						}
 
 						//retType = []jen.Code{
@@ -274,14 +290,56 @@ outer:
 
 						if iiv.Name == "uint8_t" {
 							params = append(params, jen.Id(pName).Id("TODO"))
+							continue outer
 						} else if iiv.Name == "char" {
 							params = append(params, jen.Id(pName).Id("TODO"))
+							continue outer
 						} else {
 
 							if m, ok := primTypes[iiv.Name]; ok {
 								params = append(params, jen.Id(pName).Op("**").Id(m))
+								continue outer
+							} else if s, ok := g.input.structs[iiv.Name]; ok {
+								params = append(params, jen.Id(pName).Op("**").Id(iiv.Name))
+
+								ptrName := fmt.Sprintf("ptr%v", pName)
+								tmpName := fmt.Sprintf("tmp%v", pName)
+								oldName := fmt.Sprintf("oldTmp%v", pName)
+								innerName := fmt.Sprintf("inner%v", pName)
+
+								body = append(
+									body,
+									jen.Var().Id(ptrName).Op("**").Qual("C", s.CName()),
+									jen.Var().Id(tmpName).Op("*").Qual("C", s.CName()),
+									jen.Var().Id(oldName).Op("*").Qual("C", s.CName()),
+									jen.If(jen.Id(pName).Op("!=").Id("nil")).Block(
+										jen.Id(innerName).Op(":=").Op("*").Id(pName),
+										jen.If(jen.Id(innerName).Op("!=").Id("nil")).Block(
+											jen.Id(tmpName).Op("=").Id(innerName).Dot("ptr"),
+											jen.Id(oldName).Op("=").Id(tmpName),
+										),
+										jen.Id(ptrName).Op("=").Op("&").Id(tmpName),
+									),
+								)
+
+								postCall = append(
+									postCall,
+									jen.If(jen.Id(tmpName).Op("!=").Id(oldName).Op("&&").Id(pName).Op("!=").Id("nil")).Block(
+
+										jen.If(jen.Id(tmpName).Op("!=").Id("nil")).Block(
+											jen.Op("*").Id(pName).Op("=").Op("&").Id(iiv.Name).Values(jen.Dict{
+												jen.Id("ptr"): jen.Id(tmpName),
+											}),
+										).Else().Block(
+											jen.Op("*").Id(pName).Op("=").Id("nil"),
+										),
+									),
+								)
+
+								args = append(args, jen.Id(ptrName))
 							} else {
 								params = append(params, jen.Id(pName).Op("**").Id(iiv.Name))
+								continue outer
 							}
 						}
 
@@ -290,6 +348,7 @@ outer:
 					default:
 
 						params = append(params, jen.Id(pName).Id("TODO"))
+						continue outer
 
 					}
 
@@ -299,6 +358,7 @@ outer:
 
 			case *Array:
 				params = append(params, jen.Id(pName).Id("TODO"))
+				continue outer
 
 			default:
 				log.Panicln("unexpected type", reflect.TypeOf(arg.Type))
@@ -313,12 +373,21 @@ outer:
 		case nil:
 			// nothing
 			body = append(body, cc)
+			body = append(body, postCall...)
 
 		case *IdentType:
 			var goType *jen.Statement
 
 			if m, ok := primTypes[v.Name]; ok {
 				goType = jen.Id(m)
+			} else if s, ok := g.input.structs[v.Name]; ok {
+				//cName = e.CName()
+				//
+				//goType = jen.Id(v.Name)
+
+				_ = s
+
+				continue outer
 			} else {
 				goType = jen.Id(v.Name)
 			}
@@ -327,15 +396,15 @@ outer:
 				goType,
 			}
 
-			body = append(body,
-				jen.Id("ret").Op(":=").Add(cc),
-				jen.Return(goType.Clone().Params(jen.Id("ret"))),
-			)
+			body = append(body, jen.Id("ret").Op(":=").Add(cc))
+			body = append(body, postCall...)
+			body = append(body, jen.Return(goType.Clone().Params(jen.Id("ret"))))
 
 		case *PointerType:
 			body = append(body,
 				jen.Id("ret").Op(":=").Add(cc),
 			)
+			body = append(body, postCall...)
 
 			switch iv := v.Inner.(type) {
 			case nil:
@@ -343,6 +412,7 @@ outer:
 					jen.Qual("unsafe", "Pointer"),
 				}
 				body = append(body, jen.Return(jen.Id("ret")))
+				continue outer
 
 			case *IdentType:
 
@@ -356,6 +426,8 @@ outer:
 						jen.Qual("unsafe", "Pointer"),
 					}
 					body = append(body, jen.Return(jen.Id("ret")))
+
+					continue outer
 				} else if _, ok := g.input.structs[iv.Name]; ok {
 					retType = []jen.Code{
 						jen.Op("*").Id(iv.Name),
