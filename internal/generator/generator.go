@@ -12,10 +12,15 @@ import (
 
 var primTypes = map[string]string{
 	"char":     "uint8",
+	"uchar":    "uint8",
+	"ulong":    "uint32",
+	"uint8_t":  "uint8",
+	"uint16_t": "uint16",
 	"uint32_t": "uint32",
 	"int64_t":  "int64",
 	"uint64_t": "uint64",
 	"size_t":   "uint64",
+	"float":    "float32",
 	"double":   "float64",
 }
 
@@ -108,14 +113,112 @@ func (g *Generator) generateStructs() {
 			jen.Id("ptr").Op("*").Qual("C", cName),
 		)
 
+	fieldLoop:
 		for _, field := range st.Fields {
 			fName := strcase.ToCamel(field.Name)
+
+			cName := field.Name
+			if cName == "type" {
+				cName = fmt.Sprintf("_%v", cName)
+			}
+
+			var body []jen.Code
+
+			body = append(body, jen.Id("value").Op(":=").Id("s").Dot("ptr").Dot(cName))
+
+			var retType []jen.Code
+
+			switch v := field.Type.(type) {
+
+			case *IdentType:
+				var goType *jen.Statement
+
+				if m, ok := primTypes[v.Name]; ok {
+					goType = jen.Id(m)
+				} else if s, ok := g.input.structs[v.Name]; ok {
+					_ = s
+
+					continue fieldLoop
+				} else {
+					goType = jen.Id(v.Name)
+				}
+
+				retType = []jen.Code{
+					goType,
+				}
+
+				body = append(body, jen.Return(goType.Clone().Params(jen.Id("value"))))
+
+			case *PointerType:
+				switch iv := v.Inner.(type) {
+				case nil:
+					retType = []jen.Code{
+						jen.Qual("unsafe", "Pointer"),
+					}
+					body = append(body, jen.Return(jen.Id("value")))
+					continue fieldLoop
+
+				case *IdentType:
+
+					if iv.Name == "char" {
+						retType = []jen.Code{
+							jen.Op("*").Id("CStr"),
+						}
+						body = append(body, jen.Return(jen.Id("wrapCStr").Params(jen.Id("value"))))
+					} else if iv.Name == "uint8_t" {
+						retType = []jen.Code{
+							jen.Qual("unsafe", "Pointer"),
+						}
+						body = append(body, jen.Return(jen.Id("value")))
+
+						continue fieldLoop
+					} else if _, ok := primTypes[iv.Name]; ok {
+						continue fieldLoop
+					} else if _, ok := g.input.structs[iv.Name]; ok {
+						retType = []jen.Code{
+							jen.Op("*").Id(iv.Name),
+						}
+
+						body = append(
+							body,
+							jen.Var().Id("valueMapped").Op("*").Id(iv.Name),
+							jen.If(jen.Id("value").Op("!=").Id("nil")).Block(
+								jen.Id("valueMapped").Op("=").Op("&").Id(iv.Name).Values(jen.Dict{
+									jen.Id("ptr"): jen.Id("value"),
+								}),
+							),
+							jen.Return(jen.Id("valueMapped")),
+						)
+					} else {
+						retType = []jen.Code{
+							jen.Op("*").Id(iv.Name),
+						}
+						body = append(body, jen.Return(jen.Id("value")))
+					}
+
+				case *FuncType, *PointerType:
+					continue fieldLoop
+
+				default:
+					log.Panicln("unexpected type", reflect.TypeOf(v.Inner))
+				}
+
+			case *ConstArray:
+				continue fieldLoop
+
+			case *UnionType:
+				continue fieldLoop
+
+			default:
+				log.Panicln("unexpected type", reflect.TypeOf(field.Type))
+			}
 
 			o.Func().
 				Params(jen.Id("s").Op("*").Id(goName)).
 				Id(fName).
 				Params().
-				Block()
+				Add(retType...).
+				Block(body...)
 		}
 	}
 
@@ -151,6 +254,13 @@ outer:
 			o.Line()
 
 			continue
+		}
+
+		if typeEquals(fn.Result, fileType) {
+			o.Commentf("%v skipped due to return.", fn.Name)
+			o.Line()
+
+			continue outer
 		}
 
 		for _, arg := range fn.Args {
