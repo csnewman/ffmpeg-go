@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/go-clang/bootstrap/clang"
 	"log"
-	"os"
 	"path"
 	"slices"
 	"strings"
@@ -15,15 +14,21 @@ const AVLibPath = "/opt/homebrew/Cellar/ffmpeg/6.0_1/include/"
 var files = []string{
 	"libavcodec/avcodec.h",
 	"libavcodec/codec.h",
+	"libavcodec/codec_desc.h",
 	"libavcodec/codec_id.h",
 	"libavcodec/codec_par.h",
+	"libavcodec/defs.h",
 	"libavcodec/packet.h",
 	"libavformat/avformat.h",
 	"libavformat/avio.h",
+	"libavutil/avutil.h",
 	"libavutil/buffer.h",
+	"libavutil/channel_layout.h",
 	"libavutil/dict.h",
 	"libavutil/frame.h",
+	"libavutil/hwcontext.h",
 	"libavutil/log.h",
+	"libavutil/opt.h",
 	"libavutil/pixfmt.h",
 	"libavutil/rational.h",
 	"libavutil/samplefmt.h",
@@ -221,9 +226,9 @@ func (p *Parser) parseFunction(indent string, c clang.Cursor) {
 	retToks := p.parseTokens(p.tu.Tokenize(c.Extent()))
 
 	if !retToks.LeftCut(clang.Token_Identifier, &name) {
-		log.Println(indent, "failed to find ident")
+		log.Println(indent, "failed to find ident", c.Extent())
 
-		os.Exit(1)
+		retToks = nil
 	}
 
 	// Discard name
