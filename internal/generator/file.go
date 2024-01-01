@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 type Module struct {
 	functionOrder []string
 	functions     map[string]*Function
@@ -32,6 +34,14 @@ type Struct struct {
 	Fields   []*Field
 }
 
+func (s *Struct) CName() string {
+	if s.Typedefd {
+		return s.Name
+	}
+
+	return fmt.Sprintf("struct_%v", s.Name)
+}
+
 type Field struct {
 	Name string
 	Type Type
@@ -41,4 +51,12 @@ type Enum struct {
 	Name      string
 	Typedefd  bool
 	Constants []string
+}
+
+func (s *Enum) CName() string {
+	if s.Typedefd {
+		return s.Name
+	}
+
+	return fmt.Sprintf("enum_%v", s.Name)
 }

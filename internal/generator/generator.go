@@ -59,11 +59,7 @@ func (g *Generator) generateEnums() {
 
 		o.Commentf("%v wraps %v.", goName, enum.Name)
 
-		cName := fmt.Sprintf("enum_%v", enum.Name)
-
-		if enum.Typedefd {
-			cName = enum.Name
-		}
+		cName := enum.CName()
 
 		o.Type().Id(goName).Qual("C", cName)
 
@@ -106,11 +102,7 @@ func (g *Generator) generateStructs() {
 
 		o.Commentf("%v wraps %v.", goName, st.Name)
 
-		cName := fmt.Sprintf("struct_%v", st.Name)
-
-		if st.Typedefd {
-			cName = st.Name
-		}
+		cName := st.CName()
 
 		o.Type().Id(goName).Struct(
 			jen.Id("ptr").Op("*").Qual("C", cName),
@@ -206,9 +198,7 @@ outer:
 				if m, ok := primTypes[v.Name]; ok {
 					goType = jen.Id(m)
 				} else if e, ok := g.input.enums[v.Name]; ok {
-					if !e.Typedefd {
-						cName = fmt.Sprintf("enum_%v", e.Name)
-					}
+					cName = e.CName()
 
 					goType = jen.Id(v.Name)
 				} else {
@@ -227,14 +217,19 @@ outer:
 					params = append(params, jen.Id(pName).Id("TODO"))
 
 				case *IdentType:
-
 					if iv.Name == "char" {
+						params = append(params, jen.Id(pName).Op("*").Id("CStr"))
+						convName := fmt.Sprintf("tmp%v", pName)
 
-						params = append(params, jen.Id(pName).Id("string"))
+						body = append(
+							body,
+							jen.Var().Id(convName).Op("*").Qual("C", "char"),
+							jen.If(jen.Id(pName).Op("!=").Id("nil")).Block(
+								jen.Id(convName).Op("=").Id(pName).Dot("ptr"),
+							),
+						)
 
-						//retType = []jen.Code{
-						//	jen.Id("string"),
-						//}
+						args = append(args, jen.Id(convName))
 					} else if iv.Name == "uchar" {
 						params = append(params, jen.Id(pName).Qual("unsafe", "Pointer"))
 
@@ -246,8 +241,21 @@ outer:
 					} else {
 
 						if m, ok := primTypes[iv.Name]; ok {
-							//goType = jen.Id(m)
 							params = append(params, jen.Id(pName).Op("*").Id(m))
+						} else if s, ok := g.input.structs[iv.Name]; ok {
+							params = append(params, jen.Id(pName).Op("*").Id(iv.Name))
+
+							convName := fmt.Sprintf("tmp%v", pName)
+
+							body = append(
+								body,
+								jen.Var().Id(convName).Op("*").Qual("C", s.CName()),
+								jen.If(jen.Id(pName).Op("!=").Id("nil")).Block(
+									jen.Id(convName).Op("=").Id(pName).Dot("ptr"),
+								),
+							)
+
+							args = append(args, jen.Id(convName))
 						} else {
 							//goType = jen.Id(iv.Name)
 
@@ -327,7 +335,6 @@ outer:
 		case *PointerType:
 			body = append(body,
 				jen.Id("ret").Op(":=").Add(cc),
-				//jen.Return(goType.Clone().Params(jen.Id("ret"))),
 			)
 
 			switch iv := v.Inner.(type) {
@@ -349,6 +356,21 @@ outer:
 						jen.Qual("unsafe", "Pointer"),
 					}
 					body = append(body, jen.Return(jen.Id("ret")))
+				} else if _, ok := g.input.structs[iv.Name]; ok {
+					retType = []jen.Code{
+						jen.Op("*").Id(iv.Name),
+					}
+
+					body = append(
+						body,
+						jen.Var().Id("retMapped").Op("*").Id(iv.Name),
+						jen.If(jen.Id("ret").Op("!=").Id("nil")).Block(
+							jen.Id("retMapped").Op("=").Op("&").Id(iv.Name).Values(jen.Dict{
+								jen.Id("ptr"): jen.Id("ret"),
+							}),
+						),
+						jen.Return(jen.Id("retMapped")),
+					)
 				} else {
 					retType = []jen.Code{
 						jen.Op("*").Id(iv.Name),
