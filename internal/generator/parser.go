@@ -247,7 +247,9 @@ func (p *Parser) parseFunction(indent string, c clang.Cursor) {
 
 		name := arg.Spelling()
 		if name == "" {
-			log.Fatal("no param name")
+			log.Println(indent, "no param name")
+
+			name = fmt.Sprintf("param%v", i)
 		}
 
 		aIndent := fmt.Sprintf("%v[%v]", indent, name)
