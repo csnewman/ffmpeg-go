@@ -36,6 +36,7 @@ func Gen(i *Module) {
 		input: i,
 	}
 
+	g.generateConstants()
 	g.generateEnums()
 	g.generateStructs()
 	g.generateFuncs()
@@ -49,6 +50,29 @@ func newFile() *jen.File {
 	}
 
 	return o
+}
+
+func (g *Generator) generateConstants() {
+	i := g.input
+
+	o := newFile()
+
+	for _, constName := range i.constantOrder {
+		constant := i.constants[constName]
+
+		log.Println("Generating constant", constant.Name)
+
+		goName := g.convCamel(constant.Name)
+
+		o.Commentf("%v wraps %v.", goName, constant.Name)
+
+		o.Const().Id(goName).Id("int").Op("=").Qual("C", constName)
+	}
+
+	err := o.Save("constants.gen.go")
+	if err != nil {
+		log.Panicln(err)
+	}
 }
 
 func (g *Generator) generateEnums() {
@@ -74,7 +98,7 @@ func (g *Generator) generateEnums() {
 		var valDefs []jen.Code
 
 		for _, constant := range enum.Constants {
-			constName := strcase.ToCamel(constant)
+			constName := g.convCamel(constant)
 
 			valDefs = append(
 				valDefs,
@@ -337,7 +361,7 @@ outer:
 			}
 		}
 
-		goName := g.convFuncName(fn.Name)
+		goName := g.convCamel(fn.Name)
 
 		o.Commentf("%v wraps %v.", goName, fn.Name)
 
@@ -643,17 +667,19 @@ func convParamName(val string) string {
 	return val
 }
 
-func (g *Generator) convFuncName(val string) string {
-	hasAV := strings.HasPrefix(val, "av")
+func (g *Generator) convCamel(val string) string {
+	hasAV := strings.HasPrefix(val, "av") || strings.HasPrefix(val, "AV")
 
 	if hasAV {
 		val = strings.TrimPrefix(val, "av")
+		val = strings.TrimPrefix(val, "AV")
 	}
 
-	hasIO := strings.HasPrefix(val, "io")
+	hasIO := strings.HasPrefix(val, "io") || strings.HasPrefix(val, "IO")
 
 	if hasIO {
 		val = strings.TrimPrefix(val, "io")
+		val = strings.TrimPrefix(val, "IO")
 	}
 
 	val = strcase.ToCamel(val)

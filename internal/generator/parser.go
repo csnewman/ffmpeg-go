@@ -41,6 +41,7 @@ func Parse() *Module {
 			structs:   make(map[string]*Struct),
 			enums:     make(map[string]*Enum),
 			callbacks: make(map[string]*Function),
+			constants: make(map[string]*Constant),
 		},
 	}
 
@@ -117,7 +118,26 @@ func (p *Parser) parseTopLevel(indent string, c clang.Cursor) {
 			return
 		}
 
-		log.Println("macro def", "name", c.Spelling())
+		name := c.Spelling()
+
+		log.Println("macro def", "name", name)
+
+		if strings.HasSuffix(name, "_H") {
+			return
+		}
+
+		if strings.HasPrefix(name, "AV_CHANNEL_LAYOUT_") {
+			return
+		}
+
+		if name == "AV_TIME_BASE_Q" || name == "AV_CH_LAYOUT_NATIVE" {
+			return
+		}
+
+		p.mod.constants[name] = &Constant{
+			Name: name,
+		}
+		p.mod.constantOrder = append(p.mod.constantOrder, name)
 
 	case clang.Cursor_EnumDecl:
 		p.parseEnum(indent, c, false)

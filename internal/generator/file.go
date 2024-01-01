@@ -14,6 +14,9 @@ type Module struct {
 
 	callbackOrder []string
 	callbacks     map[string]*Function
+
+	constantOrder []string
+	constants     map[string]*Constant
 }
 
 type Function struct {
@@ -60,4 +63,8 @@ func (s *Enum) CName() string {
 	}
 
 	return fmt.Sprintf("enum_%v", s.Name)
+}
+
+type Constant struct {
+	Name string
 }
