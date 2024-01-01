@@ -11,9 +11,12 @@ import (
 )
 
 var primTypes = map[string]string{
+	"char":     "uint8",
+	"uint32_t": "uint32",
 	"int64_t":  "int64",
 	"uint64_t": "uint64",
 	"size_t":   "uint64",
+	"double":   "float64",
 }
 
 type Generator struct {
@@ -55,7 +58,14 @@ func (g *Generator) generateEnums() {
 		goName := enumName
 
 		o.Commentf("%v wraps %v.", goName, enum.Name)
-		o.Type().Id(goName).Qual("C", enum.Name)
+
+		cName := fmt.Sprintf("enum_%v", enum.Name)
+
+		if enum.Typedefd {
+			cName = enum.Name
+		}
+
+		o.Type().Id(goName).Qual("C", cName)
 
 		var valDefs []jen.Code
 
@@ -161,7 +171,7 @@ outer:
 			}
 		}
 
-		goName := convFuncName(fn.Name)
+		goName := g.convFuncName(fn.Name)
 
 		o.Commentf("%v wraps %v.", goName, fn.Name)
 
@@ -233,7 +243,20 @@ outer:
 					switch iiv := iv.Inner.(type) {
 					case *IdentType:
 
-						params = append(params, jen.Id(pName).Op("*").Id(iiv.Name))
+						if iiv.Name == "uint8_t" {
+							params = append(params, jen.Id(pName).Id("TODO"))
+						} else if iiv.Name == "char" {
+							params = append(params, jen.Id(pName).Id("TODO"))
+						} else {
+
+							if m, ok := primTypes[iiv.Name]; ok {
+								params = append(params, jen.Id(pName).Op("**").Id(m))
+							} else {
+								params = append(params, jen.Id(pName).Op("**").Id(iiv.Name))
+							}
+						}
+
+						//params = append(params, jen.Id(pName).Op("**").Id(iiv.Name))
 
 					default:
 
@@ -282,6 +305,11 @@ outer:
 
 		case *PointerType:
 			switch iv := v.Inner.(type) {
+			case nil:
+				retType = []jen.Code{
+					jen.Qual("unsafe", "Pointer"),
+				}
+
 			case *IdentType:
 
 				if iv.Name == "char" {
@@ -337,7 +365,7 @@ func convParamName(val string) string {
 	return val
 }
 
-func convFuncName(val string) string {
+func (g *Generator) convFuncName(val string) string {
 	hasAV := strings.HasPrefix(val, "av")
 
 	if hasAV {
@@ -358,6 +386,11 @@ func convFuncName(val string) string {
 
 	if hasAV {
 		val = fmt.Sprintf("AV%v", val)
+	}
+
+	// Temporary hack
+	if _, ok := g.input.structs[val]; ok {
+		val = fmt.Sprintf("%v_", val)
 	}
 
 	return val

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/go-clang/bootstrap/clang"
 	"log"
+	"os"
 	"path"
 	"slices"
 	"strings"
@@ -15,9 +16,16 @@ var files = []string{
 	"libavcodec/avcodec.h",
 	"libavcodec/codec.h",
 	"libavcodec/codec_id.h",
+	"libavcodec/codec_par.h",
 	"libavcodec/packet.h",
-	"libavformat/avio.h",
 	"libavformat/avformat.h",
+	"libavformat/avio.h",
+	"libavutil/buffer.h",
+	"libavutil/dict.h",
+	"libavutil/frame.h",
+	"libavutil/log.h",
+	"libavutil/pixfmt.h",
+	"libavutil/rational.h",
 	"libavutil/samplefmt.h",
 }
 
@@ -105,7 +113,7 @@ func (p *Parser) parseTopLevel(indent string, c clang.Cursor) {
 		log.Println("macro def", "name", c.Spelling())
 
 	case clang.Cursor_EnumDecl:
-		p.parseEnum(indent, c)
+		p.parseEnum(indent, c, false)
 
 	case clang.Cursor_StructDecl:
 		p.parseStruct(indent, c)
@@ -191,6 +199,9 @@ func (p *Parser) parseTypedef(indent string, c clang.Cursor) {
 	case clang.Cursor_StructDecl:
 		p.parseStruct(indent, dec)
 
+	case clang.Cursor_EnumDecl:
+		p.parseEnum(indent, dec, true)
+
 	default:
 		log.Panicln("Unknown typedef", "kind", dec.Kind())
 	}
@@ -265,7 +276,7 @@ func (p *Parser) parseFunction(indent string, c clang.Cursor) {
 	p.mod.functionOrder = append(p.mod.functionOrder, name)
 }
 
-func (p *Parser) parseEnum(indent string, c clang.Cursor) {
+func (p *Parser) parseEnum(indent string, c clang.Cursor, typedef bool) {
 	log.Println("enum", "name", c.Spelling())
 
 	name := c.Spelling()
@@ -286,11 +297,16 @@ func (p *Parser) parseEnum(indent string, c clang.Cursor) {
 	if val, ok := p.mod.enums[name]; ok && len(val.Constants) > 0 {
 		log.Println(indent, "already exists")
 
+		if typedef {
+			val.Typedefd = true
+		}
+
 		return
 	}
 
 	enum := &Enum{
-		Name: name,
+		Name:     name,
+		Typedefd: typedef,
 	}
 
 	c.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {

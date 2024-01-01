@@ -37,5 +37,6 @@ type Field struct {
 
 type Enum struct {
 	Name      string
+	Typedefd  bool
 	Constants []string
 }
