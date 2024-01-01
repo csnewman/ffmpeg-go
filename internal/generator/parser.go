@@ -6,14 +6,16 @@ import (
 	"log"
 	"path"
 	"slices"
+	"strings"
 )
 
 const AVLibPath = "/opt/homebrew/Cellar/ffmpeg/6.0_1/include/"
 
 var files = []string{
+	"libavcodec/avcodec.h",
+	"libavcodec/codec.h",
 	"libavcodec/codec_id.h",
 	"libavcodec/packet.h",
-	//"libavcodec/avcodec.h",
 	"libavformat/avio.h",
 	"libavformat/avformat.h",
 	"libavutil/samplefmt.h",
@@ -251,9 +253,22 @@ func (p *Parser) parseEnum(indent string, c clang.Cursor) {
 	log.Println("enum", "name", c.Spelling())
 
 	name := c.Spelling()
+	indent = fmt.Sprintf("%v[%v]", indent, name)
+
+	if strings.HasPrefix(name, "enum (unnamed") {
+		log.Println(indent, "Skipping unnamed enum")
+
+		// TODO: Treat as constants
+
+		return
+	}
+
+	if strings.Contains(name, " ") {
+		log.Panicln(indent, "Name contains spaces")
+	}
 
 	if val, ok := p.mod.enums[name]; ok && len(val.Constants) > 0 {
-		log.Println("already exists")
+		log.Println(indent, "already exists")
 
 		return
 	}
