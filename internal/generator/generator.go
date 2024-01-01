@@ -325,38 +325,40 @@ outer:
 			)
 
 		case *PointerType:
-			switch iv := v.Inner.(type) {
-			case nil:
-				retType = []jen.Code{
-					jen.Qual("unsafe", "Pointer"),
-				}
-
-			case *IdentType:
-
-				if iv.Name == "char" {
-					retType = []jen.Code{
-						jen.Id("string"),
-					}
-				} else if iv.Name == "uint8_t" {
-					retType = []jen.Code{
-						jen.Qual("unsafe", "Pointer"),
-					}
-				} else {
-					retType = []jen.Code{
-						jen.Op("*").Id(iv.Name),
-					}
-				}
-
-			default:
-				log.Panicln("unexpected type", reflect.TypeOf(v.Inner))
-			}
-
 			body = append(body,
 				jen.Id("ret").Op(":=").Add(cc),
 				//jen.Return(goType.Clone().Params(jen.Id("ret"))),
 			)
 
-			body = append(body, jen.Return(jen.Id("ret")))
+			switch iv := v.Inner.(type) {
+			case nil:
+				retType = []jen.Code{
+					jen.Qual("unsafe", "Pointer"),
+				}
+				body = append(body, jen.Return(jen.Id("ret")))
+
+			case *IdentType:
+
+				if iv.Name == "char" {
+					retType = []jen.Code{
+						jen.Op("*").Id("CStr"),
+					}
+					body = append(body, jen.Return(jen.Id("wrapCStr").Params(jen.Id("ret"))))
+				} else if iv.Name == "uint8_t" {
+					retType = []jen.Code{
+						jen.Qual("unsafe", "Pointer"),
+					}
+					body = append(body, jen.Return(jen.Id("ret")))
+				} else {
+					retType = []jen.Code{
+						jen.Op("*").Id(iv.Name),
+					}
+					body = append(body, jen.Return(jen.Id("ret")))
+				}
+
+			default:
+				log.Panicln("unexpected type", reflect.TypeOf(v.Inner))
+			}
 
 		default:
 			log.Panicln("unexpected type", reflect.TypeOf(fn.Result))
