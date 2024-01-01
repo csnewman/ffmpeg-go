@@ -11,6 +11,8 @@ import (
 )
 
 var primTypes = map[string]string{
+	"int":      "int",
+	"uint":     "uint",
 	"char":     "uint8",
 	"uchar":    "uint8",
 	"ulong":    "uint32",
@@ -124,7 +126,11 @@ func (g *Generator) generateStructs() {
 
 			var body []jen.Code
 
-			body = append(body, jen.Id("value").Op(":=").Id("s").Dot("ptr").Dot(cName))
+			if field.BitWidth != -1 {
+				continue fieldLoop
+			} else {
+				body = append(body, jen.Id("value").Op(":=").Id("s").Dot("ptr").Dot(cName))
+			}
 
 			var retType []jen.Code
 
@@ -138,6 +144,8 @@ func (g *Generator) generateStructs() {
 				} else if s, ok := g.input.structs[v.Name]; ok {
 					_ = s
 
+					continue fieldLoop
+				} else if _, ok := g.input.callbacks[v.Name]; ok {
 					continue fieldLoop
 				} else {
 					goType = jen.Id(v.Name)
@@ -160,7 +168,9 @@ func (g *Generator) generateStructs() {
 
 				case *IdentType:
 
-					if iv.Name == "char" {
+					if iv.Name == "URLContext" {
+						continue fieldLoop
+					} else if iv.Name == "char" {
 						retType = []jen.Code{
 							jen.Op("*").Id("CStr"),
 						}
@@ -173,6 +183,8 @@ func (g *Generator) generateStructs() {
 
 						continue fieldLoop
 					} else if _, ok := primTypes[iv.Name]; ok {
+						continue fieldLoop
+					} else if _, ok := g.input.enums[iv.Name]; ok {
 						continue fieldLoop
 					} else if _, ok := g.input.structs[iv.Name]; ok {
 						retType = []jen.Code{

@@ -155,6 +155,16 @@ func (c *TokenCollection) LeftCut(kind clang.TokenKind, text *string) bool {
 	return false
 }
 
+func (c *TokenCollection) Contains(kind clang.TokenKind, text *string) bool {
+	for _, token := range c.tokens {
+		if token.Is(kind, text) {
+			return true
+		}
+	}
+
+	return false
+}
+
 func (p *Parser) parseTokens(toks []clang.Token) *TokenCollection {
 	var parsed []*Token
 

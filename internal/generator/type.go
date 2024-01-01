@@ -265,12 +265,6 @@ func (p *Parser) parseType(indent string, t clang.Type, tokens *TokenCollection)
 
 		dec := t.Declaration()
 
-		dec.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
-			log.Println("  Inner ", "kind", cursor.Kind().String(), "name", cursor.Spelling())
-
-			return clang.ChildVisit_Continue
-		})
-
 		switch dec.Kind() {
 		case clang.Cursor_EnumDecl, clang.Cursor_StructDecl, clang.Cursor_TypedefDecl:
 			name := dec.Spelling()

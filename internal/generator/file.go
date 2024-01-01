@@ -43,8 +43,9 @@ func (s *Struct) CName() string {
 }
 
 type Field struct {
-	Name string
-	Type Type
+	Name     string
+	Type     Type
+	BitWidth int32
 }
 
 type Enum struct {

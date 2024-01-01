@@ -71,6 +71,8 @@ func (p *Parser) parseFile(indent string, path string) {
 		path,
 		[]string{
 			"-fparse-all-comments",
+			fmt.Sprintf("-I%v", AVLibPath),
+			"-I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Kernel.framework/Headers/",
 		},
 		nil,
 		clang.TranslationUnit_IncludeBriefCommentsInCodeCompletion|clang.TranslationUnit_DetailedPreprocessingRecord,
@@ -363,11 +365,32 @@ func (p *Parser) parseStruct(indent string, c clang.Cursor, typedef bool) {
 				log.Fatal("no field name")
 			}
 
-			ty := p.parseType(fmt.Sprintf("%v[%v]", indent, name), cursor.Type(), nil)
+			fIndent := fmt.Sprintf("%v[%v]", indent, name)
+
+			tokens := p.parseTokens(p.tu.Tokenize(cursor.Extent()))
+
+			log.Println(tokens)
+
+			tokens.TrimPrefix(clang.Token_Identifier, strptr("attribute_deprecated"))
+
+			if tokens.Contains(clang.Token_Punctuation, strptr(",")) {
+				log.Println(fIndent, "Contains comma, ignoring tokens", tokens)
+				tokens = nil
+			}
+
+			t := tokens.PopEnd()
+
+			if !t.Is(clang.Token_Identifier, &name) {
+				log.Println(fIndent, "Identifier mismatch, ignoring tokens", tokens)
+				tokens = nil
+			}
+
+			ty := p.parseType(fIndent, cursor.Type(), tokens)
 
 			s.Fields = append(s.Fields, &Field{
-				Name: name,
-				Type: ty,
+				Name:     name,
+				Type:     ty,
+				BitWidth: cursor.FieldDeclBitWidth(),
 			})
 		}
 
