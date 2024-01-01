@@ -1,5 +1,6 @@
 package main
 
+import "C"
 import (
 	"fmt"
 	"log"
@@ -120,19 +121,21 @@ func (g *Generator) generateStructs() {
 			fName := strcase.ToCamel(field.Name)
 
 			cName := field.Name
-			if cName == "type" {
+			if cName == "type" || cName == "range" {
 				cName = fmt.Sprintf("_%v", cName)
 			}
 
-			var body []jen.Code
+			var (
+				body    []jen.Code
+				retType []jen.Code
+				params  []jen.Code
+			)
 
 			if field.BitWidth != -1 {
 				continue fieldLoop
 			} else {
 				body = append(body, jen.Id("value").Op(":=").Id("s").Dot("ptr").Dot(cName))
 			}
-
-			var retType []jen.Code
 
 			switch v := field.Type.(type) {
 
@@ -208,8 +211,44 @@ func (g *Generator) generateStructs() {
 						body = append(body, jen.Return(jen.Id("value")))
 					}
 
-				case *FuncType, *PointerType:
+				case *FuncType:
 					continue fieldLoop
+
+				case *PointerType:
+
+					switch iiv := iv.Inner.(type) {
+					case *IdentType:
+						if st, ok := g.input.structs[iiv.Name]; ok {
+							retType = []jen.Code{
+								jen.Op("*").Id(iiv.Name),
+							}
+
+							cName := st.CName()
+							params = append(params, jen.Id("i").Id("uint"))
+							fName = fmt.Sprintf("%vEntry", fName)
+
+							body = append(body,
+								jen.Id("ptr").Op(":=").Id("arrayGet").
+									Types(jen.Op("*").Qual("C", cName)).
+									Params(
+										jen.Id("value"),
+										jen.Id("uintptr").Params(jen.Id("i")),
+									),
+								jen.Var().Id("valueMapped").Op("*").Id(iiv.Name),
+								jen.If(jen.Id("ptr").Op("!=").Id("nil")).Block(
+									jen.Id("valueMapped").Op("=").Op("&").Id(iiv.Name).Values(jen.Dict{
+										jen.Id("ptr"): jen.Id("ptr"),
+									}),
+								),
+								jen.Return(jen.Id("valueMapped")),
+							)
+						} else {
+							continue fieldLoop
+						}
+
+					default:
+						log.Panicln("unexpected type", reflect.TypeOf(iv.Inner))
+					}
 
 				default:
 					log.Panicln("unexpected type", reflect.TypeOf(v.Inner))
@@ -228,7 +267,7 @@ func (g *Generator) generateStructs() {
 			o.Func().
 				Params(jen.Id("s").Op("*").Id(goName)).
 				Id(fName).
-				Params().
+				Params(params...).
 				Add(retType...).
 				Block(body...)
 		}
