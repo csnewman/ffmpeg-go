@@ -207,7 +207,23 @@ func (p *Parser) parseFunction(indent string, c clang.Cursor) {
 	log.Println("Parsing function", name)
 	indent = fmt.Sprintf("%v[%v]", indent, name)
 
-	result := p.parseType(fmt.Sprintf("%v[return]", indent), c.ResultType(), nil)
+	retToks := p.parseTokens(p.tu.Tokenize(c.Extent()))
+
+	if !retToks.LeftCut(clang.Token_Identifier, &name) {
+		log.Println(indent, "failed to find ident")
+
+		os.Exit(1)
+	}
+
+	// Discard name
+	retToks.PopEnd()
+
+	retToks.TrimPrefix(clang.Token_Identifier, strptr("av_warn_unused_result"))
+	retToks.TrimPrefix(clang.Token_Identifier, strptr("attribute_deprecated"))
+	retToks.TrimPrefix(clang.Token_Keyword, strptr("static"))
+	retToks.TrimPrefix(clang.Token_Keyword, strptr("inline"))
+
+	result := p.parseType(fmt.Sprintf("%v[return]", indent), c.ResultType(), retToks)
 
 	var args []*Param
 

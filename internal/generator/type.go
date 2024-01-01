@@ -126,12 +126,12 @@ func (t *Array) Equals(other Type) bool {
 func (p *Parser) parseType(indent string, t clang.Type, tokens *TokenCollection) Type {
 	switch t.Kind() {
 	case clang.Type_Void:
-		log.Println(indent, "Parsing type", t.Spelling(), "as void")
+		log.Println(indent, "Parsing type", t.Spelling(), "as void", tokens)
 		return nil
 
 	case clang.Type_Int, clang.Type_UInt, clang.Type_Long, clang.Type_ULong, clang.Type_UChar, clang.Type_Char_S,
 		clang.Type_Float, clang.Type_Double, clang.Type_Enum, clang.Type_Record:
-		log.Println(indent, "Parsing type", t.Spelling(), "as ident")
+		log.Println(indent, "Parsing type", t.Spelling(), "as ident", tokens)
 		name := t.CanonicalType().Spelling()
 		name = strings.TrimPrefix(name, "const ")
 		name = strings.TrimPrefix(name, "struct ")
@@ -156,11 +156,22 @@ func (p *Parser) parseType(indent string, t clang.Type, tokens *TokenCollection)
 			tokens.TrimPrefix(clang.Token_Keyword, strptr("enum"))
 			wasUnsigned := tokens.TrimPrefix(clang.Token_Keyword, strptr("unsigned"))
 
-			if len(tokens.tokens) != 1 {
-				log.Panicln(indent, "Tokens != 1", tokens)
-			}
+			var tok *Token
 
-			tok := tokens.PopEnd()
+			if wasUnsigned && len(tokens.tokens) == 0 {
+				// Special case
+
+				tok = &Token{
+					kind: clang.Token_Identifier,
+					text: "int",
+				}
+			} else {
+				if len(tokens.tokens) != 1 {
+					log.Panicln(indent, "Tokens != 1", tokens)
+				}
+
+				tok = tokens.PopEnd()
+			}
 
 			if tok.kind != clang.Token_Identifier && tok.kind != clang.Token_Keyword {
 				log.Panicln(indent, "Unexpected final token", tok)
@@ -190,7 +201,7 @@ func (p *Parser) parseType(indent string, t clang.Type, tokens *TokenCollection)
 		}
 
 	case clang.Type_Typedef:
-		log.Println(indent, "Parsing type", t.Spelling(), "as typedef")
+		log.Println(indent, "Parsing type", t.Spelling(), "as typedef", tokens)
 
 		name := t.DefName()
 		if name == "" {
@@ -202,7 +213,7 @@ func (p *Parser) parseType(indent string, t clang.Type, tokens *TokenCollection)
 		}
 
 	case clang.Type_Pointer:
-		log.Println(indent, "Parsing type", t.Spelling(), "as pointer")
+		log.Println(indent, "Parsing type", t.Spelling(), "as pointer", tokens)
 
 		if tokens != nil {
 			tok := tokens.PopEnd()
@@ -220,11 +231,11 @@ func (p *Parser) parseType(indent string, t clang.Type, tokens *TokenCollection)
 		}
 
 	case clang.Type_Elaborated:
-		log.Println(indent, "Parsing type", t.Spelling(), "as elaborated")
+		log.Println(indent, "Parsing type", t.Spelling(), "as elaborated", tokens)
 		return p.parseType(indent, t.NamedType(), nil)
 
 	case clang.Type_FunctionProto:
-		log.Println(indent, "Parsing type", t.Spelling(), "as funcproto")
+		log.Println(indent, "Parsing type", t.Spelling(), "as funcproto", tokens)
 
 		var args []Type
 
@@ -242,7 +253,7 @@ func (p *Parser) parseType(indent string, t clang.Type, tokens *TokenCollection)
 		}
 
 	case clang.Type_ConstantArray:
-		log.Println(indent, "Parsing type", t.Spelling(), "as const array")
+		log.Println(indent, "Parsing type", t.Spelling(), "as const array", tokens)
 		inner := p.parseType(indent, t.ArrayElementType(), nil)
 
 		return &ConstArray{
@@ -251,7 +262,7 @@ func (p *Parser) parseType(indent string, t clang.Type, tokens *TokenCollection)
 		}
 
 	case clang.Type_IncompleteArray:
-		log.Println(indent, "Parsing type", t.Spelling(), "as array")
+		log.Println(indent, "Parsing type", t.Spelling(), "as array", tokens)
 		inner := p.parseType(indent, t.ArrayElementType(), nil)
 
 		return &Array{

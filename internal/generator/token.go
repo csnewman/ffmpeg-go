@@ -142,6 +142,19 @@ func (c *TokenCollection) TrimPrefix(kind clang.TokenKind, text *string) bool {
 	}
 }
 
+func (c *TokenCollection) LeftCut(kind clang.TokenKind, text *string) bool {
+	for i, token := range c.tokens {
+		if token.Is(kind, text) {
+			c.tokens = c.tokens[:i+1]
+
+			return true
+		}
+
+	}
+
+	return false
+}
+
 func (p *Parser) parseTokens(toks []clang.Token) *TokenCollection {
 	var parsed []*Token
 
