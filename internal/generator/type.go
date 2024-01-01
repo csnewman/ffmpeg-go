@@ -123,6 +123,36 @@ func (t *Array) Equals(other Type) bool {
 	return typeEquals(t.Inner, ot.Inner)
 }
 
+type UnionType struct {
+	Fields []*Field
+}
+
+func (t *UnionType) typeMarker()    {}
+func (t *UnionType) String() string { return "union" }
+
+func (t *UnionType) Equals(other Type) bool {
+	of, ok := other.(*UnionType)
+	if !ok {
+		return false
+	}
+
+	if len(t.Fields) != len(of.Fields) {
+		return false
+	}
+
+	for i := 0; i < len(t.Fields); i++ {
+		if t.Fields[i].Name != of.Fields[i].Name {
+			return false
+		}
+
+		if !typeEquals(t.Fields[i].Type, of.Fields[i].Type) {
+			return false
+		}
+	}
+
+	return true
+}
+
 func (p *Parser) parseType(indent string, t clang.Type, tokens *TokenCollection) Type {
 	switch t.Kind() {
 	case clang.Type_Void:
@@ -232,7 +262,57 @@ func (p *Parser) parseType(indent string, t clang.Type, tokens *TokenCollection)
 
 	case clang.Type_Elaborated:
 		log.Println(indent, "Parsing type", t.Spelling(), "as elaborated", tokens)
-		return p.parseType(indent, t.NamedType(), nil)
+
+		dec := t.Declaration()
+
+		dec.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+			log.Println("  Inner ", "kind", cursor.Kind().String(), "name", cursor.Spelling())
+
+			return clang.ChildVisit_Continue
+		})
+
+		switch dec.Kind() {
+		case clang.Cursor_EnumDecl, clang.Cursor_StructDecl, clang.Cursor_TypedefDecl:
+			name := dec.Spelling()
+
+			if name == "" {
+				log.Panicln(indent, "No name")
+			}
+
+			if strings.Contains(name, " ") {
+				log.Panicln(indent, "name", name, "contains space")
+			}
+
+			return &IdentType{Name: name}
+
+		case clang.Cursor_UnionDecl:
+			u := &UnionType{}
+
+			dec.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+				if cursor.Kind() == clang.Cursor_FieldDecl {
+					name := cursor.Spelling()
+					if name == "" {
+						log.Fatal("no field name")
+					}
+
+					ty := p.parseType(fmt.Sprintf("%v[%v]", indent, name), cursor.Type(), nil)
+
+					u.Fields = append(u.Fields, &Field{
+						Name: name,
+						Type: ty,
+					})
+				}
+
+				return clang.ChildVisit_Continue
+			})
+
+			return u
+
+		default:
+			log.Panicln("Unknown dec", "kind", dec.Kind())
+
+			return nil
+		}
 
 	case clang.Type_FunctionProto:
 		log.Println(indent, "Parsing type", t.Spelling(), "as funcproto", tokens)
