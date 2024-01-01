@@ -15,9 +15,10 @@ type Module struct {
 }
 
 type Function struct {
-	Name   string
-	Args   []*Param
-	Result Type
+	Name     string
+	Args     []*Param
+	Result   Type
+	Variadic bool
 }
 
 type Param struct {
@@ -26,8 +27,9 @@ type Param struct {
 }
 
 type Struct struct {
-	Name   string
-	Fields []*Field
+	Name     string
+	Typedefd bool
+	Fields   []*Field
 }
 
 type Field struct {

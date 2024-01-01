@@ -116,7 +116,7 @@ func (p *Parser) parseTopLevel(indent string, c clang.Cursor) {
 		p.parseEnum(indent, c, false)
 
 	case clang.Cursor_StructDecl:
-		p.parseStruct(indent, c)
+		p.parseStruct(indent, c, false)
 
 	case clang.Cursor_MacroExpansion, clang.Cursor_InclusionDirective, clang.Cursor_UnionDecl:
 		// ignore
@@ -197,7 +197,7 @@ func (p *Parser) parseTypedef(indent string, c clang.Cursor) {
 
 	switch dec.Kind() {
 	case clang.Cursor_StructDecl:
-		p.parseStruct(indent, dec)
+		p.parseStruct(indent, dec, true)
 
 	case clang.Cursor_EnumDecl:
 		p.parseEnum(indent, dec, true)
@@ -269,9 +269,10 @@ func (p *Parser) parseFunction(indent string, c clang.Cursor) {
 	}
 
 	p.mod.functions[name] = &Function{
-		Name:   name,
-		Args:   args,
-		Result: result,
+		Name:     name,
+		Args:     args,
+		Result:   result,
+		Variadic: c.IsVariadic(),
 	}
 	p.mod.functionOrder = append(p.mod.functionOrder, name)
 }
@@ -327,19 +328,25 @@ func (p *Parser) parseEnum(indent string, c clang.Cursor, typedef bool) {
 	p.mod.enumOrder = append(p.mod.enumOrder, name)
 }
 
-func (p *Parser) parseStruct(indent string, c clang.Cursor) {
+func (p *Parser) parseStruct(indent string, c clang.Cursor, typedef bool) {
 	log.Println("struct", "name", c.Spelling())
 
 	name := c.Spelling()
+	indent = fmt.Sprintf("%v[%v]", indent, name)
 
 	if val, ok := p.mod.structs[name]; ok && len(val.Fields) > 0 {
-		log.Println("already exists")
+		log.Println(indent, "already exists")
+
+		if typedef {
+			val.Typedefd = true
+		}
 
 		return
 	}
 
 	s := &Struct{
-		Name: name,
+		Name:     name,
+		Typedefd: typedef,
 	}
 
 	c.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {

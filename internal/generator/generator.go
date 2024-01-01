@@ -106,8 +106,14 @@ func (g *Generator) generateStructs() {
 
 		o.Commentf("%v wraps %v.", goName, st.Name)
 
+		cName := fmt.Sprintf("struct_%v", st.Name)
+
+		if st.Typedefd {
+			cName = st.Name
+		}
+
 		o.Type().Id(goName).Struct(
-			jen.Id("ptr").Op("*").Qual("C", st.Name),
+			jen.Id("ptr").Op("*").Qual("C", cName),
 		)
 
 		for _, field := range st.Fields {
@@ -148,6 +154,13 @@ outer:
 		o.Line()
 
 		// Check if function contains unsupported features
+		if fn.Variadic {
+			o.Commentf("%v skipped due to variadic arg.", fn.Name)
+			o.Line()
+
+			continue
+		}
+
 		for _, arg := range fn.Args {
 			skip := false
 
@@ -188,15 +201,23 @@ outer:
 			case *IdentType:
 				var goType *jen.Statement
 
+				cName := v.Name
+
 				if m, ok := primTypes[v.Name]; ok {
 					goType = jen.Id(m)
+				} else if e, ok := g.input.enums[v.Name]; ok {
+					if !e.Typedefd {
+						cName = fmt.Sprintf("enum_%v", e.Name)
+					}
+
+					goType = jen.Id(v.Name)
 				} else {
 					goType = jen.Id(v.Name)
 				}
 
 				params = append(params, jen.Id(pName).Add(goType))
 
-				args = append(args, jen.Qual("C", v.Name).Params(jen.Id(pName)))
+				args = append(args, jen.Qual("C", cName).Params(jen.Id(pName)))
 
 			case *PointerType:
 				//params = append(params, jen.Id(pName).Id("int"))
