@@ -19,6 +19,9 @@ var files = []string{
 	"libavcodec/codec_par.h",
 	"libavcodec/defs.h",
 	"libavcodec/packet.h",
+	"libavfilter/avfilter.h",
+	"libavfilter/buffersink.h",
+	"libavfilter/buffersrc.h",
 	"libavformat/avformat.h",
 	"libavformat/avio.h",
 	"libavutil/avutil.h",
@@ -192,8 +195,15 @@ func (p *Parser) parseTypedef(indent string, c clang.Cursor) {
 		ut := c.TypedefDeclUnderlyingType()
 		pt := ut.PointeeType()
 
+		ptr := true
+
+		if pt.Kind() == clang.Type_Invalid {
+			pt = ut
+			ptr = false
+		}
+
 		if pt.NumArgTypes() != int32(len(params)) {
-			log.Panicln("arg mismatch")
+			log.Panicln("arg mismatch", pt.NumArgTypes(), int32(len(params)))
 		}
 
 		result := p.parseType(fmt.Sprintf("%v[%v]", indent, name), pt.ResultType())
@@ -208,6 +218,7 @@ func (p *Parser) parseTypedef(indent string, c clang.Cursor) {
 			Name:   name,
 			Args:   params,
 			Result: result,
+			Ptr:    ptr,
 		}
 		p.mod.callbackOrder = append(p.mod.callbackOrder, name)
 

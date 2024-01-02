@@ -211,7 +211,26 @@ func (p *Parser) parseType(indent string, t clang.Type) Type {
 		dec := t.Declaration()
 
 		switch dec.Kind() {
-		case clang.Cursor_EnumDecl, clang.Cursor_StructDecl, clang.Cursor_TypedefDecl:
+		case clang.Cursor_EnumDecl:
+			name := dec.Spelling()
+
+			if name == "" {
+				log.Panicln(indent, "No name")
+			}
+
+			if strings.HasPrefix(name, "enum (unnamed") {
+				// TODO: Extract constants
+
+				return &IdentType{Name: "int"}
+			}
+
+			if strings.Contains(name, " ") {
+				log.Panicln(indent, "name", name, "contains space")
+			}
+
+			return &IdentType{Name: name}
+
+		case clang.Cursor_StructDecl, clang.Cursor_TypedefDecl:
 			name := dec.Spelling()
 
 			if name == "" {

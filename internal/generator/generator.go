@@ -195,7 +195,7 @@ func (g *Generator) generateStructs() {
 
 				case *IdentType:
 
-					if iv.Name == "URLContext" {
+					if iv.Name == "URLContext" || iv.Name == "AVFilterCommand" {
 						continue fieldLoop
 					} else if iv.Name == "char" {
 						retType = []jen.Code{
@@ -212,6 +212,8 @@ func (g *Generator) generateStructs() {
 					} else if _, ok := primTypes[iv.Name]; ok {
 						continue fieldLoop
 					} else if _, ok := g.input.enums[iv.Name]; ok {
+						continue fieldLoop
+					} else if _, ok := g.input.callbacks[iv.Name]; ok {
 						continue fieldLoop
 					} else if _, ok := g.input.structs[iv.Name]; ok {
 						retType = []jen.Code{

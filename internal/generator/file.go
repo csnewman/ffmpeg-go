@@ -24,6 +24,7 @@ type Function struct {
 	Args     []*Param
 	Result   Type
 	Variadic bool
+	Ptr      bool
 }
 
 type Param struct {
