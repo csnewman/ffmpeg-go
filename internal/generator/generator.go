@@ -136,9 +136,15 @@ func (g *Generator) generateStructs() {
 
 		cName := st.CName()
 
-		o.Type().Id(goName).Struct(
-			jen.Id("ptr").Op("*").Qual("C", cName),
-		)
+		if st.ByValue {
+			o.Type().Id(goName).Struct(
+				jen.Id("value").Qual("C", cName),
+			)
+		} else {
+			o.Type().Id(goName).Struct(
+				jen.Id("ptr").Op("*").Qual("C", cName),
+			)
+		}
 
 	fieldLoop:
 		for _, field := range st.Fields {
@@ -158,31 +164,51 @@ func (g *Generator) generateStructs() {
 			if field.BitWidth != -1 {
 				continue fieldLoop
 			} else {
-				body = append(body, jen.Id("value").Op(":=").Id("s").Dot("ptr").Dot(cName))
+				if st.ByValue {
+					body = append(body, jen.Id("value").Op(":=").Id("s").Dot("value").Dot(cName))
+				} else {
+					body = append(body, jen.Id("value").Op(":=").Id("s").Dot("ptr").Dot(cName))
+				}
 			}
 
 			switch v := field.Type.(type) {
 
 			case *IdentType:
-				var goType *jen.Statement
 
 				if m, ok := primTypes[v.Name]; ok {
-					goType = jen.Id(m)
-				} else if s, ok := g.input.structs[v.Name]; ok {
-					_ = s
+					goType := jen.Id(m)
 
-					continue fieldLoop
+					retType = []jen.Code{
+						goType,
+					}
+
+					body = append(body, jen.Return(goType.Clone().Params(jen.Id("value"))))
+				} else if s, ok := g.input.structs[v.Name]; ok {
+					if !s.ByValue {
+						continue fieldLoop
+					}
+
+					retType = []jen.Code{
+						jen.Op("*").Id(s.Name),
+					}
+
+					body = append(
+						body,
+						jen.Return(jen.Op("&").Id(s.Name).Values(jen.Dict{
+							jen.Id("value"): jen.Id("value"),
+						})),
+					)
 				} else if _, ok := g.input.callbacks[v.Name]; ok {
 					continue fieldLoop
 				} else {
-					goType = jen.Id(v.Name)
-				}
+					goType := jen.Id(v.Name)
 
-				retType = []jen.Code{
-					goType,
-				}
+					retType = []jen.Code{
+						goType,
+					}
 
-				body = append(body, jen.Return(goType.Clone().Params(jen.Id("value"))))
+					body = append(body, jen.Return(goType.Clone().Params(jen.Id("value"))))
+				}
 
 			case *PointerType:
 				switch iv := v.Inner.(type) {
@@ -215,7 +241,11 @@ func (g *Generator) generateStructs() {
 						continue fieldLoop
 					} else if _, ok := g.input.callbacks[iv.Name]; ok {
 						continue fieldLoop
-					} else if _, ok := g.input.structs[iv.Name]; ok {
+					} else if ist, ok := g.input.structs[iv.Name]; ok {
+						if ist.ByValue {
+							continue fieldLoop
+						}
+
 						retType = []jen.Code{
 							jen.Op("*").Id(iv.Name),
 						}

@@ -35,6 +35,7 @@ type Param struct {
 type Struct struct {
 	Name     string
 	Typedefd bool
+	ByValue  bool
 	Fields   []*Field
 }
 

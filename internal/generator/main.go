@@ -9,5 +9,7 @@ func main() {
 
 	m := Parse()
 
+	m.structs["AVRational"].ByValue = true
+
 	Gen(m)
 }
