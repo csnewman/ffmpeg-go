@@ -170,7 +170,7 @@ func (p *Parser) parseTypedef(indent string, c clang.Cursor) {
 				log.Fatal("no param name")
 			}
 
-			ty := p.parseType(fmt.Sprintf("%v[%v]", indent, name), cursor.Type(), nil)
+			ty := p.parseType(fmt.Sprintf("%v[%v]", indent, name), cursor.Type())
 
 			params = append(params, &Param{
 				Name: name,
@@ -196,7 +196,7 @@ func (p *Parser) parseTypedef(indent string, c clang.Cursor) {
 			log.Panicln("arg mismatch")
 		}
 
-		result := p.parseType(fmt.Sprintf("%v[%v]", indent, name), pt.ResultType(), nil)
+		result := p.parseType(fmt.Sprintf("%v[%v]", indent, name), pt.ResultType())
 
 		if _, ok := p.mod.callbacks[name]; ok {
 			log.Panicln("callback already exists")
@@ -245,23 +245,7 @@ func (p *Parser) parseFunction(indent string, c clang.Cursor) {
 	log.Println("Parsing function", name)
 	indent = fmt.Sprintf("%v[%v]", indent, name)
 
-	retToks := p.parseTokens(p.tu.Tokenize(c.Extent()))
-
-	if !retToks.LeftCut(clang.Token_Identifier, &name) {
-		log.Println(indent, "failed to find ident", c.Extent())
-
-		retToks = nil
-	}
-
-	// Discard name
-	retToks.PopEnd()
-
-	retToks.TrimPrefix(clang.Token_Identifier, strptr("av_warn_unused_result"))
-	retToks.TrimPrefix(clang.Token_Identifier, strptr("attribute_deprecated"))
-	retToks.TrimPrefix(clang.Token_Keyword, strptr("static"))
-	retToks.TrimPrefix(clang.Token_Keyword, strptr("inline"))
-
-	result := p.parseType(fmt.Sprintf("%v[return]", indent), c.ResultType(), retToks)
+	result := p.parseType(fmt.Sprintf("%v[return]", indent), c.ResultType())
 
 	var args []*Param
 
@@ -281,15 +265,7 @@ func (p *Parser) parseFunction(indent string, c clang.Cursor) {
 
 		aIndent := fmt.Sprintf("%v[%v]", indent, name)
 
-		tokens := p.parseTokens(p.tu.Tokenize(arg.Extent()))
-		t := tokens.PopEnd()
-
-		if !t.Is(clang.Token_Identifier, &name) {
-			log.Println(aIndent, "Identifier mismatch, ignoring tokens", tokens)
-			tokens = nil
-		}
-
-		ty := p.parseType(aIndent, arg.Type(), tokens)
+		ty := p.parseType(aIndent, arg.Type())
 
 		args = append(args, &Param{
 			Name: name,
@@ -387,25 +363,7 @@ func (p *Parser) parseStruct(indent string, c clang.Cursor, typedef bool) {
 
 			fIndent := fmt.Sprintf("%v[%v]", indent, name)
 
-			tokens := p.parseTokens(p.tu.Tokenize(cursor.Extent()))
-
-			log.Println(tokens)
-
-			tokens.TrimPrefix(clang.Token_Identifier, strptr("attribute_deprecated"))
-
-			if tokens.Contains(clang.Token_Punctuation, strptr(",")) {
-				log.Println(fIndent, "Contains comma, ignoring tokens", tokens)
-				tokens = nil
-			}
-
-			t := tokens.PopEnd()
-
-			if !t.Is(clang.Token_Identifier, &name) {
-				log.Println(fIndent, "Identifier mismatch, ignoring tokens", tokens)
-				tokens = nil
-			}
-
-			ty := p.parseType(fIndent, cursor.Type(), tokens)
+			ty := p.parseType(fIndent, cursor.Type())
 
 			s.Fields = append(s.Fields, &Field{
 				Name:     name,
