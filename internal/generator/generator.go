@@ -162,6 +162,9 @@ func (g *Generator) generateStructs() {
 			)
 
 			if field.BitWidth != -1 {
+				o.Commentf("%v skipped due to bitfield", fName)
+				o.Line()
+
 				continue fieldLoop
 			} else {
 				if st.ByValue {
@@ -185,6 +188,9 @@ func (g *Generator) generateStructs() {
 					body = append(body, jen.Return(goType.Clone().Params(jen.Id("value"))))
 				} else if s, ok := g.input.structs[v.Name]; ok {
 					if !s.ByValue {
+						o.Commentf("%v skipped due to ident byvalue", fName)
+						o.Line()
+
 						continue fieldLoop
 					}
 
@@ -199,6 +205,9 @@ func (g *Generator) generateStructs() {
 						})),
 					)
 				} else if _, ok := g.input.callbacks[v.Name]; ok {
+					o.Commentf("%v skipped due to ident callback", fName)
+					o.Line()
+
 					continue fieldLoop
 				} else {
 					goType := jen.Id(v.Name)
@@ -222,6 +231,9 @@ func (g *Generator) generateStructs() {
 				case *IdentType:
 
 					if iv.Name == "URLContext" || iv.Name == "AVFilterCommand" {
+						o.Commentf("%v skipped due to ptr to ignored type", fName)
+						o.Line()
+
 						continue fieldLoop
 					} else if iv.Name == "char" {
 						retType = []jen.Code{
@@ -234,15 +246,30 @@ func (g *Generator) generateStructs() {
 						}
 						body = append(body, jen.Return(jen.Id("value")))
 
+						o.Commentf("%v skipped due to ptr to uint8", fName)
+						o.Line()
+
 						continue fieldLoop
 					} else if _, ok := primTypes[iv.Name]; ok {
+						o.Commentf("%v skipped due to prim ptr", fName)
+						o.Line()
+
 						continue fieldLoop
 					} else if _, ok := g.input.enums[iv.Name]; ok {
+						o.Commentf("%v skipped due to enum ptr", fName)
+						o.Line()
+
 						continue fieldLoop
 					} else if _, ok := g.input.callbacks[iv.Name]; ok {
+						o.Commentf("%v skipped due to callback ptr", fName)
+						o.Line()
+
 						continue fieldLoop
 					} else if ist, ok := g.input.structs[iv.Name]; ok {
 						if ist.ByValue {
+							o.Commentf("%v skipped due to struct value ptr", fName)
+							o.Line()
+
 							continue fieldLoop
 						}
 
@@ -268,6 +295,9 @@ func (g *Generator) generateStructs() {
 					}
 
 				case *FuncType:
+					o.Commentf("%v skipped due to func ptr", fName)
+					o.Line()
+
 					continue fieldLoop
 
 				case *PointerType:
@@ -299,6 +329,9 @@ func (g *Generator) generateStructs() {
 								jen.Return(jen.Id("valueMapped")),
 							)
 						} else {
+							o.Commentf("%v skipped due to unknown ptr ptr", fName)
+							o.Line()
+
 							continue fieldLoop
 						}
 
@@ -311,9 +344,15 @@ func (g *Generator) generateStructs() {
 				}
 
 			case *ConstArray:
+				o.Commentf("%v skipped due to const array", fName)
+				o.Line()
+
 				continue fieldLoop
 
 			case *UnionType:
+				o.Commentf("%v skipped due to union type", fName)
+				o.Line()
+
 				continue fieldLoop
 
 			default:
@@ -386,7 +425,7 @@ outer:
 			}
 
 			if skip {
-				o.Commentf("%v skipped due to arg: %v.", fn.Name, arg.Type)
+				o.Commentf("%v skipped due to %v.", fn.Name, arg.Name)
 				o.Line()
 
 				continue outer
@@ -420,6 +459,9 @@ outer:
 
 					goType = jen.Id(v.Name)
 				} else if s, ok := g.input.structs[v.Name]; ok {
+					o.Commentf("%v skipped due to %v", fn.Name, pName)
+					o.Line()
+
 					//cName = e.CName()
 					//
 					//goType = jen.Id(v.Name)
@@ -440,6 +482,9 @@ outer:
 
 				switch iv := v.Inner.(type) {
 				case nil:
+					o.Commentf("%v skipped due to %v", fn.Name, pName)
+					o.Line()
+
 					params = append(params, jen.Id(pName).Id("TODO"))
 
 					continue outer
@@ -460,6 +505,9 @@ outer:
 						args = append(args, jen.Id(convName))
 					} else if iv.Name == "uchar" {
 						params = append(params, jen.Id(pName).Qual("unsafe", "Pointer"))
+
+						o.Commentf("%v skipped due to %v", fn.Name, pName)
+						o.Line()
 						continue outer
 
 					} else if iv.Name == "uint8_t" {
@@ -467,11 +515,17 @@ outer:
 						//	jen.Qual("unsafe", "Pointer"),
 						//}
 						params = append(params, jen.Id(pName).Id("TODO"))
+
+						o.Commentf("%v skipped due to %v", fn.Name, pName)
+						o.Line()
 						continue outer
 					} else {
 
 						if m, ok := primTypes[iv.Name]; ok {
 							params = append(params, jen.Id(pName).Op("*").Id(m))
+
+							o.Commentf("%v skipped due to %v", fn.Name, pName)
+							o.Line()
 							continue outer
 
 						} else if s, ok := g.input.structs[iv.Name]; ok {
@@ -492,6 +546,9 @@ outer:
 							//goType = jen.Id(iv.Name)
 
 							params = append(params, jen.Id(pName).Op("*").Id(iv.Name))
+
+							o.Commentf("%v skipped due to %v", fn.Name, pName)
+							o.Line()
 							continue outer
 						}
 
@@ -507,14 +564,23 @@ outer:
 
 						if iiv.Name == "uint8_t" {
 							params = append(params, jen.Id(pName).Id("TODO"))
+
+							o.Commentf("%v skipped due to %v", fn.Name, pName)
+							o.Line()
 							continue outer
 						} else if iiv.Name == "char" {
 							params = append(params, jen.Id(pName).Id("TODO"))
+
+							o.Commentf("%v skipped due to %v", fn.Name, pName)
+							o.Line()
 							continue outer
 						} else {
 
 							if m, ok := primTypes[iiv.Name]; ok {
 								params = append(params, jen.Id(pName).Op("**").Id(m))
+
+								o.Commentf("%v skipped due to %v", fn.Name, pName)
+								o.Line()
 								continue outer
 							} else if s, ok := g.input.structs[iiv.Name]; ok {
 								params = append(params, jen.Id(pName).Op("**").Id(iiv.Name))
@@ -556,6 +622,9 @@ outer:
 								args = append(args, jen.Id(ptrName))
 							} else {
 								params = append(params, jen.Id(pName).Op("**").Id(iiv.Name))
+
+								o.Commentf("%v skipped due to %v", fn.Name, pName)
+								o.Line()
 								continue outer
 							}
 						}
@@ -563,8 +632,10 @@ outer:
 						//params = append(params, jen.Id(pName).Op("**").Id(iiv.Name))
 
 					default:
-
 						params = append(params, jen.Id(pName).Id("TODO"))
+
+						o.Commentf("%v skipped due to %v", fn.Name, pName)
+						o.Line()
 						continue outer
 
 					}
@@ -575,6 +646,9 @@ outer:
 
 			case *Array:
 				params = append(params, jen.Id(pName).Id("TODO"))
+
+				o.Commentf("%v skipped due to %v", fn.Name, pName)
+				o.Line()
 				continue outer
 
 			default:
@@ -604,6 +678,8 @@ outer:
 
 				_ = s
 
+				o.Commentf("%v skipped due to return", fn.Name)
+				o.Line()
 				continue outer
 			} else {
 				goType = jen.Id(v.Name)
@@ -629,6 +705,9 @@ outer:
 					jen.Qual("unsafe", "Pointer"),
 				}
 				body = append(body, jen.Return(jen.Id("ret")))
+
+				o.Commentf("%v skipped due to return", fn.Name)
+				o.Line()
 				continue outer
 
 			case *IdentType:
@@ -644,6 +723,8 @@ outer:
 					}
 					body = append(body, jen.Return(jen.Id("ret")))
 
+					o.Commentf("%v skipped due to return", fn.Name)
+					o.Line()
 					continue outer
 				} else if _, ok := g.input.structs[iv.Name]; ok {
 					retType = []jen.Code{
