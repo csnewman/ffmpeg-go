@@ -31,6 +31,7 @@ var files = []string{
 	"libavutil/frame.h",
 	"libavutil/hwcontext.h",
 	"libavutil/log.h",
+	"libavutil/mem.h",
 	"libavutil/opt.h",
 	"libavutil/pixfmt.h",
 	"libavutil/rational.h",
@@ -126,6 +127,10 @@ func (p *Parser) parseTopLevel(indent string, c clang.Cursor) {
 		log.Println("macro def", "name", name)
 
 		if strings.HasSuffix(name, "_H") {
+			return
+		}
+
+		if strings.HasPrefix(name, "av_malloc_") {
 			return
 		}
 
