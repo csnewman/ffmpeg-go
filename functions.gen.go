@@ -905,7 +905,14 @@ func AVPacketFromData(pkt *AVPacket, data unsafe.Pointer, size int) int {
 // --- Function av_packet_new_side_data ---
 
 // AVPacketNewSideData wraps av_packet_new_side_data.
-// av_packet_new_side_data skipped due to return
+func AVPacketNewSideData(pkt *AVPacket, _type AVPacketSideDataType, size uint64) unsafe.Pointer {
+	var tmppkt *C.AVPacket
+	if pkt != nil {
+		tmppkt = pkt.ptr
+	}
+	ret := C.av_packet_new_side_data(tmppkt, C.enum_AVPacketSideDataType(_type), C.size_t(size))
+	return unsafe.Pointer(ret)
+}
 
 // --- Function av_packet_add_side_data ---
 
@@ -2435,7 +2442,14 @@ func AVStreamAddSideData(st *AVStream, _type AVPacketSideDataType, data unsafe.P
 // --- Function av_stream_new_side_data ---
 
 // AVStreamNewSideData wraps av_stream_new_side_data.
-// av_stream_new_side_data skipped due to return
+func AVStreamNewSideData(stream *AVStream, _type AVPacketSideDataType, size uint64) unsafe.Pointer {
+	var tmpstream *C.AVStream
+	if stream != nil {
+		tmpstream = stream.ptr
+	}
+	ret := C.av_stream_new_side_data(tmpstream, C.enum_AVPacketSideDataType(_type), C.size_t(size))
+	return unsafe.Pointer(ret)
+}
 
 // --- Function av_stream_get_side_data ---
 
@@ -4335,7 +4349,10 @@ func AVGetPictureTypeChar(pictType AVPictureType) uint8 {
 // --- Function av_x_if_null ---
 
 // AVXIfNull wraps av_x_if_null.
-// av_x_if_null skipped due to return
+func AVXIfNull(p unsafe.Pointer, x unsafe.Pointer) unsafe.Pointer {
+	ret := C.av_x_if_null(p, x)
+	return ret
+}
 
 // --- Function av_int_list_length_for_size ---
 
@@ -4457,7 +4474,14 @@ func AVBufferIsWritable(buf *AVBufferRef) int {
 // --- Function av_buffer_get_opaque ---
 
 // AVBufferGetOpaque wraps av_buffer_get_opaque.
-// av_buffer_get_opaque skipped due to return
+func AVBufferGetOpaque(buf *AVBufferRef) unsafe.Pointer {
+	var tmpbuf *C.AVBufferRef
+	if buf != nil {
+		tmpbuf = buf.ptr
+	}
+	ret := C.av_buffer_get_opaque(tmpbuf)
+	return ret
+}
 
 // --- Function av_buffer_get_ref_count ---
 
@@ -4605,7 +4629,14 @@ func AVBufferPoolGet(pool *AVBufferPool) *AVBufferRef {
 // --- Function av_buffer_pool_buffer_get_opaque ---
 
 // AVBufferPoolBufferGetOpaque wraps av_buffer_pool_buffer_get_opaque.
-// av_buffer_pool_buffer_get_opaque skipped due to return
+func AVBufferPoolBufferGetOpaque(ref *AVBufferRef) unsafe.Pointer {
+	var tmpref *C.AVBufferRef
+	if ref != nil {
+		tmpref = ref.ptr
+	}
+	ret := C.av_buffer_pool_buffer_get_opaque(tmpref)
+	return ret
+}
 
 // --- Function av_get_channel_layout ---
 
@@ -5654,7 +5685,14 @@ func AVHwframeTransferData(dst *AVFrame, src *AVFrame, flags int) int {
 // --- Function av_hwdevice_hwconfig_alloc ---
 
 // AVHwdeviceHwconfigAlloc wraps av_hwdevice_hwconfig_alloc.
-// av_hwdevice_hwconfig_alloc skipped due to return
+func AVHwdeviceHwconfigAlloc(deviceCtx *AVBufferRef) unsafe.Pointer {
+	var tmpdeviceCtx *C.AVBufferRef
+	if deviceCtx != nil {
+		tmpdeviceCtx = deviceCtx.ptr
+	}
+	ret := C.av_hwdevice_hwconfig_alloc(tmpdeviceCtx)
+	return ret
+}
 
 // --- Function av_hwdevice_get_hwframe_constraints ---
 
@@ -5824,27 +5862,42 @@ func AVLogGetFlags() int {
 // --- Function av_malloc ---
 
 // AVMalloc wraps av_malloc.
-// av_malloc skipped due to return
+func AVMalloc(size uint64) unsafe.Pointer {
+	ret := C.av_malloc(C.size_t(size))
+	return ret
+}
 
 // --- Function av_mallocz ---
 
 // AVMallocz wraps av_mallocz.
-// av_mallocz skipped due to return
+func AVMallocz(size uint64) unsafe.Pointer {
+	ret := C.av_mallocz(C.size_t(size))
+	return ret
+}
 
 // --- Function av_malloc_array ---
 
 // AVMallocArray wraps av_malloc_array.
-// av_malloc_array skipped due to return
+func AVMallocArray(nmemb uint64, size uint64) unsafe.Pointer {
+	ret := C.av_malloc_array(C.size_t(nmemb), C.size_t(size))
+	return ret
+}
 
 // --- Function av_calloc ---
 
 // AVCalloc wraps av_calloc.
-// av_calloc skipped due to return
+func AVCalloc(nmemb uint64, size uint64) unsafe.Pointer {
+	ret := C.av_calloc(C.size_t(nmemb), C.size_t(size))
+	return ret
+}
 
 // --- Function av_realloc ---
 
 // AVRealloc wraps av_realloc.
-// av_realloc skipped due to return
+func AVRealloc(ptr unsafe.Pointer, size uint64) unsafe.Pointer {
+	ret := C.av_realloc(ptr, C.size_t(size))
+	return ret
+}
 
 // --- Function av_reallocp ---
 
@@ -5857,12 +5910,18 @@ func AVReallocp(ptr unsafe.Pointer, size uint64) int {
 // --- Function av_realloc_f ---
 
 // AVReallocF wraps av_realloc_f.
-// av_realloc_f skipped due to return
+func AVReallocF(ptr unsafe.Pointer, nelem uint64, elsize uint64) unsafe.Pointer {
+	ret := C.av_realloc_f(ptr, C.size_t(nelem), C.size_t(elsize))
+	return ret
+}
 
 // --- Function av_realloc_array ---
 
 // AVReallocArray wraps av_realloc_array.
-// av_realloc_array skipped due to return
+func AVReallocArray(ptr unsafe.Pointer, nmemb uint64, size uint64) unsafe.Pointer {
+	ret := C.av_realloc_array(ptr, C.size_t(nmemb), C.size_t(size))
+	return ret
+}
 
 // --- Function av_reallocp_array ---
 
@@ -5928,7 +5987,10 @@ func AVStrndup(s *CStr, len uint64) *CStr {
 // --- Function av_memdup ---
 
 // AVMemdup wraps av_memdup.
-// av_memdup skipped due to return
+func AVMemdup(p unsafe.Pointer, size uint64) unsafe.Pointer {
+	ret := C.av_memdup(p, C.size_t(size))
+	return ret
+}
 
 // --- Function av_memcpy_backptr ---
 
@@ -6165,7 +6227,10 @@ func AVOptNext(obj unsafe.Pointer, prev *AVOption) *AVOption {
 // --- Function av_opt_child_next ---
 
 // AVOptChildNext wraps av_opt_child_next.
-// av_opt_child_next skipped due to return
+func AVOptChildNext(obj unsafe.Pointer, prev unsafe.Pointer) unsafe.Pointer {
+	ret := C.av_opt_child_next(obj, prev)
+	return ret
+}
 
 // --- Function av_opt_child_class_iterate ---
 
@@ -6408,7 +6473,18 @@ func AVOptGetDictVal(obj unsafe.Pointer, name *CStr, searchFlags int, outVal **A
 // --- Function av_opt_ptr ---
 
 // AVOptPtr wraps av_opt_ptr.
-// av_opt_ptr skipped due to return
+func AVOptPtr(avclass *AVClass, obj unsafe.Pointer, name *CStr) unsafe.Pointer {
+	var tmpavclass *C.AVClass
+	if avclass != nil {
+		tmpavclass = avclass.ptr
+	}
+	var tmpname *C.char
+	if name != nil {
+		tmpname = name.ptr
+	}
+	ret := C.av_opt_ptr(tmpavclass, obj, tmpname)
+	return ret
+}
 
 // --- Function av_opt_freep_ranges ---
 

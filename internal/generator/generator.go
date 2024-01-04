@@ -707,10 +707,6 @@ outer:
 				}
 				body = append(body, jen.Return(jen.Id("ret")))
 
-				o.Commentf("%v skipped due to return", fn.Name)
-				o.Line()
-				continue outer
-
 			case *IdentType:
 
 				if iv.Name == "char" {
@@ -722,11 +718,10 @@ outer:
 					retType = []jen.Code{
 						jen.Qual("unsafe", "Pointer"),
 					}
-					body = append(body, jen.Return(jen.Id("ret")))
-
-					o.Commentf("%v skipped due to return", fn.Name)
-					o.Line()
-					continue outer
+					body = append(
+						body,
+						jen.Return(jen.Qual("unsafe", "Pointer").Params(jen.Id("ret"))),
+					)
 				} else if _, ok := g.input.structs[iv.Name]; ok {
 					retType = []jen.Code{
 						jen.Op("*").Id(iv.Name),
