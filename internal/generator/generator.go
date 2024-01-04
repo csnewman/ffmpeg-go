@@ -144,6 +144,13 @@ func (g *Generator) generateStructs() {
 			o.Type().Id(goName).Struct(
 				jen.Id("ptr").Op("*").Qual("C", cName),
 			)
+
+			o.Func().
+				Params(jen.Id("s").Op("*").Id(goName)).
+				Id("RawPtr").
+				Params().
+				Qual("unsafe", "Pointer").
+				Block(jen.Return(jen.Qual("unsafe", "Pointer").Params(jen.Id("s").Dot("ptr"))))
 		}
 
 	fieldLoop:
@@ -478,16 +485,10 @@ outer:
 				args = append(args, jen.Qual("C", cName).Params(jen.Id(pName)))
 
 			case *PointerType:
-				//params = append(params, jen.Id(pName).Id("int"))
-
 				switch iv := v.Inner.(type) {
 				case nil:
-					o.Commentf("%v skipped due to %v", fn.Name, pName)
-					o.Line()
-
-					params = append(params, jen.Id(pName).Id("TODO"))
-
-					continue outer
+					params = append(params, jen.Id(pName).Qual("unsafe", "Pointer"))
+					args = append(args, jen.Id(pName))
 
 				case *IdentType:
 					if iv.Name == "char" {
@@ -511,14 +512,8 @@ outer:
 						continue outer
 
 					} else if iv.Name == "uint8_t" {
-						//retType = []jen.Code{
-						//	jen.Qual("unsafe", "Pointer"),
-						//}
-						params = append(params, jen.Id(pName).Id("TODO"))
-
-						o.Commentf("%v skipped due to %v", fn.Name, pName)
-						o.Line()
-						continue outer
+						params = append(params, jen.Id(pName).Qual("unsafe", "Pointer"))
+						args = append(args, jen.Params(jen.Op("*").Qual("C", iv.Name)).Params(jen.Id(pName)))
 					} else {
 
 						if m, ok := primTypes[iv.Name]; ok {
@@ -529,6 +524,12 @@ outer:
 							continue outer
 
 						} else if s, ok := g.input.structs[iv.Name]; ok {
+							if s.ByValue {
+								o.Commentf("%v skipped due to %v", fn.Name, pName)
+								o.Line()
+								continue outer
+							}
+
 							params = append(params, jen.Id(pName).Op("*").Id(iv.Name))
 
 							convName := fmt.Sprintf("tmp%v", pName)
