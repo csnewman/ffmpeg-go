@@ -7,6 +7,9 @@ package ffmpeg
 // #include <libavcodec/codec_par.h>
 // #include <libavcodec/defs.h>
 // #include <libavcodec/packet.h>
+// #include <libavfilter/avfilter.h>
+// #include <libavfilter/buffersink.h>
+// #include <libavfilter/buffersrc.h>
 // #include <libavformat/avformat.h>
 // #include <libavformat/avio.h>
 // #include <libavutil/avutil.h>
@@ -16,6 +19,7 @@ package ffmpeg
 // #include <libavutil/frame.h>
 // #include <libavutil/hwcontext.h>
 // #include <libavutil/log.h>
+// #include <libavutil/mem.h>
 // #include <libavutil/opt.h>
 // #include <libavutil/pixfmt.h>
 // #include <libavutil/rational.h>
@@ -873,6 +877,42 @@ const AVPktFlagTrusted int = C.AV_PKT_FLAG_TRUSTED
 
 // AVPktFlagDisposable wraps AV_PKT_FLAG_DISPOSABLE.
 const AVPktFlagDisposable int = C.AV_PKT_FLAG_DISPOSABLE
+
+// AVFilterFlagDynamicInputs wraps AVFILTER_FLAG_DYNAMIC_INPUTS.
+const AVFilterFlagDynamicInputs int = C.AVFILTER_FLAG_DYNAMIC_INPUTS
+
+// AVFilterFlagDynamicOutputs wraps AVFILTER_FLAG_DYNAMIC_OUTPUTS.
+const AVFilterFlagDynamicOutputs int = C.AVFILTER_FLAG_DYNAMIC_OUTPUTS
+
+// AVFilterFlagSliceThreads wraps AVFILTER_FLAG_SLICE_THREADS.
+const AVFilterFlagSliceThreads int = C.AVFILTER_FLAG_SLICE_THREADS
+
+// AVFilterFlagMetadataOnly wraps AVFILTER_FLAG_METADATA_ONLY.
+const AVFilterFlagMetadataOnly int = C.AVFILTER_FLAG_METADATA_ONLY
+
+// AVFilterFlagSupportTimelineGeneric wraps AVFILTER_FLAG_SUPPORT_TIMELINE_GENERIC.
+const AVFilterFlagSupportTimelineGeneric int = C.AVFILTER_FLAG_SUPPORT_TIMELINE_GENERIC
+
+// AVFilterFlagSupportTimelineInternal wraps AVFILTER_FLAG_SUPPORT_TIMELINE_INTERNAL.
+const AVFilterFlagSupportTimelineInternal int = C.AVFILTER_FLAG_SUPPORT_TIMELINE_INTERNAL
+
+// AVFilterFlagSupportTimeline wraps AVFILTER_FLAG_SUPPORT_TIMELINE.
+const AVFilterFlagSupportTimeline int = C.AVFILTER_FLAG_SUPPORT_TIMELINE
+
+// AVFilterThreadSlice wraps AVFILTER_THREAD_SLICE.
+const AVFilterThreadSlice int = C.AVFILTER_THREAD_SLICE
+
+// AVFilterCmdFlagOne wraps AVFILTER_CMD_FLAG_ONE.
+const AVFilterCmdFlagOne int = C.AVFILTER_CMD_FLAG_ONE
+
+// AVFilterCmdFlagFast wraps AVFILTER_CMD_FLAG_FAST.
+const AVFilterCmdFlagFast int = C.AVFILTER_CMD_FLAG_FAST
+
+// AVBuffersinkFlagPeek wraps AV_BUFFERSINK_FLAG_PEEK.
+const AVBuffersinkFlagPeek int = C.AV_BUFFERSINK_FLAG_PEEK
+
+// AVBuffersinkFlagNoRequest wraps AV_BUFFERSINK_FLAG_NO_REQUEST.
+const AVBuffersinkFlagNoRequest int = C.AV_BUFFERSINK_FLAG_NO_REQUEST
 
 // AVProbeScoreRetry wraps AVPROBE_SCORE_RETRY.
 const AVProbeScoreRetry int = C.AVPROBE_SCORE_RETRY

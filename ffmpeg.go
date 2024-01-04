@@ -54,10 +54,14 @@ func wrapCStr(ptr *C.char) *CStr {
 	}
 }
 
-func (s *CStr) Free() {
-	C.free(unsafe.Pointer(s.ptr))
+func (s *CStr) Dup() *CStr {
+	return AVStrdup(s)
 }
 
 func (s *CStr) String() string {
 	return C.GoString(s.ptr)
+}
+
+func (s *CStr) Free() {
+	C.free(unsafe.Pointer(s.ptr))
 }
