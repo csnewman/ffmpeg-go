@@ -28,7 +28,8 @@ func typeEquals(a Type, b Type) bool {
 }
 
 type IdentType struct {
-	Name string
+	Name       string
+	IsAnonEnum bool
 }
 
 func (t *IdentType) typeMarker()    {}
@@ -221,7 +222,7 @@ func (p *Parser) parseType(indent string, t clang.Type) Type {
 			if strings.HasPrefix(name, "enum (unnamed") {
 				// TODO: Extract constants
 
-				return &IdentType{Name: "int"}
+				return &IdentType{Name: "uint32_t", IsAnonEnum: true}
 			}
 
 			if strings.Contains(name, " ") {
