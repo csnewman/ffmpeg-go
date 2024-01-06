@@ -68,5 +68,6 @@ func (s *Enum) CName() string {
 }
 
 type Constant struct {
-	Name string
+	Name     string
+	FromEnum bool
 }

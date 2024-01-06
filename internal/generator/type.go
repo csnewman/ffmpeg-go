@@ -220,7 +220,21 @@ func (p *Parser) parseType(indent string, t clang.Type) Type {
 			}
 
 			if strings.HasPrefix(name, "enum (unnamed") {
-				// TODO: Extract constants
+				dec.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+					if cursor.Kind() != clang.Cursor_EnumConstantDecl {
+						log.Panicln("Unknown enum type", "kind", cursor.Kind().String())
+					}
+
+					name := cursor.Spelling()
+
+					p.mod.constants[name] = &Constant{
+						Name:     name,
+						FromEnum: true,
+					}
+					p.mod.constantOrder = append(p.mod.constantOrder, name)
+
+					return clang.ChildVisit_Continue
+				})
 
 				return &IdentType{Name: "uint32_t", IsAnonEnum: true}
 			}

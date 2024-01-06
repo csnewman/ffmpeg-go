@@ -792,6 +792,18 @@ const AVCodecCapEncoderFlush int = C.AV_CODEC_CAP_ENCODER_FLUSH
 // AVCodecCapEncoderReconFrame wraps AV_CODEC_CAP_ENCODER_RECON_FRAME.
 const AVCodecCapEncoderReconFrame int = C.AV_CODEC_CAP_ENCODER_RECON_FRAME
 
+// AVCodecHwConfigMethodHwDeviceCtx wraps AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX.
+const AVCodecHwConfigMethodHwDeviceCtx int = C.AV_CODEC_HW_CONFIG_METHOD_HW_DEVICE_CTX
+
+// AVCodecHwConfigMethodHwFramesCtx wraps AV_CODEC_HW_CONFIG_METHOD_HW_FRAMES_CTX.
+const AVCodecHwConfigMethodHwFramesCtx int = C.AV_CODEC_HW_CONFIG_METHOD_HW_FRAMES_CTX
+
+// AVCodecHwConfigMethodInternal wraps AV_CODEC_HW_CONFIG_METHOD_INTERNAL.
+const AVCodecHwConfigMethodInternal int = C.AV_CODEC_HW_CONFIG_METHOD_INTERNAL
+
+// AVCodecHwConfigMethodAdHoc wraps AV_CODEC_HW_CONFIG_METHOD_AD_HOC.
+const AVCodecHwConfigMethodAdHoc int = C.AV_CODEC_HW_CONFIG_METHOD_AD_HOC
+
 // AVCodecPropIntraOnly wraps AV_CODEC_PROP_INTRA_ONLY.
 const AVCodecPropIntraOnly int = C.AV_CODEC_PROP_INTRA_ONLY
 
@@ -909,11 +921,35 @@ const AVFilterCmdFlagOne int = C.AVFILTER_CMD_FLAG_ONE
 // AVFilterCmdFlagFast wraps AVFILTER_CMD_FLAG_FAST.
 const AVFilterCmdFlagFast int = C.AVFILTER_CMD_FLAG_FAST
 
+// AVLinkUninit wraps AVLINK_UNINIT.
+const AVLinkUninit int = C.AVLINK_UNINIT
+
+// AVLinkStartinit wraps AVLINK_STARTINIT.
+const AVLinkStartinit int = C.AVLINK_STARTINIT
+
+// AVLinkInit wraps AVLINK_INIT.
+const AVLinkInit int = C.AVLINK_INIT
+
+// AVFilterAutoConvertAll wraps AVFILTER_AUTO_CONVERT_ALL.
+const AVFilterAutoConvertAll int = C.AVFILTER_AUTO_CONVERT_ALL
+
+// AVFilterAutoConvertNone wraps AVFILTER_AUTO_CONVERT_NONE.
+const AVFilterAutoConvertNone int = C.AVFILTER_AUTO_CONVERT_NONE
+
 // AVBuffersinkFlagPeek wraps AV_BUFFERSINK_FLAG_PEEK.
 const AVBuffersinkFlagPeek int = C.AV_BUFFERSINK_FLAG_PEEK
 
 // AVBuffersinkFlagNoRequest wraps AV_BUFFERSINK_FLAG_NO_REQUEST.
 const AVBuffersinkFlagNoRequest int = C.AV_BUFFERSINK_FLAG_NO_REQUEST
+
+// AVBuffersrcFlagNoCheckFormat wraps AV_BUFFERSRC_FLAG_NO_CHECK_FORMAT.
+const AVBuffersrcFlagNoCheckFormat int = C.AV_BUFFERSRC_FLAG_NO_CHECK_FORMAT
+
+// AVBuffersrcFlagPush wraps AV_BUFFERSRC_FLAG_PUSH.
+const AVBuffersrcFlagPush int = C.AV_BUFFERSRC_FLAG_PUSH
+
+// AVBuffersrcFlagKeepRef wraps AV_BUFFERSRC_FLAG_KEEP_REF.
+const AVBuffersrcFlagKeepRef int = C.AV_BUFFERSRC_FLAG_KEEP_REF
 
 // AVProbeScoreRetry wraps AVPROBE_SCORE_RETRY.
 const AVProbeScoreRetry int = C.AVPROBE_SCORE_RETRY
@@ -1518,6 +1554,21 @@ const FfDecodeErrorConcealmentActive int = C.FF_DECODE_ERROR_CONCEALMENT_ACTIVE
 // FfDecodeErrorDecodeSlices wraps FF_DECODE_ERROR_DECODE_SLICES.
 const FfDecodeErrorDecodeSlices int = C.FF_DECODE_ERROR_DECODE_SLICES
 
+// AVFrameCropUnaligned wraps AV_FRAME_CROP_UNALIGNED.
+const AVFrameCropUnaligned int = C.AV_FRAME_CROP_UNALIGNED
+
+// AVHwframeMapRead wraps AV_HWFRAME_MAP_READ.
+const AVHwframeMapRead int = C.AV_HWFRAME_MAP_READ
+
+// AVHwframeMapWrite wraps AV_HWFRAME_MAP_WRITE.
+const AVHwframeMapWrite int = C.AV_HWFRAME_MAP_WRITE
+
+// AVHwframeMapOverwrite wraps AV_HWFRAME_MAP_OVERWRITE.
+const AVHwframeMapOverwrite int = C.AV_HWFRAME_MAP_OVERWRITE
+
+// AVHwframeMapDirect wraps AV_HWFRAME_MAP_DIRECT.
+const AVHwframeMapDirect int = C.AV_HWFRAME_MAP_DIRECT
+
 // AVLogQuiet wraps AV_LOG_QUIET.
 const AVLogQuiet int = C.AV_LOG_QUIET
 
@@ -1607,6 +1658,9 @@ const AVOptSerializeSkipDefaults int = C.AV_OPT_SERIALIZE_SKIP_DEFAULTS
 
 // AVOptSerializeOptFlagsExact wraps AV_OPT_SERIALIZE_OPT_FLAGS_EXACT.
 const AVOptSerializeOptFlagsExact int = C.AV_OPT_SERIALIZE_OPT_FLAGS_EXACT
+
+// AVOptFlagImplicitKey wraps AV_OPT_FLAG_IMPLICIT_KEY.
+const AVOptFlagImplicitKey int = C.AV_OPT_FLAG_IMPLICIT_KEY
 
 // AVPaletteSize wraps AVPALETTE_SIZE.
 const AVPaletteSize int = C.AVPALETTE_SIZE

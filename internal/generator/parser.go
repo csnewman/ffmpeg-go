@@ -306,9 +306,23 @@ func (p *Parser) parseEnum(indent string, c clang.Cursor, typedef bool) {
 	indent = fmt.Sprintf("%v[%v]", indent, name)
 
 	if strings.HasPrefix(name, "enum (unnamed") {
-		log.Println(indent, "Skipping unnamed enum")
+		log.Println(indent, "Treating unnamed enum as constants")
 
-		// TODO: Treat as constants
+		c.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+			if cursor.Kind() != clang.Cursor_EnumConstantDecl {
+				log.Panicln("Unknown enum type", "kind", cursor.Kind().String())
+			}
+
+			name := cursor.Spelling()
+
+			p.mod.constants[name] = &Constant{
+				Name:     name,
+				FromEnum: true,
+			}
+			p.mod.constantOrder = append(p.mod.constantOrder, name)
+
+			return clang.ChildVisit_Continue
+		})
 
 		return
 	}
