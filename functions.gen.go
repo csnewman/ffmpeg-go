@@ -18,6 +18,7 @@ import "unsafe"
 // #include <libavutil/buffer.h>
 // #include <libavutil/channel_layout.h>
 // #include <libavutil/dict.h>
+// #include <libavutil/error.h>
 // #include <libavutil/frame.h>
 // #include <libavutil/hwcontext.h>
 // #include <libavutil/log.h>
@@ -5227,6 +5228,30 @@ func AVDictFree(m **AVDictionary) {
 
 // AVDictGetString wraps av_dict_get_string.
 // av_dict_get_string skipped due to buffer
+
+// --- Function av_strerror ---
+
+// AVStrerror wraps av_strerror.
+func AVStrerror(errnum int, errbuf *CStr, errbufSize uint64) int {
+	var tmperrbuf *C.char
+	if errbuf != nil {
+		tmperrbuf = errbuf.ptr
+	}
+	ret := C.av_strerror(C.int(errnum), tmperrbuf, C.size_t(errbufSize))
+	return int(ret)
+}
+
+// --- Function av_make_error_string ---
+
+// AVMakeErrorString wraps av_make_error_string.
+func AVMakeErrorString(errbuf *CStr, errbufSize uint64, errnum int) *CStr {
+	var tmperrbuf *C.char
+	if errbuf != nil {
+		tmperrbuf = errbuf.ptr
+	}
+	ret := C.av_make_error_string(tmperrbuf, C.size_t(errbufSize), C.int(errnum))
+	return wrapCStr(ret)
+}
 
 // --- Function av_frame_alloc ---
 

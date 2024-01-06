@@ -16,6 +16,7 @@ package ffmpeg
 // #include <libavutil/buffer.h>
 // #include <libavutil/channel_layout.h>
 // #include <libavutil/dict.h>
+// #include <libavutil/error.h>
 // #include <libavutil/frame.h>
 // #include <libavutil/hwcontext.h>
 // #include <libavutil/log.h>

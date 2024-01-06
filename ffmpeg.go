@@ -8,24 +8,35 @@ import (
 /*
 #cgo pkg-config: libavcodec libavfilter libavformat libavutil
 
+#include <errno.h>
 #include <stdlib.h>
 */
 import "C"
+
+var (
+	EAgain     = AVError{Code: -C.EAGAIN}
+	AVErrorEOF = AVError{Code: AVErrorEofConst}
+)
 
 type AVError struct {
 	Code int
 }
 
-func (e *AVError) Error() string {
-	return fmt.Sprintf("AVError %v", e.Code)
+func (e AVError) Error() string {
+	buf := AllocCStr(uint(AVErrorMaxStringSize))
+	defer buf.Free()
+
+	AVStrerror(e.Code, buf, uint64(AVErrorMaxStringSize))
+
+	return fmt.Sprintf("averror %v: %v", e.Code, buf.String())
 }
 
-func WrapError(code int) error {
+func WrapErr(code int) error {
 	if code >= 0 {
 		return nil
 	}
 
-	return &AVError{Code: code}
+	return AVError{Code: code}
 }
 
 func arrayGet[T any](array *T, i uintptr) T {
@@ -36,6 +47,14 @@ func arrayGet[T any](array *T, i uintptr) T {
 
 type CStr struct {
 	ptr *C.char
+}
+
+func AllocCStr(len uint) *CStr {
+	ptr := (*C.char)(C.calloc(C.ulong(len), C.sizeof_char))
+
+	return &CStr{
+		ptr: ptr,
+	}
 }
 
 func ToCStr(val string) *CStr {

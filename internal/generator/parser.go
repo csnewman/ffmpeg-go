@@ -28,6 +28,7 @@ var files = []string{
 	"libavutil/buffer.h",
 	"libavutil/channel_layout.h",
 	"libavutil/dict.h",
+	"libavutil/error.h",
 	"libavutil/frame.h",
 	"libavutil/hwcontext.h",
 	"libavutil/log.h",

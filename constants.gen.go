@@ -16,6 +16,7 @@ package ffmpeg
 // #include <libavutil/buffer.h>
 // #include <libavutil/channel_layout.h>
 // #include <libavutil/dict.h>
+// #include <libavutil/error.h>
 // #include <libavutil/frame.h>
 // #include <libavutil/hwcontext.h>
 // #include <libavutil/log.h>
@@ -1411,6 +1412,90 @@ const AVDictAppend int = C.AV_DICT_APPEND
 
 // AVDictMultikey wraps AV_DICT_MULTIKEY.
 const AVDictMultikey int = C.AV_DICT_MULTIKEY
+
+// AVErrorBsfNotFoundConst wraps AVERROR_BSF_NOT_FOUND.
+const AVErrorBsfNotFoundConst int = C.AVERROR_BSF_NOT_FOUND
+
+// AVErrorBugConst wraps AVERROR_BUG.
+const AVErrorBugConst int = C.AVERROR_BUG
+
+// AVErrorBufferTooSmallConst wraps AVERROR_BUFFER_TOO_SMALL.
+const AVErrorBufferTooSmallConst int = C.AVERROR_BUFFER_TOO_SMALL
+
+// AVErrorDecoderNotFoundConst wraps AVERROR_DECODER_NOT_FOUND.
+const AVErrorDecoderNotFoundConst int = C.AVERROR_DECODER_NOT_FOUND
+
+// AVErrorDemuxerNotFoundConst wraps AVERROR_DEMUXER_NOT_FOUND.
+const AVErrorDemuxerNotFoundConst int = C.AVERROR_DEMUXER_NOT_FOUND
+
+// AVErrorEncoderNotFoundConst wraps AVERROR_ENCODER_NOT_FOUND.
+const AVErrorEncoderNotFoundConst int = C.AVERROR_ENCODER_NOT_FOUND
+
+// AVErrorEofConst wraps AVERROR_EOF.
+const AVErrorEofConst int = C.AVERROR_EOF
+
+// AVErrorExitConst wraps AVERROR_EXIT.
+const AVErrorExitConst int = C.AVERROR_EXIT
+
+// AVErrorExternalConst wraps AVERROR_EXTERNAL.
+const AVErrorExternalConst int = C.AVERROR_EXTERNAL
+
+// AVErrorFilterNotFoundConst wraps AVERROR_FILTER_NOT_FOUND.
+const AVErrorFilterNotFoundConst int = C.AVERROR_FILTER_NOT_FOUND
+
+// AVErrorInvaliddataConst wraps AVERROR_INVALIDDATA.
+const AVErrorInvaliddataConst int = C.AVERROR_INVALIDDATA
+
+// AVErrorMuxerNotFoundConst wraps AVERROR_MUXER_NOT_FOUND.
+const AVErrorMuxerNotFoundConst int = C.AVERROR_MUXER_NOT_FOUND
+
+// AVErrorOptionNotFoundConst wraps AVERROR_OPTION_NOT_FOUND.
+const AVErrorOptionNotFoundConst int = C.AVERROR_OPTION_NOT_FOUND
+
+// AVErrorPatchwelcomeConst wraps AVERROR_PATCHWELCOME.
+const AVErrorPatchwelcomeConst int = C.AVERROR_PATCHWELCOME
+
+// AVErrorProtocolNotFoundConst wraps AVERROR_PROTOCOL_NOT_FOUND.
+const AVErrorProtocolNotFoundConst int = C.AVERROR_PROTOCOL_NOT_FOUND
+
+// AVErrorStreamNotFoundConst wraps AVERROR_STREAM_NOT_FOUND.
+const AVErrorStreamNotFoundConst int = C.AVERROR_STREAM_NOT_FOUND
+
+// AVErrorBug2Const wraps AVERROR_BUG2.
+const AVErrorBug2Const int = C.AVERROR_BUG2
+
+// AVErrorUnknownConst wraps AVERROR_UNKNOWN.
+const AVErrorUnknownConst int = C.AVERROR_UNKNOWN
+
+// AVErrorExperimentalConst wraps AVERROR_EXPERIMENTAL.
+const AVErrorExperimentalConst int = C.AVERROR_EXPERIMENTAL
+
+// AVErrorInputChangedConst wraps AVERROR_INPUT_CHANGED.
+const AVErrorInputChangedConst int = C.AVERROR_INPUT_CHANGED
+
+// AVErrorOutputChangedConst wraps AVERROR_OUTPUT_CHANGED.
+const AVErrorOutputChangedConst int = C.AVERROR_OUTPUT_CHANGED
+
+// AVErrorHttpBadRequestConst wraps AVERROR_HTTP_BAD_REQUEST.
+const AVErrorHttpBadRequestConst int = C.AVERROR_HTTP_BAD_REQUEST
+
+// AVErrorHttpUnauthorizedConst wraps AVERROR_HTTP_UNAUTHORIZED.
+const AVErrorHttpUnauthorizedConst int = C.AVERROR_HTTP_UNAUTHORIZED
+
+// AVErrorHttpForbiddenConst wraps AVERROR_HTTP_FORBIDDEN.
+const AVErrorHttpForbiddenConst int = C.AVERROR_HTTP_FORBIDDEN
+
+// AVErrorHttpNotFoundConst wraps AVERROR_HTTP_NOT_FOUND.
+const AVErrorHttpNotFoundConst int = C.AVERROR_HTTP_NOT_FOUND
+
+// AVErrorHttpOther4XxConst wraps AVERROR_HTTP_OTHER_4XX.
+const AVErrorHttpOther4XxConst int = C.AVERROR_HTTP_OTHER_4XX
+
+// AVErrorHttpServerErrorConst wraps AVERROR_HTTP_SERVER_ERROR.
+const AVErrorHttpServerErrorConst int = C.AVERROR_HTTP_SERVER_ERROR
+
+// AVErrorMaxStringSize wraps AV_ERROR_MAX_STRING_SIZE.
+const AVErrorMaxStringSize int = C.AV_ERROR_MAX_STRING_SIZE
 
 // AVNumDataPointers wraps AV_NUM_DATA_POINTERS.
 const AVNumDataPointers int = C.AV_NUM_DATA_POINTERS

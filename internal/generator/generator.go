@@ -64,6 +64,10 @@ func (g *Generator) generateConstants() {
 
 		goName := g.convCamel(constant.Name)
 
+		if strings.HasPrefix(constName, "AVERROR_") {
+			goName = fmt.Sprintf("%vConst", goName)
+		}
+
 		o.Commentf("%v wraps %v.", goName, constant.Name)
 
 		o.Const().Id(goName).Id("int").Op("=").Qual("C", constName)
