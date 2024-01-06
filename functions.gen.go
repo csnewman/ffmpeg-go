@@ -789,7 +789,10 @@ func AVGetAudioFrameDuration2(par *AVCodecParameters, frameBytes int) int {
 // --- Function av_xiphlacing ---
 
 // AVXiphlacing wraps av_xiphlacing.
-// av_xiphlacing skipped due to s
+func AVXiphlacing(s unsafe.Pointer, v uint) uint {
+	ret := C.av_xiphlacing((*C.uchar)(s), C.uint(v))
+	return uint(ret)
+}
 
 // --- Function av_packet_alloc ---
 
@@ -3640,7 +3643,13 @@ func AVIOW8(s *AVIOContext, b int) {
 // --- Function avio_write ---
 
 // AVIOWrite wraps avio_write.
-// avio_write skipped due to buf
+func AVIOWrite(s *AVIOContext, buf unsafe.Pointer, size int) {
+	var tmps *C.AVIOContext
+	if s != nil {
+		tmps = s.ptr
+	}
+	C.avio_write(tmps, (*C.uchar)(buf), C.int(size))
+}
 
 // --- Function avio_wl64 ---
 
@@ -3876,12 +3885,26 @@ func AVIOFlush(s *AVIOContext) {
 // --- Function avio_read ---
 
 // AVIORead wraps avio_read.
-// avio_read skipped due to buf
+func AVIORead(s *AVIOContext, buf unsafe.Pointer, size int) int {
+	var tmps *C.AVIOContext
+	if s != nil {
+		tmps = s.ptr
+	}
+	ret := C.avio_read(tmps, (*C.uchar)(buf), C.int(size))
+	return int(ret)
+}
 
 // --- Function avio_read_partial ---
 
 // AVIOReadPartial wraps avio_read_partial.
-// avio_read_partial skipped due to buf
+func AVIOReadPartial(s *AVIOContext, buf unsafe.Pointer, size int) int {
+	var tmps *C.AVIOContext
+	if s != nil {
+		tmps = s.ptr
+	}
+	ret := C.avio_read_partial(tmps, (*C.uchar)(buf), C.int(size))
+	return int(ret)
+}
 
 // --- Function avio_r8 ---
 
