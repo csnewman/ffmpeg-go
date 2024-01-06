@@ -70,7 +70,7 @@ func (g *Generator) generateConstants() {
 
 		o.Commentf("%v wraps %v.", goName, constant.Name)
 
-		o.Const().Id(goName).Id("int").Op("=").Qual("C", constName)
+		o.Const().Id(goName).Op("=").Qual("C", constName)
 	}
 
 	err := o.Save("constants.gen.go")

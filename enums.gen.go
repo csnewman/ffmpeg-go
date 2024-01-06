@@ -20,6 +20,7 @@ package ffmpeg
 // #include <libavutil/frame.h>
 // #include <libavutil/hwcontext.h>
 // #include <libavutil/log.h>
+// #include <libavutil/mathematics.h>
 // #include <libavutil/mem.h>
 // #include <libavutil/opt.h>
 // #include <libavutil/pixfmt.h>
@@ -1697,6 +1698,26 @@ const (
 	AVClassCategoryDeviceInput AVClassCategory = C.AV_CLASS_CATEGORY_DEVICE_INPUT
 	// AVClassCategoryNb wraps AV_CLASS_CATEGORY_NB.
 	AVClassCategoryNb AVClassCategory = C.AV_CLASS_CATEGORY_NB
+)
+
+// --- Enum AVRounding ---
+
+// AVRounding wraps AVRounding.
+type AVRounding C.enum_AVRounding
+
+const (
+	// AVRoundZero wraps AV_ROUND_ZERO.
+	AVRoundZero AVRounding = C.AV_ROUND_ZERO
+	// AVRoundInf wraps AV_ROUND_INF.
+	AVRoundInf AVRounding = C.AV_ROUND_INF
+	// AVRoundDown wraps AV_ROUND_DOWN.
+	AVRoundDown AVRounding = C.AV_ROUND_DOWN
+	// AVRoundUp wraps AV_ROUND_UP.
+	AVRoundUp AVRounding = C.AV_ROUND_UP
+	// AVRoundNearInf wraps AV_ROUND_NEAR_INF.
+	AVRoundNearInf AVRounding = C.AV_ROUND_NEAR_INF
+	// AVRoundPassMinmax wraps AV_ROUND_PASS_MINMAX.
+	AVRoundPassMinmax AVRounding = C.AV_ROUND_PASS_MINMAX
 )
 
 // --- Enum AVOptionType ---

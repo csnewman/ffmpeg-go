@@ -32,6 +32,7 @@ var files = []string{
 	"libavutil/frame.h",
 	"libavutil/hwcontext.h",
 	"libavutil/log.h",
+	"libavutil/mathematics.h",
 	"libavutil/mem.h",
 	"libavutil/opt.h",
 	"libavutil/pixfmt.h",

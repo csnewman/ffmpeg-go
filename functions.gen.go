@@ -22,6 +22,7 @@ import "unsafe"
 // #include <libavutil/frame.h>
 // #include <libavutil/hwcontext.h>
 // #include <libavutil/log.h>
+// #include <libavutil/mathematics.h>
 // #include <libavutil/mem.h>
 // #include <libavutil/opt.h>
 // #include <libavutil/pixfmt.h>
@@ -5906,6 +5907,63 @@ func AVLogGetFlags() int {
 	ret := C.av_log_get_flags()
 	return int(ret)
 }
+
+// --- Function av_gcd ---
+
+// AVGcd wraps av_gcd.
+func AVGcd(a int64, b int64) int64 {
+	ret := C.av_gcd(C.int64_t(a), C.int64_t(b))
+	return int64(ret)
+}
+
+// --- Function av_rescale ---
+
+// AVRescale wraps av_rescale.
+func AVRescale(a int64, b int64, c int64) int64 {
+	ret := C.av_rescale(C.int64_t(a), C.int64_t(b), C.int64_t(c))
+	return int64(ret)
+}
+
+// --- Function av_rescale_rnd ---
+
+// AVRescaleRnd wraps av_rescale_rnd.
+func AVRescaleRnd(a int64, b int64, c int64, rnd AVRounding) int64 {
+	ret := C.av_rescale_rnd(C.int64_t(a), C.int64_t(b), C.int64_t(c), C.enum_AVRounding(rnd))
+	return int64(ret)
+}
+
+// --- Function av_rescale_q ---
+
+// AVRescaleQ wraps av_rescale_q.
+// av_rescale_q skipped due to bq
+
+// --- Function av_rescale_q_rnd ---
+
+// AVRescaleQRnd wraps av_rescale_q_rnd.
+// av_rescale_q_rnd skipped due to bq
+
+// --- Function av_compare_ts ---
+
+// AVCompareTs wraps av_compare_ts.
+// av_compare_ts skipped due to tbA
+
+// --- Function av_compare_mod ---
+
+// AVCompareMod wraps av_compare_mod.
+func AVCompareMod(a uint64, b uint64, mod uint64) int64 {
+	ret := C.av_compare_mod(C.uint64_t(a), C.uint64_t(b), C.uint64_t(mod))
+	return int64(ret)
+}
+
+// --- Function av_rescale_delta ---
+
+// AVRescaleDelta wraps av_rescale_delta.
+// av_rescale_delta skipped due to inTb
+
+// --- Function av_add_stable ---
+
+// AVAddStable wraps av_add_stable.
+// av_add_stable skipped due to tsTb
 
 // --- Function av_malloc ---
 
