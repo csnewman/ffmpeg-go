@@ -175,11 +175,35 @@ func (g *Generator) generateStructs() {
 				tgt        *jen.Statement
 			)
 
+			genType := field.Type
+
 			if field.BitWidth != -1 {
 				o.Commentf("%v skipped due to bitfield", fName)
 				o.Line()
 
 				continue fieldLoop
+			} else if iv, ok := field.Type.(*ConstArray); ok {
+
+				fName = fmt.Sprintf("%vEntry", fName)
+
+				getParams = append(getParams, jen.Id("i").Id("uint"))
+				setParams = append(setParams, jen.Id("i").Id("uint"))
+
+				if st.ByValue {
+					getBody = append(
+						getBody,
+						jen.Id("value").Op(":=").Id("s").Dot("value").Dot(cName).Index(jen.Id("i")),
+					)
+					tgt = jen.Id("s").Dot("value").Dot(cName).Index(jen.Id("i"))
+				} else {
+					getBody = append(
+						getBody,
+						jen.Id("value").Op(":=").Id("s").Dot("ptr").Dot(cName).Index(jen.Id("i")),
+					)
+					tgt = jen.Id("s").Dot("ptr").Dot(cName).Index(jen.Id("i"))
+				}
+
+				genType = iv.Inner
 			} else {
 				if st.ByValue {
 					getBody = append(
@@ -196,13 +220,13 @@ func (g *Generator) generateStructs() {
 				}
 			}
 
-			switch v := field.Type.(type) {
+			switch v := genType.(type) {
 
 			case *IdentType:
 
 				if m, ok := primTypes[v.Name]; ok {
 					getRetType = []jen.Code{jen.Id(m)}
-					setParams = []jen.Code{jen.Id("value").Id(m)}
+					setParams = append(setParams, jen.Id("value").Id(m))
 
 					getBody = append(getBody, jen.Return(jen.Id(m).Params(jen.Id("value"))))
 
@@ -228,9 +252,7 @@ func (g *Generator) generateStructs() {
 					getRetType = []jen.Code{
 						jen.Op("*").Id(s.Name),
 					}
-					setParams = []jen.Code{
-						jen.Id("value").Op("*").Id(s.Name),
-					}
+					setParams = append(setParams, jen.Id("value").Op("*").Id(s.Name))
 
 					getBody = append(
 						getBody,
@@ -250,7 +272,7 @@ func (g *Generator) generateStructs() {
 					continue fieldLoop
 				} else if e, ok := g.input.enums[v.Name]; ok {
 					getRetType = []jen.Code{jen.Id(v.Name)}
-					setParams = []jen.Code{jen.Id("value").Id(v.Name)}
+					setParams = append(setParams, jen.Id("value").Id(v.Name))
 
 					getBody = append(getBody, jen.Return(jen.Id(v.Name).Params(jen.Id("value"))))
 
@@ -268,7 +290,7 @@ func (g *Generator) generateStructs() {
 					getRetType = []jen.Code{
 						jen.Qual("unsafe", "Pointer"),
 					}
-					setParams = []jen.Code{jen.Id("value").Qual("unsafe", "Pointer")}
+					setParams = append(setParams, jen.Id("value").Qual("unsafe", "Pointer"))
 					getBody = append(getBody, jen.Return(jen.Id("value")))
 					setBody = append(setBody, tgt.Op("=").Id("value"))
 
@@ -283,7 +305,7 @@ func (g *Generator) generateStructs() {
 						getRetType = []jen.Code{
 							jen.Op("*").Id("CStr"),
 						}
-						setParams = []jen.Code{jen.Id("value").Op("*").Id("CStr")}
+						setParams = append(setParams, jen.Id("value").Op("*").Id("CStr"))
 						getBody = append(getBody, jen.Return(jen.Id("wrapCStr").Params(jen.Id("value"))))
 						setBody = append(setBody, tgt.Op("=").Id("value").Dot("ptr"))
 
@@ -291,12 +313,10 @@ func (g *Generator) generateStructs() {
 						getRetType = []jen.Code{
 							jen.Qual("unsafe", "Pointer"),
 						}
-						getBody = append(getBody, jen.Return(jen.Id("value")))
+						getBody = append(getBody, jen.Return(jen.Qual("unsafe", "Pointer").Params(jen.Id("value"))))
 
-						o.Commentf("%v skipped due to ptr to uint8", fName)
-						o.Line()
-
-						continue fieldLoop
+						setParams = append(setParams, jen.Id("value").Qual("unsafe", "Pointer"))
+						setBody = append(setBody, tgt.Op("=").Params(jen.Op("*").Qual("C", iv.Name)).Params(jen.Id("value")))
 					} else if _, ok := primTypes[iv.Name]; ok {
 						o.Commentf("%v skipped due to prim ptr", fName)
 						o.Line()
@@ -323,7 +343,7 @@ func (g *Generator) generateStructs() {
 						getRetType = []jen.Code{
 							jen.Op("*").Id(iv.Name),
 						}
-						setParams = []jen.Code{jen.Id("value").Op("*").Id(iv.Name)}
+						setParams = append(setParams, jen.Id("value").Op("*").Id(iv.Name))
 
 						getBody = append(
 							getBody,

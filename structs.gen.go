@@ -256,7 +256,14 @@ func (s *AVCodecContext) SetFlags2(value int) {
 	s.ptr.flags2 = (C.int)(value)
 }
 
-// Extradata skipped due to ptr to uint8
+func (s *AVCodecContext) Extradata() unsafe.Pointer {
+	value := s.ptr.extradata
+	return unsafe.Pointer(value)
+}
+
+func (s *AVCodecContext) SetExtradata(value unsafe.Pointer) {
+	s.ptr.extradata = (*C.uint8_t)(value)
+}
 
 func (s *AVCodecContext) ExtradataSize() int {
 	value := s.ptr.extradata_size
@@ -1060,7 +1067,14 @@ func (s *AVCodecContext) SetHwaccelContext(value unsafe.Pointer) {
 	s.ptr.hwaccel_context = value
 }
 
-// Error skipped due to const array
+func (s *AVCodecContext) ErrorEntry(i uint) uint64 {
+	value := s.ptr.error[i]
+	return uint64(value)
+}
+
+func (s *AVCodecContext) SetErrorEntry(i uint, value uint64) {
+	s.ptr.error[i] = (C.uint64_t)(value)
+}
 
 func (s *AVCodecContext) DctAlgo() int {
 	value := s.ptr.dct_algo
@@ -1192,7 +1206,14 @@ func (s *AVCodecContext) SetSkipFrame(value AVDiscard) {
 	s.ptr.skip_frame = (C.enum_AVDiscard)(value)
 }
 
-// SubtitleHeader skipped due to ptr to uint8
+func (s *AVCodecContext) SubtitleHeader() unsafe.Pointer {
+	value := s.ptr.subtitle_header
+	return unsafe.Pointer(value)
+}
+
+func (s *AVCodecContext) SetSubtitleHeader(value unsafe.Pointer) {
+	s.ptr.subtitle_header = (*C.uint8_t)(value)
+}
 
 func (s *AVCodecContext) SubtitleHeaderSize() int {
 	value := s.ptr.subtitle_header_size
@@ -1330,7 +1351,14 @@ func (s *AVCodecContext) SetSeekPreroll(value int) {
 
 // ChromaIntraMatrix skipped due to prim ptr
 
-// DumpSeparator skipped due to ptr to uint8
+func (s *AVCodecContext) DumpSeparator() unsafe.Pointer {
+	value := s.ptr.dump_separator
+	return unsafe.Pointer(value)
+}
+
+func (s *AVCodecContext) SetDumpSeparator(value unsafe.Pointer) {
+	s.ptr.dump_separator = (*C.uint8_t)(value)
+}
 
 func (s *AVCodecContext) CodecWhitelist() *CStr {
 	value := s.ptr.codec_whitelist
@@ -1648,9 +1676,23 @@ func (s *AVSubtitleRect) SetNbColors(value int) {
 	s.ptr.nb_colors = (C.int)(value)
 }
 
-// Data skipped due to const array
+func (s *AVSubtitleRect) DataEntry(i uint) unsafe.Pointer {
+	value := s.ptr.data[i]
+	return unsafe.Pointer(value)
+}
 
-// Linesize skipped due to const array
+func (s *AVSubtitleRect) SetDataEntry(i uint, value unsafe.Pointer) {
+	s.ptr.data[i] = (*C.uint8_t)(value)
+}
+
+func (s *AVSubtitleRect) LinesizeEntry(i uint) int {
+	value := s.ptr.linesize[i]
+	return int(value)
+}
+
+func (s *AVSubtitleRect) SetLinesizeEntry(i uint, value int) {
+	s.ptr.linesize[i] = (C.int)(value)
+}
 
 func (s *AVSubtitleRect) Type() AVSubtitleType {
 	value := s.ptr._type
@@ -1888,11 +1930,32 @@ func (s *AVCodecParserContext) SetCurFrameStartIndex(value int) {
 	s.ptr.cur_frame_start_index = (C.int)(value)
 }
 
-// CurFrameOffset skipped due to const array
+func (s *AVCodecParserContext) CurFrameOffsetEntry(i uint) int64 {
+	value := s.ptr.cur_frame_offset[i]
+	return int64(value)
+}
 
-// CurFramePts skipped due to const array
+func (s *AVCodecParserContext) SetCurFrameOffsetEntry(i uint, value int64) {
+	s.ptr.cur_frame_offset[i] = (C.int64_t)(value)
+}
 
-// CurFrameDts skipped due to const array
+func (s *AVCodecParserContext) CurFramePtsEntry(i uint) int64 {
+	value := s.ptr.cur_frame_pts[i]
+	return int64(value)
+}
+
+func (s *AVCodecParserContext) SetCurFramePtsEntry(i uint, value int64) {
+	s.ptr.cur_frame_pts[i] = (C.int64_t)(value)
+}
+
+func (s *AVCodecParserContext) CurFrameDtsEntry(i uint) int64 {
+	value := s.ptr.cur_frame_dts[i]
+	return int64(value)
+}
+
+func (s *AVCodecParserContext) SetCurFrameDtsEntry(i uint, value int64) {
+	s.ptr.cur_frame_dts[i] = (C.int64_t)(value)
+}
 
 func (s *AVCodecParserContext) Flags() int {
 	value := s.ptr.flags
@@ -1912,7 +1975,14 @@ func (s *AVCodecParserContext) SetOffset(value int64) {
 	s.ptr.offset = (C.int64_t)(value)
 }
 
-// CurFrameEnd skipped due to const array
+func (s *AVCodecParserContext) CurFrameEndEntry(i uint) int64 {
+	value := s.ptr.cur_frame_end[i]
+	return int64(value)
+}
+
+func (s *AVCodecParserContext) SetCurFrameEndEntry(i uint, value int64) {
+	s.ptr.cur_frame_end[i] = (C.int64_t)(value)
+}
 
 func (s *AVCodecParserContext) KeyFrame() int {
 	value := s.ptr.key_frame
@@ -1950,7 +2020,14 @@ func (s *AVCodecParserContext) SetPtsDtsDelta(value int) {
 	s.ptr.pts_dts_delta = (C.int)(value)
 }
 
-// CurFramePos skipped due to const array
+func (s *AVCodecParserContext) CurFramePosEntry(i uint) int64 {
+	value := s.ptr.cur_frame_pos[i]
+	return int64(value)
+}
+
+func (s *AVCodecParserContext) SetCurFramePosEntry(i uint, value int64) {
+	s.ptr.cur_frame_pos[i] = (C.int64_t)(value)
+}
 
 func (s *AVCodecParserContext) Pos() int64 {
 	value := s.ptr.pos
@@ -2061,8 +2138,14 @@ type AVCodecParser struct {
 func (s *AVCodecParser) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+func (s *AVCodecParser) CodecIdsEntry(i uint) int {
+	value := s.ptr.codec_ids[i]
+	return int(value)
+}
 
-// CodecIds skipped due to const array
+func (s *AVCodecParser) SetCodecIdsEntry(i uint, value int) {
+	s.ptr.codec_ids[i] = (C.int)(value)
+}
 
 func (s *AVCodecParser) PrivDataSize() int {
 	value := s.ptr.priv_data_size
@@ -2391,7 +2474,14 @@ func (s *AVCodecParameters) SetCodecTag(value uint32) {
 	s.ptr.codec_tag = (C.uint32_t)(value)
 }
 
-// Extradata skipped due to ptr to uint8
+func (s *AVCodecParameters) Extradata() unsafe.Pointer {
+	value := s.ptr.extradata
+	return unsafe.Pointer(value)
+}
+
+func (s *AVCodecParameters) SetExtradata(value unsafe.Pointer) {
+	s.ptr.extradata = (*C.uint8_t)(value)
+}
 
 func (s *AVCodecParameters) ExtradataSize() int {
 	value := s.ptr.extradata_size
@@ -2657,7 +2747,7 @@ func (s *AVPanScan) SetHeight(value int) {
 	s.ptr.height = (C.int)(value)
 }
 
-// Position skipped due to const array
+// PositionEntry skipped due to const array
 
 // --- Struct AVCPBProperties ---
 
@@ -2752,8 +2842,14 @@ type AVPacketSideData struct {
 func (s *AVPacketSideData) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+func (s *AVPacketSideData) Data() unsafe.Pointer {
+	value := s.ptr.data
+	return unsafe.Pointer(value)
+}
 
-// Data skipped due to ptr to uint8
+func (s *AVPacketSideData) SetData(value unsafe.Pointer) {
+	s.ptr.data = (*C.uint8_t)(value)
+}
 
 func (s *AVPacketSideData) Size() uint64 {
 	value := s.ptr.size
@@ -2818,7 +2914,14 @@ func (s *AVPacket) SetDts(value int64) {
 	s.ptr.dts = (C.int64_t)(value)
 }
 
-// Data skipped due to ptr to uint8
+func (s *AVPacket) Data() unsafe.Pointer {
+	value := s.ptr.data
+	return unsafe.Pointer(value)
+}
+
+func (s *AVPacket) SetData(value unsafe.Pointer) {
+	s.ptr.data = (*C.uint8_t)(value)
+}
 
 func (s *AVPacket) Size() int {
 	value := s.ptr.size
@@ -3515,7 +3618,14 @@ func (s *AVFilterLink) SetHwFramesCtx(value *AVBufferRef) {
 	}
 }
 
-// Reserved skipped due to const array
+func (s *AVFilterLink) ReservedEntry(i uint) uint8 {
+	value := s.ptr.reserved[i]
+	return uint8(value)
+}
+
+func (s *AVFilterLink) SetReservedEntry(i uint, value uint8) {
+	s.ptr.reserved[i] = (C.char)(value)
+}
 
 // --- Struct AVFilterPad ---
 
@@ -5233,7 +5343,14 @@ func (s *AVFormatContext) SetMaxAnalyzeDuration(value int64) {
 	s.ptr.max_analyze_duration = (C.int64_t)(value)
 }
 
-// Key skipped due to ptr to uint8
+func (s *AVFormatContext) Key() unsafe.Pointer {
+	value := s.ptr.key
+	return unsafe.Pointer(value)
+}
+
+func (s *AVFormatContext) SetKey(value unsafe.Pointer) {
+	s.ptr.key = (*C.uint8_t)(value)
+}
 
 func (s *AVFormatContext) Keylen() int {
 	value := s.ptr.keylen
@@ -5668,7 +5785,14 @@ func (s *AVFormatContext) SetOutputTsOffset(value int64) {
 	s.ptr.output_ts_offset = (C.int64_t)(value)
 }
 
-// DumpSeparator skipped due to ptr to uint8
+func (s *AVFormatContext) DumpSeparator() unsafe.Pointer {
+	value := s.ptr.dump_separator
+	return unsafe.Pointer(value)
+}
+
+func (s *AVFormatContext) SetDumpSeparator(value unsafe.Pointer) {
+	s.ptr.dump_separator = (*C.uint8_t)(value)
+}
 
 func (s *AVFormatContext) DataCodecId() AVCodecID {
 	value := s.ptr.data_codec_id
@@ -6098,7 +6222,14 @@ func (s *AVBufferRef) SetBuffer(value *AVBuffer) {
 	}
 }
 
-// Data skipped due to ptr to uint8
+func (s *AVBufferRef) Data() unsafe.Pointer {
+	value := s.ptr.data
+	return unsafe.Pointer(value)
+}
+
+func (s *AVBufferRef) SetData(value unsafe.Pointer) {
+	s.ptr.data = (*C.uint8_t)(value)
+}
 
 func (s *AVBufferRef) Size() uint64 {
 	value := s.ptr.size
@@ -6139,7 +6270,14 @@ func (s *AVChannelCustom) SetId(value AVChannel) {
 	s.ptr.id = (C.enum_AVChannel)(value)
 }
 
-// Name skipped due to const array
+func (s *AVChannelCustom) NameEntry(i uint) uint8 {
+	value := s.ptr.name[i]
+	return uint8(value)
+}
+
+func (s *AVChannelCustom) SetNameEntry(i uint, value uint8) {
+	s.ptr.name[i] = (C.char)(value)
+}
 
 func (s *AVChannelCustom) Opaque() unsafe.Pointer {
 	value := s.ptr.opaque
@@ -6258,7 +6396,14 @@ func (s *AVFrameSideData) SetType(value AVFrameSideDataType) {
 	s.ptr._type = (C.enum_AVFrameSideDataType)(value)
 }
 
-// Data skipped due to ptr to uint8
+func (s *AVFrameSideData) Data() unsafe.Pointer {
+	value := s.ptr.data
+	return unsafe.Pointer(value)
+}
+
+func (s *AVFrameSideData) SetData(value unsafe.Pointer) {
+	s.ptr.data = (*C.uint8_t)(value)
+}
 
 func (s *AVFrameSideData) Size() uint64 {
 	value := s.ptr.size
@@ -6377,10 +6522,23 @@ type AVFrame struct {
 func (s *AVFrame) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+func (s *AVFrame) DataEntry(i uint) unsafe.Pointer {
+	value := s.ptr.data[i]
+	return unsafe.Pointer(value)
+}
 
-// Data skipped due to const array
+func (s *AVFrame) SetDataEntry(i uint, value unsafe.Pointer) {
+	s.ptr.data[i] = (*C.uint8_t)(value)
+}
 
-// Linesize skipped due to const array
+func (s *AVFrame) LinesizeEntry(i uint) int {
+	value := s.ptr.linesize[i]
+	return int(value)
+}
+
+func (s *AVFrame) SetLinesizeEntry(i uint, value int) {
+	s.ptr.linesize[i] = (C.int)(value)
+}
 
 // ExtendedData skipped due to unknown ptr ptr
 
@@ -6573,7 +6731,22 @@ func (s *AVFrame) SetChannelLayout(value uint64) {
 	s.ptr.channel_layout = (C.uint64_t)(value)
 }
 
-// Buf skipped due to const array
+func (s *AVFrame) BufEntry(i uint) *AVBufferRef {
+	value := s.ptr.buf[i]
+	var valueMapped *AVBufferRef
+	if value != nil {
+		valueMapped = &AVBufferRef{ptr: value}
+	}
+	return valueMapped
+}
+
+func (s *AVFrame) SetBufEntry(i uint, value *AVBufferRef) {
+	if value != nil {
+		s.ptr.buf[i] = value.ptr
+	} else {
+		s.ptr.buf[i] = nil
+	}
+}
 
 func (s *AVFrame) ExtendedBufEntry(i uint) *AVBufferRef {
 	value := s.ptr.extended_buf
