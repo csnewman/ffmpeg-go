@@ -25,6 +25,7 @@ type Function struct {
 	Result   Type
 	Variadic bool
 	Ptr      bool
+	Comment  string
 }
 
 type Param struct {

@@ -7,6 +7,7 @@ import (
 	"path"
 	"slices"
 	"strings"
+	"unicode"
 )
 
 const AVLibPath = "/opt/homebrew/Cellar/ffmpeg/6.0_1/include/"
@@ -253,6 +254,34 @@ func (p *Parser) parseTypedef(indent string, c clang.Cursor) {
 
 }
 
+func processComment(in string) string {
+	txt := in
+	txt = strings.ReplaceAll(txt, "\r\n", "\n")
+	txt = strings.TrimSpace(txt)
+	txt = strings.TrimPrefix(txt, "/**\n")
+	txt = strings.TrimSuffix(txt, "*/")
+
+	txt = strings.TrimRightFunc(txt, unicode.IsSpace)
+
+	var rebuilt []string
+
+	for _, s := range strings.Split(txt, "\n") {
+		s = strings.TrimSpace(s)
+		s = strings.TrimPrefix(s, "* ")
+
+		if s == "*" {
+			s = ""
+		}
+
+		// Double space to enter verbatim mode
+		rebuilt = append(rebuilt, fmt.Sprintf("  %v", s))
+	}
+
+	txt = strings.Join(rebuilt, "\n")
+	txt = strings.TrimRightFunc(txt, unicode.IsSpace)
+	return txt
+}
+
 func (p *Parser) parseFunction(indent string, c clang.Cursor) {
 	name := c.Spelling()
 
@@ -262,6 +291,8 @@ func (p *Parser) parseFunction(indent string, c clang.Cursor) {
 
 	log.Println("Parsing function", name)
 	indent = fmt.Sprintf("%v[%v]", indent, name)
+
+	comment := processComment(c.RawCommentText())
 
 	result := p.parseType(fmt.Sprintf("%v[return]", indent), c.ResultType())
 
@@ -296,6 +327,7 @@ func (p *Parser) parseFunction(indent string, c clang.Cursor) {
 		Args:     args,
 		Result:   result,
 		Variadic: c.IsVariadic(),
+		Comment:  comment,
 	}
 	p.mod.functionOrder = append(p.mod.functionOrder, name)
 }

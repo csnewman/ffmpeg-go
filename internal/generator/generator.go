@@ -522,8 +522,6 @@ outer:
 
 		goName := g.convCamel(fn.Name)
 
-		o.Commentf("%v wraps %v.", goName, fn.Name)
-
 		var (
 			params   []jen.Code
 			args     []jen.Code
@@ -825,6 +823,12 @@ outer:
 
 		default:
 			log.Panicln("unexpected type", reflect.TypeOf(fn.Result))
+		}
+
+		o.Commentf("%v wraps %v.", goName, fn.Name)
+
+		if fn.Comment != "" {
+			o.Comment(fn.Comment)
 		}
 
 		o.Func().
