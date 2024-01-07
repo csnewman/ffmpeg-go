@@ -718,7 +718,16 @@ outer:
 			body = append(body, jen.Id("ret").Op(":=").Add(cc))
 			body = append(body, postCall...)
 
-			if m, ok := primTypes[v.Name]; ok {
+			if v.Name == "int" {
+				retType = []jen.Code{jen.Params(jen.Id("int"), jen.Id("error"))}
+				body = append(
+					body,
+					jen.Return(
+						jen.Id("int").Params(jen.Id("ret")).Op(",").
+							Id("WrapErr").Params(jen.Id("int").Params(jen.Id("ret"))),
+					),
+				)
+			} else if m, ok := primTypes[v.Name]; ok {
 				retType = []jen.Code{jen.Id(m)}
 				body = append(body, jen.Return(jen.Id(m).Params(jen.Id("ret"))))
 			} else if s, ok := g.input.structs[v.Name]; ok {

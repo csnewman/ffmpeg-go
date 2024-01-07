@@ -122,7 +122,7 @@ func AVCodecGetSubtitleRectClass() *AVClass {
 // --- Function avcodec_parameters_from_context ---
 
 // AVCodecParametersFromContext wraps avcodec_parameters_from_context.
-func AVCodecParametersFromContext(par *AVCodecParameters, codec *AVCodecContext) int {
+func AVCodecParametersFromContext(par *AVCodecParameters, codec *AVCodecContext) (int, error) {
 	var tmppar *C.AVCodecParameters
 	if par != nil {
 		tmppar = par.ptr
@@ -132,13 +132,13 @@ func AVCodecParametersFromContext(par *AVCodecParameters, codec *AVCodecContext)
 		tmpcodec = codec.ptr
 	}
 	ret := C.avcodec_parameters_from_context(tmppar, tmpcodec)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avcodec_parameters_to_context ---
 
 // AVCodecParametersToContext wraps avcodec_parameters_to_context.
-func AVCodecParametersToContext(codec *AVCodecContext, par *AVCodecParameters) int {
+func AVCodecParametersToContext(codec *AVCodecContext, par *AVCodecParameters) (int, error) {
 	var tmpcodec *C.AVCodecContext
 	if codec != nil {
 		tmpcodec = codec.ptr
@@ -148,13 +148,13 @@ func AVCodecParametersToContext(codec *AVCodecContext, par *AVCodecParameters) i
 		tmppar = par.ptr
 	}
 	ret := C.avcodec_parameters_to_context(tmpcodec, tmppar)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avcodec_open2 ---
 
 // AVCodecOpen2 wraps avcodec_open2.
-func AVCodecOpen2(avctx *AVCodecContext, codec *AVCodec, options **AVDictionary) int {
+func AVCodecOpen2(avctx *AVCodecContext, codec *AVCodec, options **AVDictionary) (int, error) {
 	var tmpavctx *C.AVCodecContext
 	if avctx != nil {
 		tmpavctx = avctx.ptr
@@ -182,19 +182,19 @@ func AVCodecOpen2(avctx *AVCodecContext, codec *AVCodec, options **AVDictionary)
 			*options = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avcodec_close ---
 
 // AVCodecClose wraps avcodec_close.
-func AVCodecClose(avctx *AVCodecContext) int {
+func AVCodecClose(avctx *AVCodecContext) (int, error) {
 	var tmpavctx *C.AVCodecContext
 	if avctx != nil {
 		tmpavctx = avctx.ptr
 	}
 	ret := C.avcodec_close(tmpavctx)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avsubtitle_free ---
@@ -211,7 +211,7 @@ func AVSubtitleFree(sub *AVSubtitle) {
 // --- Function avcodec_default_get_buffer2 ---
 
 // AVCodecDefaultGetBuffer2 wraps avcodec_default_get_buffer2.
-func AVCodecDefaultGetBuffer2(s *AVCodecContext, frame *AVFrame, flags int) int {
+func AVCodecDefaultGetBuffer2(s *AVCodecContext, frame *AVFrame, flags int) (int, error) {
 	var tmps *C.AVCodecContext
 	if s != nil {
 		tmps = s.ptr
@@ -221,13 +221,13 @@ func AVCodecDefaultGetBuffer2(s *AVCodecContext, frame *AVFrame, flags int) int 
 		tmpframe = frame.ptr
 	}
 	ret := C.avcodec_default_get_buffer2(tmps, tmpframe, C.int(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avcodec_default_get_encode_buffer ---
 
 // AVCodecDefaultGetEncodeBuffer wraps avcodec_default_get_encode_buffer.
-func AVCodecDefaultGetEncodeBuffer(s *AVCodecContext, pkt *AVPacket, flags int) int {
+func AVCodecDefaultGetEncodeBuffer(s *AVCodecContext, pkt *AVPacket, flags int) (int, error) {
 	var tmps *C.AVCodecContext
 	if s != nil {
 		tmps = s.ptr
@@ -237,7 +237,7 @@ func AVCodecDefaultGetEncodeBuffer(s *AVCodecContext, pkt *AVPacket, flags int) 
 		tmppkt = pkt.ptr
 	}
 	ret := C.avcodec_default_get_encode_buffer(tmps, tmppkt, C.int(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avcodec_align_dimensions ---
@@ -271,7 +271,7 @@ func AVCodecChromaPosToEnum(xpos int, ypos int) AVChromaLocation {
 // --- Function avcodec_send_packet ---
 
 // AVCodecSendPacket wraps avcodec_send_packet.
-func AVCodecSendPacket(avctx *AVCodecContext, avpkt *AVPacket) int {
+func AVCodecSendPacket(avctx *AVCodecContext, avpkt *AVPacket) (int, error) {
 	var tmpavctx *C.AVCodecContext
 	if avctx != nil {
 		tmpavctx = avctx.ptr
@@ -281,13 +281,13 @@ func AVCodecSendPacket(avctx *AVCodecContext, avpkt *AVPacket) int {
 		tmpavpkt = avpkt.ptr
 	}
 	ret := C.avcodec_send_packet(tmpavctx, tmpavpkt)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avcodec_receive_frame ---
 
 // AVCodecReceiveFrame wraps avcodec_receive_frame.
-func AVCodecReceiveFrame(avctx *AVCodecContext, frame *AVFrame) int {
+func AVCodecReceiveFrame(avctx *AVCodecContext, frame *AVFrame) (int, error) {
 	var tmpavctx *C.AVCodecContext
 	if avctx != nil {
 		tmpavctx = avctx.ptr
@@ -297,13 +297,13 @@ func AVCodecReceiveFrame(avctx *AVCodecContext, frame *AVFrame) int {
 		tmpframe = frame.ptr
 	}
 	ret := C.avcodec_receive_frame(tmpavctx, tmpframe)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avcodec_send_frame ---
 
 // AVCodecSendFrame wraps avcodec_send_frame.
-func AVCodecSendFrame(avctx *AVCodecContext, frame *AVFrame) int {
+func AVCodecSendFrame(avctx *AVCodecContext, frame *AVFrame) (int, error) {
 	var tmpavctx *C.AVCodecContext
 	if avctx != nil {
 		tmpavctx = avctx.ptr
@@ -313,13 +313,13 @@ func AVCodecSendFrame(avctx *AVCodecContext, frame *AVFrame) int {
 		tmpframe = frame.ptr
 	}
 	ret := C.avcodec_send_frame(tmpavctx, tmpframe)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avcodec_receive_packet ---
 
 // AVCodecReceivePacket wraps avcodec_receive_packet.
-func AVCodecReceivePacket(avctx *AVCodecContext, avpkt *AVPacket) int {
+func AVCodecReceivePacket(avctx *AVCodecContext, avpkt *AVPacket) (int, error) {
 	var tmpavctx *C.AVCodecContext
 	if avctx != nil {
 		tmpavctx = avctx.ptr
@@ -329,13 +329,13 @@ func AVCodecReceivePacket(avctx *AVCodecContext, avpkt *AVPacket) int {
 		tmpavpkt = avpkt.ptr
 	}
 	ret := C.avcodec_receive_packet(tmpavctx, tmpavpkt)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avcodec_get_hw_frames_parameters ---
 
 // AVCodecGetHwFramesParameters wraps avcodec_get_hw_frames_parameters.
-func AVCodecGetHwFramesParameters(avctx *AVCodecContext, deviceRef *AVBufferRef, hwPixFmt AVPixelFormat, outFramesRef **AVBufferRef) int {
+func AVCodecGetHwFramesParameters(avctx *AVCodecContext, deviceRef *AVBufferRef, hwPixFmt AVPixelFormat, outFramesRef **AVBufferRef) (int, error) {
 	var tmpavctx *C.AVCodecContext
 	if avctx != nil {
 		tmpavctx = avctx.ptr
@@ -363,7 +363,7 @@ func AVCodecGetHwFramesParameters(avctx *AVCodecContext, deviceRef *AVBufferRef,
 			*outFramesRef = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_parser_iterate ---
@@ -402,7 +402,7 @@ func AVParserClose(s *AVCodecParserContext) {
 // --- Function avcodec_encode_subtitle ---
 
 // AVCodecEncodeSubtitle wraps avcodec_encode_subtitle.
-func AVCodecEncodeSubtitle(avctx *AVCodecContext, buf unsafe.Pointer, bufSize int, sub *AVSubtitle) int {
+func AVCodecEncodeSubtitle(avctx *AVCodecContext, buf unsafe.Pointer, bufSize int, sub *AVSubtitle) (int, error) {
 	var tmpavctx *C.AVCodecContext
 	if avctx != nil {
 		tmpavctx = avctx.ptr
@@ -412,7 +412,7 @@ func AVCodecEncodeSubtitle(avctx *AVCodecContext, buf unsafe.Pointer, bufSize in
 		tmpsub = sub.ptr
 	}
 	ret := C.avcodec_encode_subtitle(tmpavctx, (*C.uint8_t)(buf), C.int(bufSize), tmpsub)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avcodec_pix_fmt_to_codec_tag ---
@@ -459,13 +459,13 @@ func AVCodecString(buf *CStr, bufSize int, enc *AVCodecContext, encode int) {
 // --- Function avcodec_fill_audio_frame ---
 
 // AVCodecFillAudioFrame wraps avcodec_fill_audio_frame.
-func AVCodecFillAudioFrame(frame *AVFrame, nbChannels int, sampleFmt AVSampleFormat, buf unsafe.Pointer, bufSize int, align int) int {
+func AVCodecFillAudioFrame(frame *AVFrame, nbChannels int, sampleFmt AVSampleFormat, buf unsafe.Pointer, bufSize int, align int) (int, error) {
 	var tmpframe *C.AVFrame
 	if frame != nil {
 		tmpframe = frame.ptr
 	}
 	ret := C.avcodec_fill_audio_frame(tmpframe, C.int(nbChannels), C.enum_AVSampleFormat(sampleFmt), (*C.uint8_t)(buf), C.int(bufSize), C.int(align))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avcodec_flush_buffers ---
@@ -482,13 +482,13 @@ func AVCodecFlushBuffers(avctx *AVCodecContext) {
 // --- Function av_get_audio_frame_duration ---
 
 // AVGetAudioFrameDuration wraps av_get_audio_frame_duration.
-func AVGetAudioFrameDuration(avctx *AVCodecContext, frameBytes int) int {
+func AVGetAudioFrameDuration(avctx *AVCodecContext, frameBytes int) (int, error) {
 	var tmpavctx *C.AVCodecContext
 	if avctx != nil {
 		tmpavctx = avctx.ptr
 	}
 	ret := C.av_get_audio_frame_duration(tmpavctx, C.int(frameBytes))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_fast_padded_malloc ---
@@ -504,13 +504,13 @@ func AVGetAudioFrameDuration(avctx *AVCodecContext, frameBytes int) int {
 // --- Function avcodec_is_open ---
 
 // AVCodecIsOpen wraps avcodec_is_open.
-func AVCodecIsOpen(s *AVCodecContext) int {
+func AVCodecIsOpen(s *AVCodecContext) (int, error) {
 	var tmps *C.AVCodecContext
 	if s != nil {
 		tmps = s.ptr
 	}
 	ret := C.avcodec_is_open(tmps)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_codec_iterate ---
@@ -577,25 +577,25 @@ func AVCodecFindEncoderByName(name *CStr) *AVCodec {
 // --- Function av_codec_is_encoder ---
 
 // AVCodecIsEncoder wraps av_codec_is_encoder.
-func AVCodecIsEncoder(codec *AVCodec) int {
+func AVCodecIsEncoder(codec *AVCodec) (int, error) {
 	var tmpcodec *C.AVCodec
 	if codec != nil {
 		tmpcodec = codec.ptr
 	}
 	ret := C.av_codec_is_encoder(tmpcodec)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_codec_is_decoder ---
 
 // AVCodecIsDecoder wraps av_codec_is_decoder.
-func AVCodecIsDecoder(codec *AVCodec) int {
+func AVCodecIsDecoder(codec *AVCodec) (int, error) {
 	var tmpcodec *C.AVCodec
 	if codec != nil {
 		tmpcodec = codec.ptr
 	}
 	ret := C.av_codec_is_decoder(tmpcodec)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_get_profile_name ---
@@ -689,17 +689,17 @@ func AVCodecGetName(id AVCodecID) *CStr {
 // --- Function av_get_bits_per_sample ---
 
 // AVGetBitsPerSample wraps av_get_bits_per_sample.
-func AVGetBitsPerSample(codecId AVCodecID) int {
+func AVGetBitsPerSample(codecId AVCodecID) (int, error) {
 	ret := C.av_get_bits_per_sample(C.enum_AVCodecID(codecId))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_get_exact_bits_per_sample ---
 
 // AVGetExactBitsPerSample wraps av_get_exact_bits_per_sample.
-func AVGetExactBitsPerSample(codecId AVCodecID) int {
+func AVGetExactBitsPerSample(codecId AVCodecID) (int, error) {
 	ret := C.av_get_exact_bits_per_sample(C.enum_AVCodecID(codecId))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avcodec_profile_name ---
@@ -758,7 +758,7 @@ func AVCodecParametersFree(par **AVCodecParameters) {
 // --- Function avcodec_parameters_copy ---
 
 // AVCodecParametersCopy wraps avcodec_parameters_copy.
-func AVCodecParametersCopy(dst *AVCodecParameters, src *AVCodecParameters) int {
+func AVCodecParametersCopy(dst *AVCodecParameters, src *AVCodecParameters) (int, error) {
 	var tmpdst *C.AVCodecParameters
 	if dst != nil {
 		tmpdst = dst.ptr
@@ -768,19 +768,19 @@ func AVCodecParametersCopy(dst *AVCodecParameters, src *AVCodecParameters) int {
 		tmpsrc = src.ptr
 	}
 	ret := C.avcodec_parameters_copy(tmpdst, tmpsrc)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_get_audio_frame_duration2 ---
 
 // AVGetAudioFrameDuration2 wraps av_get_audio_frame_duration2.
-func AVGetAudioFrameDuration2(par *AVCodecParameters, frameBytes int) int {
+func AVGetAudioFrameDuration2(par *AVCodecParameters, frameBytes int) (int, error) {
 	var tmppar *C.AVCodecParameters
 	if par != nil {
 		tmppar = par.ptr
 	}
 	ret := C.av_get_audio_frame_duration2(tmppar, C.int(frameBytes))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_cpb_properties_alloc ---
@@ -863,13 +863,13 @@ func AVInitPacket(pkt *AVPacket) {
 // --- Function av_new_packet ---
 
 // AVNewPacket wraps av_new_packet.
-func AVNewPacket(pkt *AVPacket, size int) int {
+func AVNewPacket(pkt *AVPacket, size int) (int, error) {
 	var tmppkt *C.AVPacket
 	if pkt != nil {
 		tmppkt = pkt.ptr
 	}
 	ret := C.av_new_packet(tmppkt, C.int(size))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_shrink_packet ---
@@ -886,25 +886,25 @@ func AVShrinkPacket(pkt *AVPacket, size int) {
 // --- Function av_grow_packet ---
 
 // AVGrowPacket wraps av_grow_packet.
-func AVGrowPacket(pkt *AVPacket, growBy int) int {
+func AVGrowPacket(pkt *AVPacket, growBy int) (int, error) {
 	var tmppkt *C.AVPacket
 	if pkt != nil {
 		tmppkt = pkt.ptr
 	}
 	ret := C.av_grow_packet(tmppkt, C.int(growBy))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_packet_from_data ---
 
 // AVPacketFromData wraps av_packet_from_data.
-func AVPacketFromData(pkt *AVPacket, data unsafe.Pointer, size int) int {
+func AVPacketFromData(pkt *AVPacket, data unsafe.Pointer, size int) (int, error) {
 	var tmppkt *C.AVPacket
 	if pkt != nil {
 		tmppkt = pkt.ptr
 	}
 	ret := C.av_packet_from_data(tmppkt, (*C.uint8_t)(data), C.int(size))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_packet_new_side_data ---
@@ -922,25 +922,25 @@ func AVPacketNewSideData(pkt *AVPacket, _type AVPacketSideDataType, size uint64)
 // --- Function av_packet_add_side_data ---
 
 // AVPacketAddSideData wraps av_packet_add_side_data.
-func AVPacketAddSideData(pkt *AVPacket, _type AVPacketSideDataType, data unsafe.Pointer, size uint64) int {
+func AVPacketAddSideData(pkt *AVPacket, _type AVPacketSideDataType, data unsafe.Pointer, size uint64) (int, error) {
 	var tmppkt *C.AVPacket
 	if pkt != nil {
 		tmppkt = pkt.ptr
 	}
 	ret := C.av_packet_add_side_data(tmppkt, C.enum_AVPacketSideDataType(_type), (*C.uint8_t)(data), C.size_t(size))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_packet_shrink_side_data ---
 
 // AVPacketShrinkSideData wraps av_packet_shrink_side_data.
-func AVPacketShrinkSideData(pkt *AVPacket, _type AVPacketSideDataType, size uint64) int {
+func AVPacketShrinkSideData(pkt *AVPacket, _type AVPacketSideDataType, size uint64) (int, error) {
 	var tmppkt *C.AVPacket
 	if pkt != nil {
 		tmppkt = pkt.ptr
 	}
 	ret := C.av_packet_shrink_side_data(tmppkt, C.enum_AVPacketSideDataType(_type), C.size_t(size))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_packet_get_side_data ---
@@ -964,7 +964,7 @@ func AVPacketSideDataName(_type AVPacketSideDataType) *CStr {
 // --- Function av_packet_unpack_dictionary ---
 
 // AVPacketUnpackDictionary wraps av_packet_unpack_dictionary.
-func AVPacketUnpackDictionary(data unsafe.Pointer, size uint64, dict **AVDictionary) int {
+func AVPacketUnpackDictionary(data unsafe.Pointer, size uint64, dict **AVDictionary) (int, error) {
 	var ptrdict **C.AVDictionary
 	var tmpdict *C.AVDictionary
 	var oldTmpdict *C.AVDictionary
@@ -984,7 +984,7 @@ func AVPacketUnpackDictionary(data unsafe.Pointer, size uint64, dict **AVDiction
 			*dict = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_packet_free_side_data ---
@@ -1001,7 +1001,7 @@ func AVPacketFreeSideData(pkt *AVPacket) {
 // --- Function av_packet_ref ---
 
 // AVPacketRef wraps av_packet_ref.
-func AVPacketRef(dst *AVPacket, src *AVPacket) int {
+func AVPacketRef(dst *AVPacket, src *AVPacket) (int, error) {
 	var tmpdst *C.AVPacket
 	if dst != nil {
 		tmpdst = dst.ptr
@@ -1011,7 +1011,7 @@ func AVPacketRef(dst *AVPacket, src *AVPacket) int {
 		tmpsrc = src.ptr
 	}
 	ret := C.av_packet_ref(tmpdst, tmpsrc)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_packet_unref ---
@@ -1043,7 +1043,7 @@ func AVPacketMoveRef(dst *AVPacket, src *AVPacket) {
 // --- Function av_packet_copy_props ---
 
 // AVPacketCopyProps wraps av_packet_copy_props.
-func AVPacketCopyProps(dst *AVPacket, src *AVPacket) int {
+func AVPacketCopyProps(dst *AVPacket, src *AVPacket) (int, error) {
 	var tmpdst *C.AVPacket
 	if dst != nil {
 		tmpdst = dst.ptr
@@ -1053,31 +1053,31 @@ func AVPacketCopyProps(dst *AVPacket, src *AVPacket) int {
 		tmpsrc = src.ptr
 	}
 	ret := C.av_packet_copy_props(tmpdst, tmpsrc)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_packet_make_refcounted ---
 
 // AVPacketMakeRefcounted wraps av_packet_make_refcounted.
-func AVPacketMakeRefcounted(pkt *AVPacket) int {
+func AVPacketMakeRefcounted(pkt *AVPacket) (int, error) {
 	var tmppkt *C.AVPacket
 	if pkt != nil {
 		tmppkt = pkt.ptr
 	}
 	ret := C.av_packet_make_refcounted(tmppkt)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_packet_make_writable ---
 
 // AVPacketMakeWritable wraps av_packet_make_writable.
-func AVPacketMakeWritable(pkt *AVPacket) int {
+func AVPacketMakeWritable(pkt *AVPacket) (int, error) {
 	var tmppkt *C.AVPacket
 	if pkt != nil {
 		tmppkt = pkt.ptr
 	}
 	ret := C.av_packet_make_writable(tmppkt)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_packet_rescale_ts ---
@@ -1154,7 +1154,7 @@ func AVFilterFilterPadCount(filter *AVFilter, isOutput int) uint {
 // --- Function avfilter_link ---
 
 // AVFilterLink_ wraps avfilter_link.
-func AVFilterLink_(src *AVFilterContext, srcpad uint, dst *AVFilterContext, dstpad uint) int {
+func AVFilterLink_(src *AVFilterContext, srcpad uint, dst *AVFilterContext, dstpad uint) (int, error) {
 	var tmpsrc *C.AVFilterContext
 	if src != nil {
 		tmpsrc = src.ptr
@@ -1164,7 +1164,7 @@ func AVFilterLink_(src *AVFilterContext, srcpad uint, dst *AVFilterContext, dstp
 		tmpdst = dst.ptr
 	}
 	ret := C.avfilter_link(tmpsrc, C.uint(srcpad), tmpdst, C.uint(dstpad))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avfilter_link_free ---
@@ -1195,19 +1195,19 @@ func AVFilterLinkFree(link **AVFilterLink) {
 // --- Function avfilter_config_links ---
 
 // AVFilterConfigLinks wraps avfilter_config_links.
-func AVFilterConfigLinks(filter *AVFilterContext) int {
+func AVFilterConfigLinks(filter *AVFilterContext) (int, error) {
 	var tmpfilter *C.AVFilterContext
 	if filter != nil {
 		tmpfilter = filter.ptr
 	}
 	ret := C.avfilter_config_links(tmpfilter)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avfilter_process_command ---
 
 // AVFilterProcessCommand wraps avfilter_process_command.
-func AVFilterProcessCommand(filter *AVFilterContext, cmd *CStr, arg *CStr, res *CStr, resLen int, flags int) int {
+func AVFilterProcessCommand(filter *AVFilterContext, cmd *CStr, arg *CStr, res *CStr, resLen int, flags int) (int, error) {
 	var tmpfilter *C.AVFilterContext
 	if filter != nil {
 		tmpfilter = filter.ptr
@@ -1225,7 +1225,7 @@ func AVFilterProcessCommand(filter *AVFilterContext, cmd *CStr, arg *CStr, res *
 		tmpres = res.ptr
 	}
 	ret := C.avfilter_process_command(tmpfilter, tmpcmd, tmparg, tmpres, C.int(resLen), C.int(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_filter_iterate ---
@@ -1252,7 +1252,7 @@ func AVFilterGetByName(name *CStr) *AVFilter {
 // --- Function avfilter_init_str ---
 
 // AVFilterInitStr wraps avfilter_init_str.
-func AVFilterInitStr(ctx *AVFilterContext, args *CStr) int {
+func AVFilterInitStr(ctx *AVFilterContext, args *CStr) (int, error) {
 	var tmpctx *C.AVFilterContext
 	if ctx != nil {
 		tmpctx = ctx.ptr
@@ -1262,13 +1262,13 @@ func AVFilterInitStr(ctx *AVFilterContext, args *CStr) int {
 		tmpargs = args.ptr
 	}
 	ret := C.avfilter_init_str(tmpctx, tmpargs)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avfilter_init_dict ---
 
 // AVFilterInitDict wraps avfilter_init_dict.
-func AVFilterInitDict(ctx *AVFilterContext, options **AVDictionary) int {
+func AVFilterInitDict(ctx *AVFilterContext, options **AVDictionary) (int, error) {
 	var tmpctx *C.AVFilterContext
 	if ctx != nil {
 		tmpctx = ctx.ptr
@@ -1292,7 +1292,7 @@ func AVFilterInitDict(ctx *AVFilterContext, options **AVDictionary) int {
 			*options = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avfilter_free ---
@@ -1309,7 +1309,7 @@ func AVFilterFree(filter *AVFilterContext) {
 // --- Function avfilter_insert_filter ---
 
 // AVFilterInsertFilter wraps avfilter_insert_filter.
-func AVFilterInsertFilter(link *AVFilterLink, filt *AVFilterContext, filtSrcpadIdx uint, filtDstpadIdx uint) int {
+func AVFilterInsertFilter(link *AVFilterLink, filt *AVFilterContext, filtSrcpadIdx uint, filtDstpadIdx uint) (int, error) {
 	var tmplink *C.AVFilterLink
 	if link != nil {
 		tmplink = link.ptr
@@ -1319,7 +1319,7 @@ func AVFilterInsertFilter(link *AVFilterLink, filt *AVFilterContext, filtSrcpadI
 		tmpfilt = filt.ptr
 	}
 	ret := C.avfilter_insert_filter(tmplink, tmpfilt, C.uint(filtSrcpadIdx), C.uint(filtDstpadIdx))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avfilter_get_class ---
@@ -1393,7 +1393,7 @@ func AVFilterGraphGetFilter(graph *AVFilterGraph, name *CStr) *AVFilterContext {
 // --- Function avfilter_graph_create_filter ---
 
 // AVFilterGraphCreateFilter wraps avfilter_graph_create_filter.
-func AVFilterGraphCreateFilter(filtCtx **AVFilterContext, filt *AVFilter, name *CStr, args *CStr, opaque unsafe.Pointer, graphCtx *AVFilterGraph) int {
+func AVFilterGraphCreateFilter(filtCtx **AVFilterContext, filt *AVFilter, name *CStr, args *CStr, opaque unsafe.Pointer, graphCtx *AVFilterGraph) (int, error) {
 	var ptrfiltCtx **C.AVFilterContext
 	var tmpfiltCtx *C.AVFilterContext
 	var oldTmpfiltCtx *C.AVFilterContext
@@ -1429,7 +1429,7 @@ func AVFilterGraphCreateFilter(filtCtx **AVFilterContext, filt *AVFilter, name *
 			*filtCtx = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avfilter_graph_set_auto_convert ---
@@ -1446,13 +1446,13 @@ func AVFilterGraphSetAutoConvert(graph *AVFilterGraph, flags uint) {
 // --- Function avfilter_graph_config ---
 
 // AVFilterGraphConfig wraps avfilter_graph_config.
-func AVFilterGraphConfig(graphctx *AVFilterGraph, logCtx unsafe.Pointer) int {
+func AVFilterGraphConfig(graphctx *AVFilterGraph, logCtx unsafe.Pointer) (int, error) {
 	var tmpgraphctx *C.AVFilterGraph
 	if graphctx != nil {
 		tmpgraphctx = graphctx.ptr
 	}
 	ret := C.avfilter_graph_config(tmpgraphctx, logCtx)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avfilter_graph_free ---
@@ -1520,7 +1520,7 @@ func AVFilterInoutFree(inout **AVFilterInOut) {
 // --- Function avfilter_graph_parse ---
 
 // AVFilterGraphParse wraps avfilter_graph_parse.
-func AVFilterGraphParse(graph *AVFilterGraph, filters *CStr, inputs *AVFilterInOut, outputs *AVFilterInOut, logCtx unsafe.Pointer) int {
+func AVFilterGraphParse(graph *AVFilterGraph, filters *CStr, inputs *AVFilterInOut, outputs *AVFilterInOut, logCtx unsafe.Pointer) (int, error) {
 	var tmpgraph *C.AVFilterGraph
 	if graph != nil {
 		tmpgraph = graph.ptr
@@ -1538,13 +1538,13 @@ func AVFilterGraphParse(graph *AVFilterGraph, filters *CStr, inputs *AVFilterInO
 		tmpoutputs = outputs.ptr
 	}
 	ret := C.avfilter_graph_parse(tmpgraph, tmpfilters, tmpinputs, tmpoutputs, logCtx)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avfilter_graph_parse_ptr ---
 
 // AVFilterGraphParsePtr wraps avfilter_graph_parse_ptr.
-func AVFilterGraphParsePtr(graph *AVFilterGraph, filters *CStr, inputs **AVFilterInOut, outputs **AVFilterInOut, logCtx unsafe.Pointer) int {
+func AVFilterGraphParsePtr(graph *AVFilterGraph, filters *CStr, inputs **AVFilterInOut, outputs **AVFilterInOut, logCtx unsafe.Pointer) (int, error) {
 	var tmpgraph *C.AVFilterGraph
 	if graph != nil {
 		tmpgraph = graph.ptr
@@ -1590,13 +1590,13 @@ func AVFilterGraphParsePtr(graph *AVFilterGraph, filters *CStr, inputs **AVFilte
 			*outputs = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avfilter_graph_parse2 ---
 
 // AVFilterGraphParse2 wraps avfilter_graph_parse2.
-func AVFilterGraphParse2(graph *AVFilterGraph, filters *CStr, inputs **AVFilterInOut, outputs **AVFilterInOut) int {
+func AVFilterGraphParse2(graph *AVFilterGraph, filters *CStr, inputs **AVFilterInOut, outputs **AVFilterInOut) (int, error) {
 	var tmpgraph *C.AVFilterGraph
 	if graph != nil {
 		tmpgraph = graph.ptr
@@ -1642,13 +1642,13 @@ func AVFilterGraphParse2(graph *AVFilterGraph, filters *CStr, inputs **AVFilterI
 			*outputs = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avfilter_graph_segment_parse ---
 
 // AVFilterGraphSegmentParse wraps avfilter_graph_segment_parse.
-func AVFilterGraphSegmentParse(graph *AVFilterGraph, graphStr *CStr, flags int, seg **AVFilterGraphSegment) int {
+func AVFilterGraphSegmentParse(graph *AVFilterGraph, graphStr *CStr, flags int, seg **AVFilterGraphSegment) (int, error) {
 	var tmpgraph *C.AVFilterGraph
 	if graph != nil {
 		tmpgraph = graph.ptr
@@ -1676,49 +1676,49 @@ func AVFilterGraphSegmentParse(graph *AVFilterGraph, graphStr *CStr, flags int, 
 			*seg = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avfilter_graph_segment_create_filters ---
 
 // AVFilterGraphSegmentCreateFilters wraps avfilter_graph_segment_create_filters.
-func AVFilterGraphSegmentCreateFilters(seg *AVFilterGraphSegment, flags int) int {
+func AVFilterGraphSegmentCreateFilters(seg *AVFilterGraphSegment, flags int) (int, error) {
 	var tmpseg *C.AVFilterGraphSegment
 	if seg != nil {
 		tmpseg = seg.ptr
 	}
 	ret := C.avfilter_graph_segment_create_filters(tmpseg, C.int(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avfilter_graph_segment_apply_opts ---
 
 // AVFilterGraphSegmentApplyOpts wraps avfilter_graph_segment_apply_opts.
-func AVFilterGraphSegmentApplyOpts(seg *AVFilterGraphSegment, flags int) int {
+func AVFilterGraphSegmentApplyOpts(seg *AVFilterGraphSegment, flags int) (int, error) {
 	var tmpseg *C.AVFilterGraphSegment
 	if seg != nil {
 		tmpseg = seg.ptr
 	}
 	ret := C.avfilter_graph_segment_apply_opts(tmpseg, C.int(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avfilter_graph_segment_init ---
 
 // AVFilterGraphSegmentInit wraps avfilter_graph_segment_init.
-func AVFilterGraphSegmentInit(seg *AVFilterGraphSegment, flags int) int {
+func AVFilterGraphSegmentInit(seg *AVFilterGraphSegment, flags int) (int, error) {
 	var tmpseg *C.AVFilterGraphSegment
 	if seg != nil {
 		tmpseg = seg.ptr
 	}
 	ret := C.avfilter_graph_segment_init(tmpseg, C.int(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avfilter_graph_segment_link ---
 
 // AVFilterGraphSegmentLink wraps avfilter_graph_segment_link.
-func AVFilterGraphSegmentLink(seg *AVFilterGraphSegment, flags int, inputs **AVFilterInOut, outputs **AVFilterInOut) int {
+func AVFilterGraphSegmentLink(seg *AVFilterGraphSegment, flags int, inputs **AVFilterInOut, outputs **AVFilterInOut) (int, error) {
 	var tmpseg *C.AVFilterGraphSegment
 	if seg != nil {
 		tmpseg = seg.ptr
@@ -1760,13 +1760,13 @@ func AVFilterGraphSegmentLink(seg *AVFilterGraphSegment, flags int, inputs **AVF
 			*outputs = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avfilter_graph_segment_apply ---
 
 // AVFilterGraphSegmentApply wraps avfilter_graph_segment_apply.
-func AVFilterGraphSegmentApply(seg *AVFilterGraphSegment, flags int, inputs **AVFilterInOut, outputs **AVFilterInOut) int {
+func AVFilterGraphSegmentApply(seg *AVFilterGraphSegment, flags int, inputs **AVFilterInOut, outputs **AVFilterInOut) (int, error) {
 	var tmpseg *C.AVFilterGraphSegment
 	if seg != nil {
 		tmpseg = seg.ptr
@@ -1808,7 +1808,7 @@ func AVFilterGraphSegmentApply(seg *AVFilterGraphSegment, flags int, inputs **AV
 			*outputs = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avfilter_graph_segment_free ---
@@ -1839,7 +1839,7 @@ func AVFilterGraphSegmentFree(seg **AVFilterGraphSegment) {
 // --- Function avfilter_graph_send_command ---
 
 // AVFilterGraphSendCommand wraps avfilter_graph_send_command.
-func AVFilterGraphSendCommand(graph *AVFilterGraph, target *CStr, cmd *CStr, arg *CStr, res *CStr, resLen int, flags int) int {
+func AVFilterGraphSendCommand(graph *AVFilterGraph, target *CStr, cmd *CStr, arg *CStr, res *CStr, resLen int, flags int) (int, error) {
 	var tmpgraph *C.AVFilterGraph
 	if graph != nil {
 		tmpgraph = graph.ptr
@@ -1861,13 +1861,13 @@ func AVFilterGraphSendCommand(graph *AVFilterGraph, target *CStr, cmd *CStr, arg
 		tmpres = res.ptr
 	}
 	ret := C.avfilter_graph_send_command(tmpgraph, tmptarget, tmpcmd, tmparg, tmpres, C.int(resLen), C.int(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avfilter_graph_queue_command ---
 
 // AVFilterGraphQueueCommand wraps avfilter_graph_queue_command.
-func AVFilterGraphQueueCommand(graph *AVFilterGraph, target *CStr, cmd *CStr, arg *CStr, flags int, ts float64) int {
+func AVFilterGraphQueueCommand(graph *AVFilterGraph, target *CStr, cmd *CStr, arg *CStr, flags int, ts float64) (int, error) {
 	var tmpgraph *C.AVFilterGraph
 	if graph != nil {
 		tmpgraph = graph.ptr
@@ -1885,7 +1885,7 @@ func AVFilterGraphQueueCommand(graph *AVFilterGraph, target *CStr, cmd *CStr, ar
 		tmparg = arg.ptr
 	}
 	ret := C.avfilter_graph_queue_command(tmpgraph, tmptarget, tmpcmd, tmparg, C.int(flags), C.double(ts))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avfilter_graph_dump ---
@@ -1907,19 +1907,19 @@ func AVFilterGraphDump(graph *AVFilterGraph, options *CStr) *CStr {
 // --- Function avfilter_graph_request_oldest ---
 
 // AVFilterGraphRequestOldest wraps avfilter_graph_request_oldest.
-func AVFilterGraphRequestOldest(graph *AVFilterGraph) int {
+func AVFilterGraphRequestOldest(graph *AVFilterGraph) (int, error) {
 	var tmpgraph *C.AVFilterGraph
 	if graph != nil {
 		tmpgraph = graph.ptr
 	}
 	ret := C.avfilter_graph_request_oldest(tmpgraph)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_buffersink_get_frame_flags ---
 
 // AVBuffersinkGetFrameFlags wraps av_buffersink_get_frame_flags.
-func AVBuffersinkGetFrameFlags(ctx *AVFilterContext, frame *AVFrame, flags int) int {
+func AVBuffersinkGetFrameFlags(ctx *AVFilterContext, frame *AVFrame, flags int) (int, error) {
 	var tmpctx *C.AVFilterContext
 	if ctx != nil {
 		tmpctx = ctx.ptr
@@ -1929,7 +1929,7 @@ func AVBuffersinkGetFrameFlags(ctx *AVFilterContext, frame *AVFrame, flags int) 
 		tmpframe = frame.ptr
 	}
 	ret := C.av_buffersink_get_frame_flags(tmpctx, tmpframe, C.int(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_buffersink_set_frame_size ---
@@ -1970,13 +1970,13 @@ func AVBuffersinkGetTimeBase(ctx *AVFilterContext) *AVRational {
 // --- Function av_buffersink_get_format ---
 
 // AVBuffersinkGetFormat wraps av_buffersink_get_format.
-func AVBuffersinkGetFormat(ctx *AVFilterContext) int {
+func AVBuffersinkGetFormat(ctx *AVFilterContext) (int, error) {
 	var tmpctx *C.AVFilterContext
 	if ctx != nil {
 		tmpctx = ctx.ptr
 	}
 	ret := C.av_buffersink_get_format(tmpctx)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_buffersink_get_frame_rate ---
@@ -1994,25 +1994,25 @@ func AVBuffersinkGetFrameRate(ctx *AVFilterContext) *AVRational {
 // --- Function av_buffersink_get_w ---
 
 // AVBuffersinkGetW wraps av_buffersink_get_w.
-func AVBuffersinkGetW(ctx *AVFilterContext) int {
+func AVBuffersinkGetW(ctx *AVFilterContext) (int, error) {
 	var tmpctx *C.AVFilterContext
 	if ctx != nil {
 		tmpctx = ctx.ptr
 	}
 	ret := C.av_buffersink_get_w(tmpctx)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_buffersink_get_h ---
 
 // AVBuffersinkGetH wraps av_buffersink_get_h.
-func AVBuffersinkGetH(ctx *AVFilterContext) int {
+func AVBuffersinkGetH(ctx *AVFilterContext) (int, error) {
 	var tmpctx *C.AVFilterContext
 	if ctx != nil {
 		tmpctx = ctx.ptr
 	}
 	ret := C.av_buffersink_get_h(tmpctx)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_buffersink_get_sample_aspect_ratio ---
@@ -2030,13 +2030,13 @@ func AVBuffersinkGetSampleAspectRatio(ctx *AVFilterContext) *AVRational {
 // --- Function av_buffersink_get_channels ---
 
 // AVBuffersinkGetChannels wraps av_buffersink_get_channels.
-func AVBuffersinkGetChannels(ctx *AVFilterContext) int {
+func AVBuffersinkGetChannels(ctx *AVFilterContext) (int, error) {
 	var tmpctx *C.AVFilterContext
 	if ctx != nil {
 		tmpctx = ctx.ptr
 	}
 	ret := C.av_buffersink_get_channels(tmpctx)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_buffersink_get_channel_layout ---
@@ -2054,7 +2054,7 @@ func AVBuffersinkGetChannelLayout(ctx *AVFilterContext) uint64 {
 // --- Function av_buffersink_get_ch_layout ---
 
 // AVBuffersinkGetChLayout wraps av_buffersink_get_ch_layout.
-func AVBuffersinkGetChLayout(ctx *AVFilterContext, chLayout *AVChannelLayout) int {
+func AVBuffersinkGetChLayout(ctx *AVFilterContext, chLayout *AVChannelLayout) (int, error) {
 	var tmpctx *C.AVFilterContext
 	if ctx != nil {
 		tmpctx = ctx.ptr
@@ -2064,19 +2064,19 @@ func AVBuffersinkGetChLayout(ctx *AVFilterContext, chLayout *AVChannelLayout) in
 		tmpchLayout = chLayout.ptr
 	}
 	ret := C.av_buffersink_get_ch_layout(tmpctx, tmpchLayout)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_buffersink_get_sample_rate ---
 
 // AVBuffersinkGetSampleRate wraps av_buffersink_get_sample_rate.
-func AVBuffersinkGetSampleRate(ctx *AVFilterContext) int {
+func AVBuffersinkGetSampleRate(ctx *AVFilterContext) (int, error) {
 	var tmpctx *C.AVFilterContext
 	if ctx != nil {
 		tmpctx = ctx.ptr
 	}
 	ret := C.av_buffersink_get_sample_rate(tmpctx)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_buffersink_get_hw_frames_ctx ---
@@ -2098,7 +2098,7 @@ func AVBuffersinkGetHwFramesCtx(ctx *AVFilterContext) *AVBufferRef {
 // --- Function av_buffersink_get_frame ---
 
 // AVBuffersinkGetFrame wraps av_buffersink_get_frame.
-func AVBuffersinkGetFrame(ctx *AVFilterContext, frame *AVFrame) int {
+func AVBuffersinkGetFrame(ctx *AVFilterContext, frame *AVFrame) (int, error) {
 	var tmpctx *C.AVFilterContext
 	if ctx != nil {
 		tmpctx = ctx.ptr
@@ -2108,13 +2108,13 @@ func AVBuffersinkGetFrame(ctx *AVFilterContext, frame *AVFrame) int {
 		tmpframe = frame.ptr
 	}
 	ret := C.av_buffersink_get_frame(tmpctx, tmpframe)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_buffersink_get_samples ---
 
 // AVBuffersinkGetSamples wraps av_buffersink_get_samples.
-func AVBuffersinkGetSamples(ctx *AVFilterContext, frame *AVFrame, nbSamples int) int {
+func AVBuffersinkGetSamples(ctx *AVFilterContext, frame *AVFrame, nbSamples int) (int, error) {
 	var tmpctx *C.AVFilterContext
 	if ctx != nil {
 		tmpctx = ctx.ptr
@@ -2124,7 +2124,7 @@ func AVBuffersinkGetSamples(ctx *AVFilterContext, frame *AVFrame, nbSamples int)
 		tmpframe = frame.ptr
 	}
 	ret := C.av_buffersink_get_samples(tmpctx, tmpframe, C.int(nbSamples))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_buffersrc_get_nb_failed_requests ---
@@ -2154,7 +2154,7 @@ func AVBuffersrcParametersAlloc() *AVBufferSrcParameters {
 // --- Function av_buffersrc_parameters_set ---
 
 // AVBuffersrcParametersSet wraps av_buffersrc_parameters_set.
-func AVBuffersrcParametersSet(ctx *AVFilterContext, param *AVBufferSrcParameters) int {
+func AVBuffersrcParametersSet(ctx *AVFilterContext, param *AVBufferSrcParameters) (int, error) {
 	var tmpctx *C.AVFilterContext
 	if ctx != nil {
 		tmpctx = ctx.ptr
@@ -2164,13 +2164,13 @@ func AVBuffersrcParametersSet(ctx *AVFilterContext, param *AVBufferSrcParameters
 		tmpparam = param.ptr
 	}
 	ret := C.av_buffersrc_parameters_set(tmpctx, tmpparam)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_buffersrc_write_frame ---
 
 // AVBuffersrcWriteFrame wraps av_buffersrc_write_frame.
-func AVBuffersrcWriteFrame(ctx *AVFilterContext, frame *AVFrame) int {
+func AVBuffersrcWriteFrame(ctx *AVFilterContext, frame *AVFrame) (int, error) {
 	var tmpctx *C.AVFilterContext
 	if ctx != nil {
 		tmpctx = ctx.ptr
@@ -2180,13 +2180,13 @@ func AVBuffersrcWriteFrame(ctx *AVFilterContext, frame *AVFrame) int {
 		tmpframe = frame.ptr
 	}
 	ret := C.av_buffersrc_write_frame(tmpctx, tmpframe)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_buffersrc_add_frame ---
 
 // AVBuffersrcAddFrame wraps av_buffersrc_add_frame.
-func AVBuffersrcAddFrame(ctx *AVFilterContext, frame *AVFrame) int {
+func AVBuffersrcAddFrame(ctx *AVFilterContext, frame *AVFrame) (int, error) {
 	var tmpctx *C.AVFilterContext
 	if ctx != nil {
 		tmpctx = ctx.ptr
@@ -2196,13 +2196,13 @@ func AVBuffersrcAddFrame(ctx *AVFilterContext, frame *AVFrame) int {
 		tmpframe = frame.ptr
 	}
 	ret := C.av_buffersrc_add_frame(tmpctx, tmpframe)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_buffersrc_add_frame_flags ---
 
 // AVBuffersrcAddFrameFlags wraps av_buffersrc_add_frame_flags.
-func AVBuffersrcAddFrameFlags(bufferSrc *AVFilterContext, frame *AVFrame, flags int) int {
+func AVBuffersrcAddFrameFlags(bufferSrc *AVFilterContext, frame *AVFrame, flags int) (int, error) {
 	var tmpbufferSrc *C.AVFilterContext
 	if bufferSrc != nil {
 		tmpbufferSrc = bufferSrc.ptr
@@ -2212,25 +2212,25 @@ func AVBuffersrcAddFrameFlags(bufferSrc *AVFilterContext, frame *AVFrame, flags 
 		tmpframe = frame.ptr
 	}
 	ret := C.av_buffersrc_add_frame_flags(tmpbufferSrc, tmpframe, C.int(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_buffersrc_close ---
 
 // AVBuffersrcClose wraps av_buffersrc_close.
-func AVBuffersrcClose(ctx *AVFilterContext, pts int64, flags uint) int {
+func AVBuffersrcClose(ctx *AVFilterContext, pts int64, flags uint) (int, error) {
 	var tmpctx *C.AVFilterContext
 	if ctx != nil {
 		tmpctx = ctx.ptr
 	}
 	ret := C.av_buffersrc_close(tmpctx, C.int64_t(pts), C.uint(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_get_packet ---
 
 // AVGetPacket wraps av_get_packet.
-func AVGetPacket(s *AVIOContext, pkt *AVPacket, size int) int {
+func AVGetPacket(s *AVIOContext, pkt *AVPacket, size int) (int, error) {
 	var tmps *C.AVIOContext
 	if s != nil {
 		tmps = s.ptr
@@ -2240,13 +2240,13 @@ func AVGetPacket(s *AVIOContext, pkt *AVPacket, size int) int {
 		tmppkt = pkt.ptr
 	}
 	ret := C.av_get_packet(tmps, tmppkt, C.int(size))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_append_packet ---
 
 // AVAppendPacket wraps av_append_packet.
-func AVAppendPacket(s *AVIOContext, pkt *AVPacket, size int) int {
+func AVAppendPacket(s *AVIOContext, pkt *AVPacket, size int) (int, error) {
 	var tmps *C.AVIOContext
 	if s != nil {
 		tmps = s.ptr
@@ -2256,19 +2256,19 @@ func AVAppendPacket(s *AVIOContext, pkt *AVPacket, size int) int {
 		tmppkt = pkt.ptr
 	}
 	ret := C.av_append_packet(tmps, tmppkt, C.int(size))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_disposition_from_string ---
 
 // AVDispositionFromString wraps av_disposition_from_string.
-func AVDispositionFromString(disp *CStr) int {
+func AVDispositionFromString(disp *CStr) (int, error) {
 	var tmpdisp *C.char
 	if disp != nil {
 		tmpdisp = disp.ptr
 	}
 	ret := C.av_disposition_from_string(tmpdisp)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_disposition_to_string ---
@@ -2369,17 +2369,17 @@ func AVFormatLicense() *CStr {
 // --- Function avformat_network_init ---
 
 // AVFormatNetworkInit wraps avformat_network_init.
-func AVFormatNetworkInit() int {
+func AVFormatNetworkInit() (int, error) {
 	ret := C.avformat_network_init()
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avformat_network_deinit ---
 
 // AVFormatNetworkDeinit wraps avformat_network_deinit.
-func AVFormatNetworkDeinit() int {
+func AVFormatNetworkDeinit() (int, error) {
 	ret := C.avformat_network_deinit()
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_muxer_iterate ---
@@ -2462,13 +2462,13 @@ func AVFormatNewStream(s *AVFormatContext, c *AVCodec) *AVStream {
 // --- Function av_stream_add_side_data ---
 
 // AVStreamAddSideData wraps av_stream_add_side_data.
-func AVStreamAddSideData(st *AVStream, _type AVPacketSideDataType, data unsafe.Pointer, size uint64) int {
+func AVStreamAddSideData(st *AVStream, _type AVPacketSideDataType, data unsafe.Pointer, size uint64) (int, error) {
 	var tmpst *C.AVStream
 	if st != nil {
 		tmpst = st.ptr
 	}
 	ret := C.av_stream_add_side_data(tmpst, C.enum_AVPacketSideDataType(_type), (*C.uint8_t)(data), C.size_t(size))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_stream_new_side_data ---
@@ -2507,7 +2507,7 @@ func AVNewProgram(s *AVFormatContext, id int) *AVProgram {
 // --- Function avformat_alloc_output_context2 ---
 
 // AVFormatAllocOutputContext2 wraps avformat_alloc_output_context2.
-func AVFormatAllocOutputContext2(ctx **AVFormatContext, oformat *AVOutputFormat, formatName *CStr, filename *CStr) int {
+func AVFormatAllocOutputContext2(ctx **AVFormatContext, oformat *AVOutputFormat, formatName *CStr, filename *CStr) (int, error) {
 	var ptrctx **C.AVFormatContext
 	var tmpctx *C.AVFormatContext
 	var oldTmpctx *C.AVFormatContext
@@ -2539,7 +2539,7 @@ func AVFormatAllocOutputContext2(ctx **AVFormatContext, oformat *AVOutputFormat,
 			*ctx = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_find_input_format ---
@@ -2587,7 +2587,7 @@ func AVProbeInputFormat(pd *AVProbeData, isOpened int) *AVInputFormat {
 // --- Function av_probe_input_buffer2 ---
 
 // AVProbeInputBuffer2 wraps av_probe_input_buffer2.
-func AVProbeInputBuffer2(pb *AVIOContext, fmt **AVInputFormat, url *CStr, logctx unsafe.Pointer, offset uint, maxProbeSize uint) int {
+func AVProbeInputBuffer2(pb *AVIOContext, fmt **AVInputFormat, url *CStr, logctx unsafe.Pointer, offset uint, maxProbeSize uint) (int, error) {
 	var tmppb *C.AVIOContext
 	if pb != nil {
 		tmppb = pb.ptr
@@ -2615,13 +2615,13 @@ func AVProbeInputBuffer2(pb *AVIOContext, fmt **AVInputFormat, url *CStr, logctx
 			*fmt = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_probe_input_buffer ---
 
 // AVProbeInputBuffer wraps av_probe_input_buffer.
-func AVProbeInputBuffer(pb *AVIOContext, fmt **AVInputFormat, url *CStr, logctx unsafe.Pointer, offset uint, maxProbeSize uint) int {
+func AVProbeInputBuffer(pb *AVIOContext, fmt **AVInputFormat, url *CStr, logctx unsafe.Pointer, offset uint, maxProbeSize uint) (int, error) {
 	var tmppb *C.AVIOContext
 	if pb != nil {
 		tmppb = pb.ptr
@@ -2649,13 +2649,13 @@ func AVProbeInputBuffer(pb *AVIOContext, fmt **AVInputFormat, url *CStr, logctx 
 			*fmt = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avformat_open_input ---
 
 // AVFormatOpenInput wraps avformat_open_input.
-func AVFormatOpenInput(ps **AVFormatContext, url *CStr, fmt *AVInputFormat, options **AVDictionary) int {
+func AVFormatOpenInput(ps **AVFormatContext, url *CStr, fmt *AVInputFormat, options **AVDictionary) (int, error) {
 	var ptrps **C.AVFormatContext
 	var tmpps *C.AVFormatContext
 	var oldTmpps *C.AVFormatContext
@@ -2701,13 +2701,13 @@ func AVFormatOpenInput(ps **AVFormatContext, url *CStr, fmt *AVInputFormat, opti
 			*options = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avformat_find_stream_info ---
 
 // AVFormatFindStreamInfo wraps avformat_find_stream_info.
-func AVFormatFindStreamInfo(ic *AVFormatContext, options **AVDictionary) int {
+func AVFormatFindStreamInfo(ic *AVFormatContext, options **AVDictionary) (int, error) {
 	var tmpic *C.AVFormatContext
 	if ic != nil {
 		tmpic = ic.ptr
@@ -2731,7 +2731,7 @@ func AVFormatFindStreamInfo(ic *AVFormatContext, options **AVDictionary) int {
 			*options = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_find_program_from_stream ---
@@ -2768,7 +2768,7 @@ func AVProgramAddStreamIndex(ac *AVFormatContext, progid int, idx uint) {
 // --- Function av_find_best_stream ---
 
 // AVFindBestStream wraps av_find_best_stream.
-func AVFindBestStream(ic *AVFormatContext, _type AVMediaType, wantedStreamNb int, relatedStream int, decoderRet **AVCodec, flags int) int {
+func AVFindBestStream(ic *AVFormatContext, _type AVMediaType, wantedStreamNb int, relatedStream int, decoderRet **AVCodec, flags int) (int, error) {
 	var tmpic *C.AVFormatContext
 	if ic != nil {
 		tmpic = ic.ptr
@@ -2792,13 +2792,13 @@ func AVFindBestStream(ic *AVFormatContext, _type AVMediaType, wantedStreamNb int
 			*decoderRet = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_read_frame ---
 
 // AVReadFrame wraps av_read_frame.
-func AVReadFrame(s *AVFormatContext, pkt *AVPacket) int {
+func AVReadFrame(s *AVFormatContext, pkt *AVPacket) (int, error) {
 	var tmps *C.AVFormatContext
 	if s != nil {
 		tmps = s.ptr
@@ -2808,67 +2808,67 @@ func AVReadFrame(s *AVFormatContext, pkt *AVPacket) int {
 		tmppkt = pkt.ptr
 	}
 	ret := C.av_read_frame(tmps, tmppkt)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_seek_frame ---
 
 // AVSeekFrame wraps av_seek_frame.
-func AVSeekFrame(s *AVFormatContext, streamIndex int, timestamp int64, flags int) int {
+func AVSeekFrame(s *AVFormatContext, streamIndex int, timestamp int64, flags int) (int, error) {
 	var tmps *C.AVFormatContext
 	if s != nil {
 		tmps = s.ptr
 	}
 	ret := C.av_seek_frame(tmps, C.int(streamIndex), C.int64_t(timestamp), C.int(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avformat_seek_file ---
 
 // AVFormatSeekFile wraps avformat_seek_file.
-func AVFormatSeekFile(s *AVFormatContext, streamIndex int, minTs int64, ts int64, maxTs int64, flags int) int {
+func AVFormatSeekFile(s *AVFormatContext, streamIndex int, minTs int64, ts int64, maxTs int64, flags int) (int, error) {
 	var tmps *C.AVFormatContext
 	if s != nil {
 		tmps = s.ptr
 	}
 	ret := C.avformat_seek_file(tmps, C.int(streamIndex), C.int64_t(minTs), C.int64_t(ts), C.int64_t(maxTs), C.int(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avformat_flush ---
 
 // AVFormatFlush wraps avformat_flush.
-func AVFormatFlush(s *AVFormatContext) int {
+func AVFormatFlush(s *AVFormatContext) (int, error) {
 	var tmps *C.AVFormatContext
 	if s != nil {
 		tmps = s.ptr
 	}
 	ret := C.avformat_flush(tmps)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_read_play ---
 
 // AVReadPlay wraps av_read_play.
-func AVReadPlay(s *AVFormatContext) int {
+func AVReadPlay(s *AVFormatContext) (int, error) {
 	var tmps *C.AVFormatContext
 	if s != nil {
 		tmps = s.ptr
 	}
 	ret := C.av_read_play(tmps)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_read_pause ---
 
 // AVReadPause wraps av_read_pause.
-func AVReadPause(s *AVFormatContext) int {
+func AVReadPause(s *AVFormatContext) (int, error) {
 	var tmps *C.AVFormatContext
 	if s != nil {
 		tmps = s.ptr
 	}
 	ret := C.av_read_pause(tmps)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avformat_close_input ---
@@ -2899,7 +2899,7 @@ func AVFormatCloseInput(s **AVFormatContext) {
 // --- Function avformat_write_header ---
 
 // AVFormatWriteHeader wraps avformat_write_header.
-func AVFormatWriteHeader(s *AVFormatContext, options **AVDictionary) int {
+func AVFormatWriteHeader(s *AVFormatContext, options **AVDictionary) (int, error) {
 	var tmps *C.AVFormatContext
 	if s != nil {
 		tmps = s.ptr
@@ -2923,13 +2923,13 @@ func AVFormatWriteHeader(s *AVFormatContext, options **AVDictionary) int {
 			*options = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avformat_init_output ---
 
 // AVFormatInitOutput wraps avformat_init_output.
-func AVFormatInitOutput(s *AVFormatContext, options **AVDictionary) int {
+func AVFormatInitOutput(s *AVFormatContext, options **AVDictionary) (int, error) {
 	var tmps *C.AVFormatContext
 	if s != nil {
 		tmps = s.ptr
@@ -2953,13 +2953,13 @@ func AVFormatInitOutput(s *AVFormatContext, options **AVDictionary) int {
 			*options = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_write_frame ---
 
 // AVWriteFrame wraps av_write_frame.
-func AVWriteFrame(s *AVFormatContext, pkt *AVPacket) int {
+func AVWriteFrame(s *AVFormatContext, pkt *AVPacket) (int, error) {
 	var tmps *C.AVFormatContext
 	if s != nil {
 		tmps = s.ptr
@@ -2969,13 +2969,13 @@ func AVWriteFrame(s *AVFormatContext, pkt *AVPacket) int {
 		tmppkt = pkt.ptr
 	}
 	ret := C.av_write_frame(tmps, tmppkt)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_interleaved_write_frame ---
 
 // AVInterleavedWriteFrame wraps av_interleaved_write_frame.
-func AVInterleavedWriteFrame(s *AVFormatContext, pkt *AVPacket) int {
+func AVInterleavedWriteFrame(s *AVFormatContext, pkt *AVPacket) (int, error) {
 	var tmps *C.AVFormatContext
 	if s != nil {
 		tmps = s.ptr
@@ -2985,13 +2985,13 @@ func AVInterleavedWriteFrame(s *AVFormatContext, pkt *AVPacket) int {
 		tmppkt = pkt.ptr
 	}
 	ret := C.av_interleaved_write_frame(tmps, tmppkt)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_write_uncoded_frame ---
 
 // AVWriteUncodedFrame wraps av_write_uncoded_frame.
-func AVWriteUncodedFrame(s *AVFormatContext, streamIndex int, frame *AVFrame) int {
+func AVWriteUncodedFrame(s *AVFormatContext, streamIndex int, frame *AVFrame) (int, error) {
 	var tmps *C.AVFormatContext
 	if s != nil {
 		tmps = s.ptr
@@ -3001,13 +3001,13 @@ func AVWriteUncodedFrame(s *AVFormatContext, streamIndex int, frame *AVFrame) in
 		tmpframe = frame.ptr
 	}
 	ret := C.av_write_uncoded_frame(tmps, C.int(streamIndex), tmpframe)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_interleaved_write_uncoded_frame ---
 
 // AVInterleavedWriteUncodedFrame wraps av_interleaved_write_uncoded_frame.
-func AVInterleavedWriteUncodedFrame(s *AVFormatContext, streamIndex int, frame *AVFrame) int {
+func AVInterleavedWriteUncodedFrame(s *AVFormatContext, streamIndex int, frame *AVFrame) (int, error) {
 	var tmps *C.AVFormatContext
 	if s != nil {
 		tmps = s.ptr
@@ -3017,31 +3017,31 @@ func AVInterleavedWriteUncodedFrame(s *AVFormatContext, streamIndex int, frame *
 		tmpframe = frame.ptr
 	}
 	ret := C.av_interleaved_write_uncoded_frame(tmps, C.int(streamIndex), tmpframe)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_write_uncoded_frame_query ---
 
 // AVWriteUncodedFrameQuery wraps av_write_uncoded_frame_query.
-func AVWriteUncodedFrameQuery(s *AVFormatContext, streamIndex int) int {
+func AVWriteUncodedFrameQuery(s *AVFormatContext, streamIndex int) (int, error) {
 	var tmps *C.AVFormatContext
 	if s != nil {
 		tmps = s.ptr
 	}
 	ret := C.av_write_uncoded_frame_query(tmps, C.int(streamIndex))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_write_trailer ---
 
 // AVWriteTrailer wraps av_write_trailer.
-func AVWriteTrailer(s *AVFormatContext) int {
+func AVWriteTrailer(s *AVFormatContext) (int, error) {
 	var tmps *C.AVFormatContext
 	if s != nil {
 		tmps = s.ptr
 	}
 	ret := C.av_write_trailer(tmps)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_guess_format ---
@@ -3187,37 +3187,37 @@ func AVCodecGetTag(tags **AVCodecTag, id AVCodecID) uint {
 // --- Function av_find_default_stream_index ---
 
 // AVFindDefaultStreamIndex wraps av_find_default_stream_index.
-func AVFindDefaultStreamIndex(s *AVFormatContext) int {
+func AVFindDefaultStreamIndex(s *AVFormatContext) (int, error) {
 	var tmps *C.AVFormatContext
 	if s != nil {
 		tmps = s.ptr
 	}
 	ret := C.av_find_default_stream_index(tmps)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_index_search_timestamp ---
 
 // AVIndexSearchTimestamp wraps av_index_search_timestamp.
-func AVIndexSearchTimestamp(st *AVStream, timestamp int64, flags int) int {
+func AVIndexSearchTimestamp(st *AVStream, timestamp int64, flags int) (int, error) {
 	var tmpst *C.AVStream
 	if st != nil {
 		tmpst = st.ptr
 	}
 	ret := C.av_index_search_timestamp(tmpst, C.int64_t(timestamp), C.int(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avformat_index_get_entries_count ---
 
 // AVFormatIndexGetEntriesCount wraps avformat_index_get_entries_count.
-func AVFormatIndexGetEntriesCount(st *AVStream) int {
+func AVFormatIndexGetEntriesCount(st *AVStream) (int, error) {
 	var tmpst *C.AVStream
 	if st != nil {
 		tmpst = st.ptr
 	}
 	ret := C.avformat_index_get_entries_count(tmpst)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avformat_index_get_entry ---
@@ -3255,13 +3255,13 @@ func AVFormatIndexGetEntryFromTimestamp(st *AVStream, wantedTimestamp int64, fla
 // --- Function av_add_index_entry ---
 
 // AVAddIndexEntry wraps av_add_index_entry.
-func AVAddIndexEntry(st *AVStream, pos int64, timestamp int64, size int, distance int, flags int) int {
+func AVAddIndexEntry(st *AVStream, pos int64, timestamp int64, size int, distance int, flags int) (int, error) {
 	var tmpst *C.AVStream
 	if st != nil {
 		tmpst = st.ptr
 	}
 	ret := C.av_add_index_entry(tmpst, C.int64_t(pos), C.int64_t(timestamp), C.int(size), C.int(distance), C.int(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_url_split ---
@@ -3287,7 +3287,7 @@ func AVDumpFormat(ic *AVFormatContext, index int, url *CStr, isOutput int) {
 // --- Function av_get_frame_filename2 ---
 
 // AVGetFrameFilename2 wraps av_get_frame_filename2.
-func AVGetFrameFilename2(buf *CStr, bufSize int, path *CStr, number int, flags int) int {
+func AVGetFrameFilename2(buf *CStr, bufSize int, path *CStr, number int, flags int) (int, error) {
 	var tmpbuf *C.char
 	if buf != nil {
 		tmpbuf = buf.ptr
@@ -3297,13 +3297,13 @@ func AVGetFrameFilename2(buf *CStr, bufSize int, path *CStr, number int, flags i
 		tmppath = path.ptr
 	}
 	ret := C.av_get_frame_filename2(tmpbuf, C.int(bufSize), tmppath, C.int(number), C.int(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_get_frame_filename ---
 
 // AVGetFrameFilename wraps av_get_frame_filename.
-func AVGetFrameFilename(buf *CStr, bufSize int, path *CStr, number int) int {
+func AVGetFrameFilename(buf *CStr, bufSize int, path *CStr, number int) (int, error) {
 	var tmpbuf *C.char
 	if buf != nil {
 		tmpbuf = buf.ptr
@@ -3313,19 +3313,19 @@ func AVGetFrameFilename(buf *CStr, bufSize int, path *CStr, number int) int {
 		tmppath = path.ptr
 	}
 	ret := C.av_get_frame_filename(tmpbuf, C.int(bufSize), tmppath, C.int(number))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_filename_number_test ---
 
 // AVFilenameNumberTest wraps av_filename_number_test.
-func AVFilenameNumberTest(filename *CStr) int {
+func AVFilenameNumberTest(filename *CStr) (int, error) {
 	var tmpfilename *C.char
 	if filename != nil {
 		tmpfilename = filename.ptr
 	}
 	ret := C.av_filename_number_test(tmpfilename)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_sdp_create ---
@@ -3336,7 +3336,7 @@ func AVFilenameNumberTest(filename *CStr) int {
 // --- Function av_match_ext ---
 
 // AVMatchExt wraps av_match_ext.
-func AVMatchExt(filename *CStr, extensions *CStr) int {
+func AVMatchExt(filename *CStr, extensions *CStr) (int, error) {
 	var tmpfilename *C.char
 	if filename != nil {
 		tmpfilename = filename.ptr
@@ -3346,19 +3346,19 @@ func AVMatchExt(filename *CStr, extensions *CStr) int {
 		tmpextensions = extensions.ptr
 	}
 	ret := C.av_match_ext(tmpfilename, tmpextensions)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avformat_query_codec ---
 
 // AVFormatQueryCodec wraps avformat_query_codec.
-func AVFormatQueryCodec(ofmt *AVOutputFormat, codecId AVCodecID, stdCompliance int) int {
+func AVFormatQueryCodec(ofmt *AVOutputFormat, codecId AVCodecID, stdCompliance int) (int, error) {
 	var tmpofmt *C.AVOutputFormat
 	if ofmt != nil {
 		tmpofmt = ofmt.ptr
 	}
 	ret := C.avformat_query_codec(tmpofmt, C.enum_AVCodecID(codecId), C.int(stdCompliance))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avformat_get_riff_video_tags ---
@@ -3452,7 +3452,7 @@ func AVGuessFrameRate(ctx *AVFormatContext, stream *AVStream, frame *AVFrame) *A
 // --- Function avformat_match_stream_specifier ---
 
 // AVFormatMatchStreamSpecifier wraps avformat_match_stream_specifier.
-func AVFormatMatchStreamSpecifier(s *AVFormatContext, st *AVStream, spec *CStr) int {
+func AVFormatMatchStreamSpecifier(s *AVFormatContext, st *AVStream, spec *CStr) (int, error) {
 	var tmps *C.AVFormatContext
 	if s != nil {
 		tmps = s.ptr
@@ -3466,25 +3466,25 @@ func AVFormatMatchStreamSpecifier(s *AVFormatContext, st *AVStream, spec *CStr) 
 		tmpspec = spec.ptr
 	}
 	ret := C.avformat_match_stream_specifier(tmps, tmpst, tmpspec)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avformat_queue_attached_pictures ---
 
 // AVFormatQueueAttachedPictures wraps avformat_queue_attached_pictures.
-func AVFormatQueueAttachedPictures(s *AVFormatContext) int {
+func AVFormatQueueAttachedPictures(s *AVFormatContext) (int, error) {
 	var tmps *C.AVFormatContext
 	if s != nil {
 		tmps = s.ptr
 	}
 	ret := C.avformat_queue_attached_pictures(tmps)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avformat_transfer_internal_stream_timing_info ---
 
 // AVFormatTransferInternalStreamTimingInfo wraps avformat_transfer_internal_stream_timing_info.
-func AVFormatTransferInternalStreamTimingInfo(ofmt *AVOutputFormat, ost *AVStream, ist *AVStream, copyTb AVTimebaseSource) int {
+func AVFormatTransferInternalStreamTimingInfo(ofmt *AVOutputFormat, ost *AVStream, ist *AVStream, copyTb AVTimebaseSource) (int, error) {
 	var tmpofmt *C.AVOutputFormat
 	if ofmt != nil {
 		tmpofmt = ofmt.ptr
@@ -3498,7 +3498,7 @@ func AVFormatTransferInternalStreamTimingInfo(ofmt *AVOutputFormat, ost *AVStrea
 		tmpist = ist.ptr
 	}
 	ret := C.avformat_transfer_internal_stream_timing_info(tmpofmt, tmpost, tmpist, C.enum_AVTimebaseSource(copyTb))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_stream_get_codec_timebase ---
@@ -3528,19 +3528,19 @@ func AVIOFindProtocolName(url *CStr) *CStr {
 // --- Function avio_check ---
 
 // AVIOCheck wraps avio_check.
-func AVIOCheck(url *CStr, flags int) int {
+func AVIOCheck(url *CStr, flags int) (int, error) {
 	var tmpurl *C.char
 	if url != nil {
 		tmpurl = url.ptr
 	}
 	ret := C.avio_check(tmpurl, C.int(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_open_dir ---
 
 // AVIOOpenDir wraps avio_open_dir.
-func AVIOOpenDir(s **AVIODirContext, url *CStr, options **AVDictionary) int {
+func AVIOOpenDir(s **AVIODirContext, url *CStr, options **AVDictionary) (int, error) {
 	var ptrs **C.AVIODirContext
 	var tmps *C.AVIODirContext
 	var oldTmps *C.AVIODirContext
@@ -3582,13 +3582,13 @@ func AVIOOpenDir(s **AVIODirContext, url *CStr, options **AVDictionary) int {
 			*options = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_read_dir ---
 
 // AVIOReadDir wraps avio_read_dir.
-func AVIOReadDir(s *AVIODirContext, next **AVIODirEntry) int {
+func AVIOReadDir(s *AVIODirContext, next **AVIODirEntry) (int, error) {
 	var tmps *C.AVIODirContext
 	if s != nil {
 		tmps = s.ptr
@@ -3612,13 +3612,13 @@ func AVIOReadDir(s *AVIODirContext, next **AVIODirEntry) int {
 			*next = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_close_dir ---
 
 // AVIOCloseDir wraps avio_close_dir.
-func AVIOCloseDir(s **AVIODirContext) int {
+func AVIOCloseDir(s **AVIODirContext) (int, error) {
 	var ptrs **C.AVIODirContext
 	var tmps *C.AVIODirContext
 	var oldTmps *C.AVIODirContext
@@ -3638,7 +3638,7 @@ func AVIOCloseDir(s **AVIODirContext) int {
 			*s = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_free_directory_entry ---
@@ -3808,7 +3808,7 @@ func AVIOWb16(s *AVIOContext, val uint) {
 // --- Function avio_put_str ---
 
 // AVIOPutStr wraps avio_put_str.
-func AVIOPutStr(s *AVIOContext, str *CStr) int {
+func AVIOPutStr(s *AVIOContext, str *CStr) (int, error) {
 	var tmps *C.AVIOContext
 	if s != nil {
 		tmps = s.ptr
@@ -3818,13 +3818,13 @@ func AVIOPutStr(s *AVIOContext, str *CStr) int {
 		tmpstr = str.ptr
 	}
 	ret := C.avio_put_str(tmps, tmpstr)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_put_str16le ---
 
 // AVIOPutStr16Le wraps avio_put_str16le.
-func AVIOPutStr16Le(s *AVIOContext, str *CStr) int {
+func AVIOPutStr16Le(s *AVIOContext, str *CStr) (int, error) {
 	var tmps *C.AVIOContext
 	if s != nil {
 		tmps = s.ptr
@@ -3834,13 +3834,13 @@ func AVIOPutStr16Le(s *AVIOContext, str *CStr) int {
 		tmpstr = str.ptr
 	}
 	ret := C.avio_put_str16le(tmps, tmpstr)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_put_str16be ---
 
 // AVIOPutStr16Be wraps avio_put_str16be.
-func AVIOPutStr16Be(s *AVIOContext, str *CStr) int {
+func AVIOPutStr16Be(s *AVIOContext, str *CStr) (int, error) {
 	var tmps *C.AVIOContext
 	if s != nil {
 		tmps = s.ptr
@@ -3850,7 +3850,7 @@ func AVIOPutStr16Be(s *AVIOContext, str *CStr) int {
 		tmpstr = str.ptr
 	}
 	ret := C.avio_put_str16be(tmps, tmpstr)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_write_marker ---
@@ -3915,13 +3915,13 @@ func AVIOSize(s *AVIOContext) int64 {
 // --- Function avio_feof ---
 
 // AVIOFeof wraps avio_feof.
-func AVIOFeof(s *AVIOContext) int {
+func AVIOFeof(s *AVIOContext) (int, error) {
 	var tmps *C.AVIOContext
 	if s != nil {
 		tmps = s.ptr
 	}
 	ret := C.avio_feof(tmps)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_vprintf ---
@@ -3951,37 +3951,37 @@ func AVIOFlush(s *AVIOContext) {
 // --- Function avio_read ---
 
 // AVIORead wraps avio_read.
-func AVIORead(s *AVIOContext, buf unsafe.Pointer, size int) int {
+func AVIORead(s *AVIOContext, buf unsafe.Pointer, size int) (int, error) {
 	var tmps *C.AVIOContext
 	if s != nil {
 		tmps = s.ptr
 	}
 	ret := C.avio_read(tmps, (*C.uchar)(buf), C.int(size))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_read_partial ---
 
 // AVIOReadPartial wraps avio_read_partial.
-func AVIOReadPartial(s *AVIOContext, buf unsafe.Pointer, size int) int {
+func AVIOReadPartial(s *AVIOContext, buf unsafe.Pointer, size int) (int, error) {
 	var tmps *C.AVIOContext
 	if s != nil {
 		tmps = s.ptr
 	}
 	ret := C.avio_read_partial(tmps, (*C.uchar)(buf), C.int(size))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_r8 ---
 
 // AVIOR8 wraps avio_r8.
-func AVIOR8(s *AVIOContext) int {
+func AVIOR8(s *AVIOContext) (int, error) {
 	var tmps *C.AVIOContext
 	if s != nil {
 		tmps = s.ptr
 	}
 	ret := C.avio_r8(tmps)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_rl16 ---
@@ -4083,7 +4083,7 @@ func AVIORb64(s *AVIOContext) uint64 {
 // --- Function avio_get_str ---
 
 // AVIOGetStr wraps avio_get_str.
-func AVIOGetStr(pb *AVIOContext, maxlen int, buf *CStr, buflen int) int {
+func AVIOGetStr(pb *AVIOContext, maxlen int, buf *CStr, buflen int) (int, error) {
 	var tmppb *C.AVIOContext
 	if pb != nil {
 		tmppb = pb.ptr
@@ -4093,13 +4093,13 @@ func AVIOGetStr(pb *AVIOContext, maxlen int, buf *CStr, buflen int) int {
 		tmpbuf = buf.ptr
 	}
 	ret := C.avio_get_str(tmppb, C.int(maxlen), tmpbuf, C.int(buflen))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_get_str16le ---
 
 // AVIOGetStr16Le wraps avio_get_str16le.
-func AVIOGetStr16Le(pb *AVIOContext, maxlen int, buf *CStr, buflen int) int {
+func AVIOGetStr16Le(pb *AVIOContext, maxlen int, buf *CStr, buflen int) (int, error) {
 	var tmppb *C.AVIOContext
 	if pb != nil {
 		tmppb = pb.ptr
@@ -4109,13 +4109,13 @@ func AVIOGetStr16Le(pb *AVIOContext, maxlen int, buf *CStr, buflen int) int {
 		tmpbuf = buf.ptr
 	}
 	ret := C.avio_get_str16le(tmppb, C.int(maxlen), tmpbuf, C.int(buflen))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_get_str16be ---
 
 // AVIOGetStr16Be wraps avio_get_str16be.
-func AVIOGetStr16Be(pb *AVIOContext, maxlen int, buf *CStr, buflen int) int {
+func AVIOGetStr16Be(pb *AVIOContext, maxlen int, buf *CStr, buflen int) (int, error) {
 	var tmppb *C.AVIOContext
 	if pb != nil {
 		tmppb = pb.ptr
@@ -4125,13 +4125,13 @@ func AVIOGetStr16Be(pb *AVIOContext, maxlen int, buf *CStr, buflen int) int {
 		tmpbuf = buf.ptr
 	}
 	ret := C.avio_get_str16be(tmppb, C.int(maxlen), tmpbuf, C.int(buflen))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_open ---
 
 // AVIOOpen wraps avio_open.
-func AVIOOpen(s **AVIOContext, url *CStr, flags int) int {
+func AVIOOpen(s **AVIOContext, url *CStr, flags int) (int, error) {
 	var ptrs **C.AVIOContext
 	var tmps *C.AVIOContext
 	var oldTmps *C.AVIOContext
@@ -4155,13 +4155,13 @@ func AVIOOpen(s **AVIOContext, url *CStr, flags int) int {
 			*s = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_open2 ---
 
 // AVIOOpen2 wraps avio_open2.
-func AVIOOpen2(s **AVIOContext, url *CStr, flags int, intCb *AVIOInterruptCB, options **AVDictionary) int {
+func AVIOOpen2(s **AVIOContext, url *CStr, flags int, intCb *AVIOInterruptCB, options **AVDictionary) (int, error) {
 	var ptrs **C.AVIOContext
 	var tmps *C.AVIOContext
 	var oldTmps *C.AVIOContext
@@ -4207,25 +4207,25 @@ func AVIOOpen2(s **AVIOContext, url *CStr, flags int, intCb *AVIOInterruptCB, op
 			*options = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_close ---
 
 // AVIOClose wraps avio_close.
-func AVIOClose(s *AVIOContext) int {
+func AVIOClose(s *AVIOContext) (int, error) {
 	var tmps *C.AVIOContext
 	if s != nil {
 		tmps = s.ptr
 	}
 	ret := C.avio_close(tmps)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_closep ---
 
 // AVIOClosep wraps avio_closep.
-func AVIOClosep(s **AVIOContext) int {
+func AVIOClosep(s **AVIOContext) (int, error) {
 	var ptrs **C.AVIOContext
 	var tmps *C.AVIOContext
 	var oldTmps *C.AVIOContext
@@ -4245,13 +4245,13 @@ func AVIOClosep(s **AVIOContext) int {
 			*s = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_open_dyn_buf ---
 
 // AVIOOpenDynBuf wraps avio_open_dyn_buf.
-func AVIOOpenDynBuf(s **AVIOContext) int {
+func AVIOOpenDynBuf(s **AVIOContext) (int, error) {
 	var ptrs **C.AVIOContext
 	var tmps *C.AVIOContext
 	var oldTmps *C.AVIOContext
@@ -4271,7 +4271,7 @@ func AVIOOpenDynBuf(s **AVIOContext) int {
 			*s = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_get_dyn_buf ---
@@ -4308,13 +4308,13 @@ func AVIOProtocolGetClass(name *CStr) *AVClass {
 // --- Function avio_pause ---
 
 // AVIOPause wraps avio_pause.
-func AVIOPause(h *AVIOContext, pause int) int {
+func AVIOPause(h *AVIOContext, pause int) (int, error) {
 	var tmph *C.AVIOContext
 	if h != nil {
 		tmph = h.ptr
 	}
 	ret := C.avio_pause(tmph, C.int(pause))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_seek_time ---
@@ -4332,7 +4332,7 @@ func AVIOSeekTime(h *AVIOContext, streamIndex int, timestamp int64, flags int) i
 // --- Function avio_read_to_bprint ---
 
 // AVIOReadToBprint wraps avio_read_to_bprint.
-func AVIOReadToBprint(h *AVIOContext, pb *AVBPrint, maxSize uint64) int {
+func AVIOReadToBprint(h *AVIOContext, pb *AVBPrint, maxSize uint64) (int, error) {
 	var tmph *C.AVIOContext
 	if h != nil {
 		tmph = h.ptr
@@ -4342,13 +4342,13 @@ func AVIOReadToBprint(h *AVIOContext, pb *AVBPrint, maxSize uint64) int {
 		tmppb = pb.ptr
 	}
 	ret := C.avio_read_to_bprint(tmph, tmppb, C.size_t(maxSize))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_accept ---
 
 // AVIOAccept wraps avio_accept.
-func AVIOAccept(s *AVIOContext, c **AVIOContext) int {
+func AVIOAccept(s *AVIOContext, c **AVIOContext) (int, error) {
 	var tmps *C.AVIOContext
 	if s != nil {
 		tmps = s.ptr
@@ -4372,19 +4372,19 @@ func AVIOAccept(s *AVIOContext, c **AVIOContext) int {
 			*c = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avio_handshake ---
 
 // AVIOHandshake wraps avio_handshake.
-func AVIOHandshake(c *AVIOContext) int {
+func AVIOHandshake(c *AVIOContext) (int, error) {
 	var tmpc *C.AVIOContext
 	if c != nil {
 		tmpc = c.ptr
 	}
 	ret := C.avio_handshake(tmpc)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function avutil_version ---
@@ -4554,13 +4554,13 @@ func AVBufferUnref(buf **AVBufferRef) {
 // --- Function av_buffer_is_writable ---
 
 // AVBufferIsWritable wraps av_buffer_is_writable.
-func AVBufferIsWritable(buf *AVBufferRef) int {
+func AVBufferIsWritable(buf *AVBufferRef) (int, error) {
 	var tmpbuf *C.AVBufferRef
 	if buf != nil {
 		tmpbuf = buf.ptr
 	}
 	ret := C.av_buffer_is_writable(tmpbuf)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_buffer_get_opaque ---
@@ -4578,19 +4578,19 @@ func AVBufferGetOpaque(buf *AVBufferRef) unsafe.Pointer {
 // --- Function av_buffer_get_ref_count ---
 
 // AVBufferGetRefCount wraps av_buffer_get_ref_count.
-func AVBufferGetRefCount(buf *AVBufferRef) int {
+func AVBufferGetRefCount(buf *AVBufferRef) (int, error) {
 	var tmpbuf *C.AVBufferRef
 	if buf != nil {
 		tmpbuf = buf.ptr
 	}
 	ret := C.av_buffer_get_ref_count(tmpbuf)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_buffer_make_writable ---
 
 // AVBufferMakeWritable wraps av_buffer_make_writable.
-func AVBufferMakeWritable(buf **AVBufferRef) int {
+func AVBufferMakeWritable(buf **AVBufferRef) (int, error) {
 	var ptrbuf **C.AVBufferRef
 	var tmpbuf *C.AVBufferRef
 	var oldTmpbuf *C.AVBufferRef
@@ -4610,13 +4610,13 @@ func AVBufferMakeWritable(buf **AVBufferRef) int {
 			*buf = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_buffer_realloc ---
 
 // AVBufferRealloc wraps av_buffer_realloc.
-func AVBufferRealloc(buf **AVBufferRef, size uint64) int {
+func AVBufferRealloc(buf **AVBufferRef, size uint64) (int, error) {
 	var ptrbuf **C.AVBufferRef
 	var tmpbuf *C.AVBufferRef
 	var oldTmpbuf *C.AVBufferRef
@@ -4636,13 +4636,13 @@ func AVBufferRealloc(buf **AVBufferRef, size uint64) int {
 			*buf = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_buffer_replace ---
 
 // AVBufferReplace wraps av_buffer_replace.
-func AVBufferReplace(dst **AVBufferRef, src *AVBufferRef) int {
+func AVBufferReplace(dst **AVBufferRef, src *AVBufferRef) (int, error) {
 	var ptrdst **C.AVBufferRef
 	var tmpdst *C.AVBufferRef
 	var oldTmpdst *C.AVBufferRef
@@ -4666,7 +4666,7 @@ func AVBufferReplace(dst **AVBufferRef, src *AVBufferRef) int {
 			*dst = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_buffer_pool_init ---
@@ -4772,9 +4772,9 @@ func AVBprintChannelLayout(bp *AVBPrint, nbChannels int, channelLayout uint64) {
 // --- Function av_get_channel_layout_nb_channels ---
 
 // AVGetChannelLayoutNbChannels wraps av_get_channel_layout_nb_channels.
-func AVGetChannelLayoutNbChannels(channelLayout uint64) int {
+func AVGetChannelLayoutNbChannels(channelLayout uint64) (int, error) {
 	ret := C.av_get_channel_layout_nb_channels(C.uint64_t(channelLayout))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_get_default_channel_layout ---
@@ -4788,9 +4788,9 @@ func AVGetDefaultChannelLayout(nbChannels int) int64 {
 // --- Function av_get_channel_layout_channel_index ---
 
 // AVGetChannelLayoutChannelIndex wraps av_get_channel_layout_channel_index.
-func AVGetChannelLayoutChannelIndex(channelLayout uint64, channel uint64) int {
+func AVGetChannelLayoutChannelIndex(channelLayout uint64, channel uint64) (int, error) {
 	ret := C.av_get_channel_layout_channel_index(C.uint64_t(channelLayout), C.uint64_t(channel))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_channel_layout_extract_channel ---
@@ -4825,13 +4825,13 @@ func AVGetChannelDescription(channel uint64) *CStr {
 // --- Function av_channel_name ---
 
 // AVChannelName wraps av_channel_name.
-func AVChannelName(buf *CStr, bufSize uint64, channel AVChannel) int {
+func AVChannelName(buf *CStr, bufSize uint64, channel AVChannel) (int, error) {
 	var tmpbuf *C.char
 	if buf != nil {
 		tmpbuf = buf.ptr
 	}
 	ret := C.av_channel_name(tmpbuf, C.size_t(bufSize), C.enum_AVChannel(channel))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_channel_name_bprint ---
@@ -4848,13 +4848,13 @@ func AVChannelNameBprint(bp *AVBPrint, channelId AVChannel) {
 // --- Function av_channel_description ---
 
 // AVChannelDescription wraps av_channel_description.
-func AVChannelDescription(buf *CStr, bufSize uint64, channel AVChannel) int {
+func AVChannelDescription(buf *CStr, bufSize uint64, channel AVChannel) (int, error) {
 	var tmpbuf *C.char
 	if buf != nil {
 		tmpbuf = buf.ptr
 	}
 	ret := C.av_channel_description(tmpbuf, C.size_t(bufSize), C.enum_AVChannel(channel))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_channel_description_bprint ---
@@ -4883,19 +4883,19 @@ func AVChannelFromString(name *CStr) AVChannel {
 // --- Function av_channel_layout_from_mask ---
 
 // AVChannelLayoutFromMask wraps av_channel_layout_from_mask.
-func AVChannelLayoutFromMask(channelLayout *AVChannelLayout, mask uint64) int {
+func AVChannelLayoutFromMask(channelLayout *AVChannelLayout, mask uint64) (int, error) {
 	var tmpchannelLayout *C.AVChannelLayout
 	if channelLayout != nil {
 		tmpchannelLayout = channelLayout.ptr
 	}
 	ret := C.av_channel_layout_from_mask(tmpchannelLayout, C.uint64_t(mask))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_channel_layout_from_string ---
 
 // AVChannelLayoutFromString wraps av_channel_layout_from_string.
-func AVChannelLayoutFromString(channelLayout *AVChannelLayout, str *CStr) int {
+func AVChannelLayoutFromString(channelLayout *AVChannelLayout, str *CStr) (int, error) {
 	var tmpchannelLayout *C.AVChannelLayout
 	if channelLayout != nil {
 		tmpchannelLayout = channelLayout.ptr
@@ -4905,7 +4905,7 @@ func AVChannelLayoutFromString(channelLayout *AVChannelLayout, str *CStr) int {
 		tmpstr = str.ptr
 	}
 	ret := C.av_channel_layout_from_string(tmpchannelLayout, tmpstr)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_channel_layout_default ---
@@ -4938,7 +4938,7 @@ func AVChannelLayoutUninit(channelLayout *AVChannelLayout) {
 // --- Function av_channel_layout_copy ---
 
 // AVChannelLayoutCopy wraps av_channel_layout_copy.
-func AVChannelLayoutCopy(dst *AVChannelLayout, src *AVChannelLayout) int {
+func AVChannelLayoutCopy(dst *AVChannelLayout, src *AVChannelLayout) (int, error) {
 	var tmpdst *C.AVChannelLayout
 	if dst != nil {
 		tmpdst = dst.ptr
@@ -4948,13 +4948,13 @@ func AVChannelLayoutCopy(dst *AVChannelLayout, src *AVChannelLayout) int {
 		tmpsrc = src.ptr
 	}
 	ret := C.av_channel_layout_copy(tmpdst, tmpsrc)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_channel_layout_describe ---
 
 // AVChannelLayoutDescribe wraps av_channel_layout_describe.
-func AVChannelLayoutDescribe(channelLayout *AVChannelLayout, buf *CStr, bufSize uint64) int {
+func AVChannelLayoutDescribe(channelLayout *AVChannelLayout, buf *CStr, bufSize uint64) (int, error) {
 	var tmpchannelLayout *C.AVChannelLayout
 	if channelLayout != nil {
 		tmpchannelLayout = channelLayout.ptr
@@ -4964,13 +4964,13 @@ func AVChannelLayoutDescribe(channelLayout *AVChannelLayout, buf *CStr, bufSize 
 		tmpbuf = buf.ptr
 	}
 	ret := C.av_channel_layout_describe(tmpchannelLayout, tmpbuf, C.size_t(bufSize))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_channel_layout_describe_bprint ---
 
 // AVChannelLayoutDescribeBprint wraps av_channel_layout_describe_bprint.
-func AVChannelLayoutDescribeBprint(channelLayout *AVChannelLayout, bp *AVBPrint) int {
+func AVChannelLayoutDescribeBprint(channelLayout *AVChannelLayout, bp *AVBPrint) (int, error) {
 	var tmpchannelLayout *C.AVChannelLayout
 	if channelLayout != nil {
 		tmpchannelLayout = channelLayout.ptr
@@ -4980,7 +4980,7 @@ func AVChannelLayoutDescribeBprint(channelLayout *AVChannelLayout, bp *AVBPrint)
 		tmpbp = bp.ptr
 	}
 	ret := C.av_channel_layout_describe_bprint(tmpchannelLayout, tmpbp)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_channel_layout_channel_from_index ---
@@ -4998,19 +4998,19 @@ func AVChannelLayoutChannelFromIndex(channelLayout *AVChannelLayout, idx uint) A
 // --- Function av_channel_layout_index_from_channel ---
 
 // AVChannelLayoutIndexFromChannel wraps av_channel_layout_index_from_channel.
-func AVChannelLayoutIndexFromChannel(channelLayout *AVChannelLayout, channel AVChannel) int {
+func AVChannelLayoutIndexFromChannel(channelLayout *AVChannelLayout, channel AVChannel) (int, error) {
 	var tmpchannelLayout *C.AVChannelLayout
 	if channelLayout != nil {
 		tmpchannelLayout = channelLayout.ptr
 	}
 	ret := C.av_channel_layout_index_from_channel(tmpchannelLayout, C.enum_AVChannel(channel))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_channel_layout_index_from_string ---
 
 // AVChannelLayoutIndexFromString wraps av_channel_layout_index_from_string.
-func AVChannelLayoutIndexFromString(channelLayout *AVChannelLayout, name *CStr) int {
+func AVChannelLayoutIndexFromString(channelLayout *AVChannelLayout, name *CStr) (int, error) {
 	var tmpchannelLayout *C.AVChannelLayout
 	if channelLayout != nil {
 		tmpchannelLayout = channelLayout.ptr
@@ -5020,7 +5020,7 @@ func AVChannelLayoutIndexFromString(channelLayout *AVChannelLayout, name *CStr) 
 		tmpname = name.ptr
 	}
 	ret := C.av_channel_layout_index_from_string(tmpchannelLayout, tmpname)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_channel_layout_channel_from_string ---
@@ -5054,19 +5054,19 @@ func AVChannelLayoutSubset(channelLayout *AVChannelLayout, mask uint64) uint64 {
 // --- Function av_channel_layout_check ---
 
 // AVChannelLayoutCheck wraps av_channel_layout_check.
-func AVChannelLayoutCheck(channelLayout *AVChannelLayout) int {
+func AVChannelLayoutCheck(channelLayout *AVChannelLayout) (int, error) {
 	var tmpchannelLayout *C.AVChannelLayout
 	if channelLayout != nil {
 		tmpchannelLayout = channelLayout.ptr
 	}
 	ret := C.av_channel_layout_check(tmpchannelLayout)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_channel_layout_compare ---
 
 // AVChannelLayoutCompare wraps av_channel_layout_compare.
-func AVChannelLayoutCompare(chl *AVChannelLayout, chl1 *AVChannelLayout) int {
+func AVChannelLayoutCompare(chl *AVChannelLayout, chl1 *AVChannelLayout) (int, error) {
 	var tmpchl *C.AVChannelLayout
 	if chl != nil {
 		tmpchl = chl.ptr
@@ -5076,7 +5076,7 @@ func AVChannelLayoutCompare(chl *AVChannelLayout, chl1 *AVChannelLayout) int {
 		tmpchl1 = chl1.ptr
 	}
 	ret := C.av_channel_layout_compare(tmpchl, tmpchl1)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_dict_get ---
@@ -5126,19 +5126,19 @@ func AVDictIterate(m *AVDictionary, prev *AVDictionaryEntry) *AVDictionaryEntry 
 // --- Function av_dict_count ---
 
 // AVDictCount wraps av_dict_count.
-func AVDictCount(m *AVDictionary) int {
+func AVDictCount(m *AVDictionary) (int, error) {
 	var tmpm *C.AVDictionary
 	if m != nil {
 		tmpm = m.ptr
 	}
 	ret := C.av_dict_count(tmpm)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_dict_set ---
 
 // AVDictSet wraps av_dict_set.
-func AVDictSet(pm **AVDictionary, key *CStr, value *CStr, flags int) int {
+func AVDictSet(pm **AVDictionary, key *CStr, value *CStr, flags int) (int, error) {
 	var ptrpm **C.AVDictionary
 	var tmppm *C.AVDictionary
 	var oldTmppm *C.AVDictionary
@@ -5166,13 +5166,13 @@ func AVDictSet(pm **AVDictionary, key *CStr, value *CStr, flags int) int {
 			*pm = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_dict_set_int ---
 
 // AVDictSetInt wraps av_dict_set_int.
-func AVDictSetInt(pm **AVDictionary, key *CStr, value int64, flags int) int {
+func AVDictSetInt(pm **AVDictionary, key *CStr, value int64, flags int) (int, error) {
 	var ptrpm **C.AVDictionary
 	var tmppm *C.AVDictionary
 	var oldTmppm *C.AVDictionary
@@ -5196,13 +5196,13 @@ func AVDictSetInt(pm **AVDictionary, key *CStr, value int64, flags int) int {
 			*pm = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_dict_parse_string ---
 
 // AVDictParseString wraps av_dict_parse_string.
-func AVDictParseString(pm **AVDictionary, str *CStr, keyValSep *CStr, pairsSep *CStr, flags int) int {
+func AVDictParseString(pm **AVDictionary, str *CStr, keyValSep *CStr, pairsSep *CStr, flags int) (int, error) {
 	var ptrpm **C.AVDictionary
 	var tmppm *C.AVDictionary
 	var oldTmppm *C.AVDictionary
@@ -5234,13 +5234,13 @@ func AVDictParseString(pm **AVDictionary, str *CStr, keyValSep *CStr, pairsSep *
 			*pm = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_dict_copy ---
 
 // AVDictCopy wraps av_dict_copy.
-func AVDictCopy(dst **AVDictionary, src *AVDictionary, flags int) int {
+func AVDictCopy(dst **AVDictionary, src *AVDictionary, flags int) (int, error) {
 	var ptrdst **C.AVDictionary
 	var tmpdst *C.AVDictionary
 	var oldTmpdst *C.AVDictionary
@@ -5264,7 +5264,7 @@ func AVDictCopy(dst **AVDictionary, src *AVDictionary, flags int) int {
 			*dst = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_dict_free ---
@@ -5300,13 +5300,13 @@ func AVDictFree(m **AVDictionary) {
 // --- Function av_strerror ---
 
 // AVStrerror wraps av_strerror.
-func AVStrerror(errnum int, errbuf *CStr, errbufSize uint64) int {
+func AVStrerror(errnum int, errbuf *CStr, errbufSize uint64) (int, error) {
 	var tmperrbuf *C.char
 	if errbuf != nil {
 		tmperrbuf = errbuf.ptr
 	}
 	ret := C.av_strerror(C.int(errnum), tmperrbuf, C.size_t(errbufSize))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_make_error_string ---
@@ -5361,7 +5361,7 @@ func AVFrameFree(frame **AVFrame) {
 // --- Function av_frame_ref ---
 
 // AVFrameRef wraps av_frame_ref.
-func AVFrameRef(dst *AVFrame, src *AVFrame) int {
+func AVFrameRef(dst *AVFrame, src *AVFrame) (int, error) {
 	var tmpdst *C.AVFrame
 	if dst != nil {
 		tmpdst = dst.ptr
@@ -5371,7 +5371,7 @@ func AVFrameRef(dst *AVFrame, src *AVFrame) int {
 		tmpsrc = src.ptr
 	}
 	ret := C.av_frame_ref(tmpdst, tmpsrc)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_frame_clone ---
@@ -5419,43 +5419,43 @@ func AVFrameMoveRef(dst *AVFrame, src *AVFrame) {
 // --- Function av_frame_get_buffer ---
 
 // AVFrameGetBuffer wraps av_frame_get_buffer.
-func AVFrameGetBuffer(frame *AVFrame, align int) int {
+func AVFrameGetBuffer(frame *AVFrame, align int) (int, error) {
 	var tmpframe *C.AVFrame
 	if frame != nil {
 		tmpframe = frame.ptr
 	}
 	ret := C.av_frame_get_buffer(tmpframe, C.int(align))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_frame_is_writable ---
 
 // AVFrameIsWritable wraps av_frame_is_writable.
-func AVFrameIsWritable(frame *AVFrame) int {
+func AVFrameIsWritable(frame *AVFrame) (int, error) {
 	var tmpframe *C.AVFrame
 	if frame != nil {
 		tmpframe = frame.ptr
 	}
 	ret := C.av_frame_is_writable(tmpframe)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_frame_make_writable ---
 
 // AVFrameMakeWritable wraps av_frame_make_writable.
-func AVFrameMakeWritable(frame *AVFrame) int {
+func AVFrameMakeWritable(frame *AVFrame) (int, error) {
 	var tmpframe *C.AVFrame
 	if frame != nil {
 		tmpframe = frame.ptr
 	}
 	ret := C.av_frame_make_writable(tmpframe)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_frame_copy ---
 
 // AVFrameCopy wraps av_frame_copy.
-func AVFrameCopy(dst *AVFrame, src *AVFrame) int {
+func AVFrameCopy(dst *AVFrame, src *AVFrame) (int, error) {
 	var tmpdst *C.AVFrame
 	if dst != nil {
 		tmpdst = dst.ptr
@@ -5465,13 +5465,13 @@ func AVFrameCopy(dst *AVFrame, src *AVFrame) int {
 		tmpsrc = src.ptr
 	}
 	ret := C.av_frame_copy(tmpdst, tmpsrc)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_frame_copy_props ---
 
 // AVFrameCopyProps wraps av_frame_copy_props.
-func AVFrameCopyProps(dst *AVFrame, src *AVFrame) int {
+func AVFrameCopyProps(dst *AVFrame, src *AVFrame) (int, error) {
 	var tmpdst *C.AVFrame
 	if dst != nil {
 		tmpdst = dst.ptr
@@ -5481,7 +5481,7 @@ func AVFrameCopyProps(dst *AVFrame, src *AVFrame) int {
 		tmpsrc = src.ptr
 	}
 	ret := C.av_frame_copy_props(tmpdst, tmpsrc)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_frame_get_plane_buffer ---
@@ -5566,13 +5566,13 @@ func AVFrameRemoveSideData(frame *AVFrame, _type AVFrameSideDataType) {
 // --- Function av_frame_apply_cropping ---
 
 // AVFrameApplyCropping wraps av_frame_apply_cropping.
-func AVFrameApplyCropping(frame *AVFrame, flags int) int {
+func AVFrameApplyCropping(frame *AVFrame, flags int) (int, error) {
 	var tmpframe *C.AVFrame
 	if frame != nil {
 		tmpframe = frame.ptr
 	}
 	ret := C.av_frame_apply_cropping(tmpframe, C.int(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_frame_side_data_name ---
@@ -5626,19 +5626,19 @@ func AVHwdeviceCtxAlloc(_type AVHWDeviceType) *AVBufferRef {
 // --- Function av_hwdevice_ctx_init ---
 
 // AVHwdeviceCtxInit wraps av_hwdevice_ctx_init.
-func AVHwdeviceCtxInit(ref *AVBufferRef) int {
+func AVHwdeviceCtxInit(ref *AVBufferRef) (int, error) {
 	var tmpref *C.AVBufferRef
 	if ref != nil {
 		tmpref = ref.ptr
 	}
 	ret := C.av_hwdevice_ctx_init(tmpref)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_hwdevice_ctx_create ---
 
 // AVHwdeviceCtxCreate wraps av_hwdevice_ctx_create.
-func AVHwdeviceCtxCreate(deviceCtx **AVBufferRef, _type AVHWDeviceType, device *CStr, opts *AVDictionary, flags int) int {
+func AVHwdeviceCtxCreate(deviceCtx **AVBufferRef, _type AVHWDeviceType, device *CStr, opts *AVDictionary, flags int) (int, error) {
 	var ptrdeviceCtx **C.AVBufferRef
 	var tmpdeviceCtx *C.AVBufferRef
 	var oldTmpdeviceCtx *C.AVBufferRef
@@ -5666,13 +5666,13 @@ func AVHwdeviceCtxCreate(deviceCtx **AVBufferRef, _type AVHWDeviceType, device *
 			*deviceCtx = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_hwdevice_ctx_create_derived ---
 
 // AVHwdeviceCtxCreateDerived wraps av_hwdevice_ctx_create_derived.
-func AVHwdeviceCtxCreateDerived(dstCtx **AVBufferRef, _type AVHWDeviceType, srcCtx *AVBufferRef, flags int) int {
+func AVHwdeviceCtxCreateDerived(dstCtx **AVBufferRef, _type AVHWDeviceType, srcCtx *AVBufferRef, flags int) (int, error) {
 	var ptrdstCtx **C.AVBufferRef
 	var tmpdstCtx *C.AVBufferRef
 	var oldTmpdstCtx *C.AVBufferRef
@@ -5696,13 +5696,13 @@ func AVHwdeviceCtxCreateDerived(dstCtx **AVBufferRef, _type AVHWDeviceType, srcC
 			*dstCtx = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_hwdevice_ctx_create_derived_opts ---
 
 // AVHwdeviceCtxCreateDerivedOpts wraps av_hwdevice_ctx_create_derived_opts.
-func AVHwdeviceCtxCreateDerivedOpts(dstCtx **AVBufferRef, _type AVHWDeviceType, srcCtx *AVBufferRef, options *AVDictionary, flags int) int {
+func AVHwdeviceCtxCreateDerivedOpts(dstCtx **AVBufferRef, _type AVHWDeviceType, srcCtx *AVBufferRef, options *AVDictionary, flags int) (int, error) {
 	var ptrdstCtx **C.AVBufferRef
 	var tmpdstCtx *C.AVBufferRef
 	var oldTmpdstCtx *C.AVBufferRef
@@ -5730,7 +5730,7 @@ func AVHwdeviceCtxCreateDerivedOpts(dstCtx **AVBufferRef, _type AVHWDeviceType, 
 			*dstCtx = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_hwframe_ctx_alloc ---
@@ -5752,19 +5752,19 @@ func AVHwframeCtxAlloc(deviceCtx *AVBufferRef) *AVBufferRef {
 // --- Function av_hwframe_ctx_init ---
 
 // AVHwframeCtxInit wraps av_hwframe_ctx_init.
-func AVHwframeCtxInit(ref *AVBufferRef) int {
+func AVHwframeCtxInit(ref *AVBufferRef) (int, error) {
 	var tmpref *C.AVBufferRef
 	if ref != nil {
 		tmpref = ref.ptr
 	}
 	ret := C.av_hwframe_ctx_init(tmpref)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_hwframe_get_buffer ---
 
 // AVHwframeGetBuffer wraps av_hwframe_get_buffer.
-func AVHwframeGetBuffer(hwframeCtx *AVBufferRef, frame *AVFrame, flags int) int {
+func AVHwframeGetBuffer(hwframeCtx *AVBufferRef, frame *AVFrame, flags int) (int, error) {
 	var tmphwframeCtx *C.AVBufferRef
 	if hwframeCtx != nil {
 		tmphwframeCtx = hwframeCtx.ptr
@@ -5774,13 +5774,13 @@ func AVHwframeGetBuffer(hwframeCtx *AVBufferRef, frame *AVFrame, flags int) int 
 		tmpframe = frame.ptr
 	}
 	ret := C.av_hwframe_get_buffer(tmphwframeCtx, tmpframe, C.int(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_hwframe_transfer_data ---
 
 // AVHwframeTransferData wraps av_hwframe_transfer_data.
-func AVHwframeTransferData(dst *AVFrame, src *AVFrame, flags int) int {
+func AVHwframeTransferData(dst *AVFrame, src *AVFrame, flags int) (int, error) {
 	var tmpdst *C.AVFrame
 	if dst != nil {
 		tmpdst = dst.ptr
@@ -5790,7 +5790,7 @@ func AVHwframeTransferData(dst *AVFrame, src *AVFrame, flags int) int {
 		tmpsrc = src.ptr
 	}
 	ret := C.av_hwframe_transfer_data(tmpdst, tmpsrc, C.int(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_hwframe_transfer_get_formats ---
@@ -5854,7 +5854,7 @@ func AVHwframeConstraintsFree(constraints **AVHWFramesConstraints) {
 // --- Function av_hwframe_map ---
 
 // AVHwframeMap wraps av_hwframe_map.
-func AVHwframeMap(dst *AVFrame, src *AVFrame, flags int) int {
+func AVHwframeMap(dst *AVFrame, src *AVFrame, flags int) (int, error) {
 	var tmpdst *C.AVFrame
 	if dst != nil {
 		tmpdst = dst.ptr
@@ -5864,13 +5864,13 @@ func AVHwframeMap(dst *AVFrame, src *AVFrame, flags int) int {
 		tmpsrc = src.ptr
 	}
 	ret := C.av_hwframe_map(tmpdst, tmpsrc, C.int(flags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_hwframe_ctx_create_derived ---
 
 // AVHwframeCtxCreateDerived wraps av_hwframe_ctx_create_derived.
-func AVHwframeCtxCreateDerived(derivedFrameCtx **AVBufferRef, format AVPixelFormat, derivedDeviceCtx *AVBufferRef, sourceFrameCtx *AVBufferRef, flags int) int {
+func AVHwframeCtxCreateDerived(derivedFrameCtx **AVBufferRef, format AVPixelFormat, derivedDeviceCtx *AVBufferRef, sourceFrameCtx *AVBufferRef, flags int) (int, error) {
 	var ptrderivedFrameCtx **C.AVBufferRef
 	var tmpderivedFrameCtx *C.AVBufferRef
 	var oldTmpderivedFrameCtx *C.AVBufferRef
@@ -5898,7 +5898,7 @@ func AVHwframeCtxCreateDerived(derivedFrameCtx **AVBufferRef, format AVPixelForm
 			*derivedFrameCtx = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_log ---
@@ -5916,9 +5916,9 @@ func AVHwframeCtxCreateDerived(derivedFrameCtx **AVBufferRef, format AVPixelForm
 // --- Function av_log_get_level ---
 
 // AVLogGetLevel wraps av_log_get_level.
-func AVLogGetLevel() int {
+func AVLogGetLevel() (int, error) {
 	ret := C.av_log_get_level()
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_log_set_level ---
@@ -5970,9 +5970,9 @@ func AVLogSetFlags(arg int) {
 // --- Function av_log_get_flags ---
 
 // AVLogGetFlags wraps av_log_get_flags.
-func AVLogGetFlags() int {
+func AVLogGetFlags() (int, error) {
 	ret := C.av_log_get_flags()
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_gcd ---
@@ -6018,9 +6018,9 @@ func AVRescaleQRnd(a int64, bq *AVRational, cq *AVRational, rnd AVRounding) int6
 // --- Function av_compare_ts ---
 
 // AVCompareTs wraps av_compare_ts.
-func AVCompareTs(tsA int64, tbA *AVRational, tsB int64, tbB *AVRational) int {
+func AVCompareTs(tsA int64, tbA *AVRational, tsB int64, tbB *AVRational) (int, error) {
 	ret := C.av_compare_ts(C.int64_t(tsA), tbA.value, C.int64_t(tsB), tbB.value)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_compare_mod ---
@@ -6087,9 +6087,9 @@ func AVRealloc(ptr unsafe.Pointer, size uint64) unsafe.Pointer {
 // --- Function av_reallocp ---
 
 // AVReallocp wraps av_reallocp.
-func AVReallocp(ptr unsafe.Pointer, size uint64) int {
+func AVReallocp(ptr unsafe.Pointer, size uint64) (int, error) {
 	ret := C.av_reallocp(ptr, C.size_t(size))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_realloc_f ---
@@ -6111,9 +6111,9 @@ func AVReallocArray(ptr unsafe.Pointer, nmemb uint64, size uint64) unsafe.Pointe
 // --- Function av_reallocp_array ---
 
 // AVReallocpArray wraps av_reallocp_array.
-func AVReallocpArray(ptr unsafe.Pointer, nmemb uint64, size uint64) int {
+func AVReallocpArray(ptr unsafe.Pointer, nmemb uint64, size uint64) (int, error) {
 	ret := C.av_reallocp_array(ptr, C.size_t(nmemb), C.size_t(size))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_fast_realloc ---
@@ -6214,9 +6214,9 @@ func AVMaxAlloc(max uint64) {
 // --- Function av_opt_show2 ---
 
 // AVOptShow2 wraps av_opt_show2.
-func AVOptShow2(obj unsafe.Pointer, avLogObj unsafe.Pointer, reqFlags int, rejFlags int) int {
+func AVOptShow2(obj unsafe.Pointer, avLogObj unsafe.Pointer, reqFlags int, rejFlags int) (int, error) {
 	ret := C.av_opt_show2(obj, avLogObj, C.int(reqFlags), C.int(rejFlags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_set_defaults ---
@@ -6236,7 +6236,7 @@ func AVOptSetDefaults2(s unsafe.Pointer, mask int, flags int) {
 // --- Function av_set_options_string ---
 
 // AVSetOptionsString wraps av_set_options_string.
-func AVSetOptionsString(ctx unsafe.Pointer, opts *CStr, keyValSep *CStr, pairsSep *CStr) int {
+func AVSetOptionsString(ctx unsafe.Pointer, opts *CStr, keyValSep *CStr, pairsSep *CStr) (int, error) {
 	var tmpopts *C.char
 	if opts != nil {
 		tmpopts = opts.ptr
@@ -6250,7 +6250,7 @@ func AVSetOptionsString(ctx unsafe.Pointer, opts *CStr, keyValSep *CStr, pairsSe
 		tmppairsSep = pairsSep.ptr
 	}
 	ret := C.av_set_options_string(ctx, tmpopts, tmpkeyValSep, tmppairsSep)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_set_from_string ---
@@ -6268,7 +6268,7 @@ func AVOptFree(obj unsafe.Pointer) {
 // --- Function av_opt_flag_is_set ---
 
 // AVOptFlagIsSet wraps av_opt_flag_is_set.
-func AVOptFlagIsSet(obj unsafe.Pointer, fieldName *CStr, flagName *CStr) int {
+func AVOptFlagIsSet(obj unsafe.Pointer, fieldName *CStr, flagName *CStr) (int, error) {
 	var tmpfieldName *C.char
 	if fieldName != nil {
 		tmpfieldName = fieldName.ptr
@@ -6278,13 +6278,13 @@ func AVOptFlagIsSet(obj unsafe.Pointer, fieldName *CStr, flagName *CStr) int {
 		tmpflagName = flagName.ptr
 	}
 	ret := C.av_opt_flag_is_set(obj, tmpfieldName, tmpflagName)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_set_dict ---
 
 // AVOptSetDict wraps av_opt_set_dict.
-func AVOptSetDict(obj unsafe.Pointer, options **AVDictionary) int {
+func AVOptSetDict(obj unsafe.Pointer, options **AVDictionary) (int, error) {
 	var ptroptions **C.AVDictionary
 	var tmpoptions *C.AVDictionary
 	var oldTmpoptions *C.AVDictionary
@@ -6304,13 +6304,13 @@ func AVOptSetDict(obj unsafe.Pointer, options **AVDictionary) int {
 			*options = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_set_dict2 ---
 
 // AVOptSetDict2 wraps av_opt_set_dict2.
-func AVOptSetDict2(obj unsafe.Pointer, options **AVDictionary, searchFlags int) int {
+func AVOptSetDict2(obj unsafe.Pointer, options **AVDictionary, searchFlags int) (int, error) {
 	var ptroptions **C.AVDictionary
 	var tmpoptions *C.AVDictionary
 	var oldTmpoptions *C.AVDictionary
@@ -6330,7 +6330,7 @@ func AVOptSetDict2(obj unsafe.Pointer, options **AVDictionary, searchFlags int) 
 			*options = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_get_key_value ---
@@ -6425,7 +6425,7 @@ func AVOptChildNext(obj unsafe.Pointer, prev unsafe.Pointer) unsafe.Pointer {
 // --- Function av_opt_set ---
 
 // AVOptSet wraps av_opt_set.
-func AVOptSet(obj unsafe.Pointer, name *CStr, val *CStr, searchFlags int) int {
+func AVOptSet(obj unsafe.Pointer, name *CStr, val *CStr, searchFlags int) (int, error) {
 	var tmpname *C.char
 	if name != nil {
 		tmpname = name.ptr
@@ -6435,121 +6435,121 @@ func AVOptSet(obj unsafe.Pointer, name *CStr, val *CStr, searchFlags int) int {
 		tmpval = val.ptr
 	}
 	ret := C.av_opt_set(obj, tmpname, tmpval, C.int(searchFlags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_set_int ---
 
 // AVOptSetInt wraps av_opt_set_int.
-func AVOptSetInt(obj unsafe.Pointer, name *CStr, val int64, searchFlags int) int {
+func AVOptSetInt(obj unsafe.Pointer, name *CStr, val int64, searchFlags int) (int, error) {
 	var tmpname *C.char
 	if name != nil {
 		tmpname = name.ptr
 	}
 	ret := C.av_opt_set_int(obj, tmpname, C.int64_t(val), C.int(searchFlags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_set_double ---
 
 // AVOptSetDouble wraps av_opt_set_double.
-func AVOptSetDouble(obj unsafe.Pointer, name *CStr, val float64, searchFlags int) int {
+func AVOptSetDouble(obj unsafe.Pointer, name *CStr, val float64, searchFlags int) (int, error) {
 	var tmpname *C.char
 	if name != nil {
 		tmpname = name.ptr
 	}
 	ret := C.av_opt_set_double(obj, tmpname, C.double(val), C.int(searchFlags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_set_q ---
 
 // AVOptSetQ wraps av_opt_set_q.
-func AVOptSetQ(obj unsafe.Pointer, name *CStr, val *AVRational, searchFlags int) int {
+func AVOptSetQ(obj unsafe.Pointer, name *CStr, val *AVRational, searchFlags int) (int, error) {
 	var tmpname *C.char
 	if name != nil {
 		tmpname = name.ptr
 	}
 	ret := C.av_opt_set_q(obj, tmpname, val.value, C.int(searchFlags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_set_bin ---
 
 // AVOptSetBin wraps av_opt_set_bin.
-func AVOptSetBin(obj unsafe.Pointer, name *CStr, val unsafe.Pointer, size int, searchFlags int) int {
+func AVOptSetBin(obj unsafe.Pointer, name *CStr, val unsafe.Pointer, size int, searchFlags int) (int, error) {
 	var tmpname *C.char
 	if name != nil {
 		tmpname = name.ptr
 	}
 	ret := C.av_opt_set_bin(obj, tmpname, (*C.uint8_t)(val), C.int(size), C.int(searchFlags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_set_image_size ---
 
 // AVOptSetImageSize wraps av_opt_set_image_size.
-func AVOptSetImageSize(obj unsafe.Pointer, name *CStr, w int, h int, searchFlags int) int {
+func AVOptSetImageSize(obj unsafe.Pointer, name *CStr, w int, h int, searchFlags int) (int, error) {
 	var tmpname *C.char
 	if name != nil {
 		tmpname = name.ptr
 	}
 	ret := C.av_opt_set_image_size(obj, tmpname, C.int(w), C.int(h), C.int(searchFlags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_set_pixel_fmt ---
 
 // AVOptSetPixelFmt wraps av_opt_set_pixel_fmt.
-func AVOptSetPixelFmt(obj unsafe.Pointer, name *CStr, fmt AVPixelFormat, searchFlags int) int {
+func AVOptSetPixelFmt(obj unsafe.Pointer, name *CStr, fmt AVPixelFormat, searchFlags int) (int, error) {
 	var tmpname *C.char
 	if name != nil {
 		tmpname = name.ptr
 	}
 	ret := C.av_opt_set_pixel_fmt(obj, tmpname, C.enum_AVPixelFormat(fmt), C.int(searchFlags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_set_sample_fmt ---
 
 // AVOptSetSampleFmt wraps av_opt_set_sample_fmt.
-func AVOptSetSampleFmt(obj unsafe.Pointer, name *CStr, fmt AVSampleFormat, searchFlags int) int {
+func AVOptSetSampleFmt(obj unsafe.Pointer, name *CStr, fmt AVSampleFormat, searchFlags int) (int, error) {
 	var tmpname *C.char
 	if name != nil {
 		tmpname = name.ptr
 	}
 	ret := C.av_opt_set_sample_fmt(obj, tmpname, C.enum_AVSampleFormat(fmt), C.int(searchFlags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_set_video_rate ---
 
 // AVOptSetVideoRate wraps av_opt_set_video_rate.
-func AVOptSetVideoRate(obj unsafe.Pointer, name *CStr, val *AVRational, searchFlags int) int {
+func AVOptSetVideoRate(obj unsafe.Pointer, name *CStr, val *AVRational, searchFlags int) (int, error) {
 	var tmpname *C.char
 	if name != nil {
 		tmpname = name.ptr
 	}
 	ret := C.av_opt_set_video_rate(obj, tmpname, val.value, C.int(searchFlags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_set_channel_layout ---
 
 // AVOptSetChannelLayout wraps av_opt_set_channel_layout.
-func AVOptSetChannelLayout(obj unsafe.Pointer, name *CStr, chLayout int64, searchFlags int) int {
+func AVOptSetChannelLayout(obj unsafe.Pointer, name *CStr, chLayout int64, searchFlags int) (int, error) {
 	var tmpname *C.char
 	if name != nil {
 		tmpname = name.ptr
 	}
 	ret := C.av_opt_set_channel_layout(obj, tmpname, C.int64_t(chLayout), C.int(searchFlags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_set_chlayout ---
 
 // AVOptSetChlayout wraps av_opt_set_chlayout.
-func AVOptSetChlayout(obj unsafe.Pointer, name *CStr, layout *AVChannelLayout, searchFlags int) int {
+func AVOptSetChlayout(obj unsafe.Pointer, name *CStr, layout *AVChannelLayout, searchFlags int) (int, error) {
 	var tmpname *C.char
 	if name != nil {
 		tmpname = name.ptr
@@ -6559,13 +6559,13 @@ func AVOptSetChlayout(obj unsafe.Pointer, name *CStr, layout *AVChannelLayout, s
 		tmplayout = layout.ptr
 	}
 	ret := C.av_opt_set_chlayout(obj, tmpname, tmplayout, C.int(searchFlags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_set_dict_val ---
 
 // AVOptSetDictVal wraps av_opt_set_dict_val.
-func AVOptSetDictVal(obj unsafe.Pointer, name *CStr, val *AVDictionary, searchFlags int) int {
+func AVOptSetDictVal(obj unsafe.Pointer, name *CStr, val *AVDictionary, searchFlags int) (int, error) {
 	var tmpname *C.char
 	if name != nil {
 		tmpname = name.ptr
@@ -6575,7 +6575,7 @@ func AVOptSetDictVal(obj unsafe.Pointer, name *CStr, val *AVDictionary, searchFl
 		tmpval = val.ptr
 	}
 	ret := C.av_opt_set_dict_val(obj, tmpname, tmpval, C.int(searchFlags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_get ---
@@ -6626,7 +6626,7 @@ func AVOptSetDictVal(obj unsafe.Pointer, name *CStr, val *AVDictionary, searchFl
 // --- Function av_opt_get_chlayout ---
 
 // AVOptGetChlayout wraps av_opt_get_chlayout.
-func AVOptGetChlayout(obj unsafe.Pointer, name *CStr, searchFlags int, layout *AVChannelLayout) int {
+func AVOptGetChlayout(obj unsafe.Pointer, name *CStr, searchFlags int, layout *AVChannelLayout) (int, error) {
 	var tmpname *C.char
 	if name != nil {
 		tmpname = name.ptr
@@ -6636,13 +6636,13 @@ func AVOptGetChlayout(obj unsafe.Pointer, name *CStr, searchFlags int, layout *A
 		tmplayout = layout.ptr
 	}
 	ret := C.av_opt_get_chlayout(obj, tmpname, C.int(searchFlags), tmplayout)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_get_dict_val ---
 
 // AVOptGetDictVal wraps av_opt_get_dict_val.
-func AVOptGetDictVal(obj unsafe.Pointer, name *CStr, searchFlags int, outVal **AVDictionary) int {
+func AVOptGetDictVal(obj unsafe.Pointer, name *CStr, searchFlags int, outVal **AVDictionary) (int, error) {
 	var tmpname *C.char
 	if name != nil {
 		tmpname = name.ptr
@@ -6666,7 +6666,7 @@ func AVOptGetDictVal(obj unsafe.Pointer, name *CStr, searchFlags int, outVal **A
 			*outVal = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_ptr ---
@@ -6713,7 +6713,7 @@ func AVOptFreepRanges(ranges **AVOptionRanges) {
 // --- Function av_opt_query_ranges ---
 
 // AVOptQueryRanges wraps av_opt_query_ranges.
-func AVOptQueryRanges(param0 **AVOptionRanges, obj unsafe.Pointer, key *CStr, flags int) int {
+func AVOptQueryRanges(param0 **AVOptionRanges, obj unsafe.Pointer, key *CStr, flags int) (int, error) {
 	var ptrparam0 **C.AVOptionRanges
 	var tmpparam0 *C.AVOptionRanges
 	var oldTmpparam0 *C.AVOptionRanges
@@ -6737,21 +6737,21 @@ func AVOptQueryRanges(param0 **AVOptionRanges, obj unsafe.Pointer, key *CStr, fl
 			*param0 = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_copy ---
 
 // AVOptCopy wraps av_opt_copy.
-func AVOptCopy(dest unsafe.Pointer, src unsafe.Pointer) int {
+func AVOptCopy(dest unsafe.Pointer, src unsafe.Pointer) (int, error) {
 	ret := C.av_opt_copy(dest, src)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_query_ranges_default ---
 
 // AVOptQueryRangesDefault wraps av_opt_query_ranges_default.
-func AVOptQueryRangesDefault(param0 **AVOptionRanges, obj unsafe.Pointer, key *CStr, flags int) int {
+func AVOptQueryRangesDefault(param0 **AVOptionRanges, obj unsafe.Pointer, key *CStr, flags int) (int, error) {
 	var ptrparam0 **C.AVOptionRanges
 	var tmpparam0 *C.AVOptionRanges
 	var oldTmpparam0 *C.AVOptionRanges
@@ -6775,31 +6775,31 @@ func AVOptQueryRangesDefault(param0 **AVOptionRanges, obj unsafe.Pointer, key *C
 			*param0 = nil
 		}
 	}
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_is_set_to_default ---
 
 // AVOptIsSetToDefault wraps av_opt_is_set_to_default.
-func AVOptIsSetToDefault(obj unsafe.Pointer, o *AVOption) int {
+func AVOptIsSetToDefault(obj unsafe.Pointer, o *AVOption) (int, error) {
 	var tmpo *C.AVOption
 	if o != nil {
 		tmpo = o.ptr
 	}
 	ret := C.av_opt_is_set_to_default(obj, tmpo)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_is_set_to_default_by_name ---
 
 // AVOptIsSetToDefaultByName wraps av_opt_is_set_to_default_by_name.
-func AVOptIsSetToDefaultByName(obj unsafe.Pointer, name *CStr, searchFlags int) int {
+func AVOptIsSetToDefaultByName(obj unsafe.Pointer, name *CStr, searchFlags int) (int, error) {
 	var tmpname *C.char
 	if name != nil {
 		tmpname = name.ptr
 	}
 	ret := C.av_opt_is_set_to_default_by_name(obj, tmpname, C.int(searchFlags))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_opt_serialize ---
@@ -6818,9 +6818,9 @@ func AVMakeQ(num int, den int) *AVRational {
 // --- Function av_cmp_q ---
 
 // AVCmpQ wraps av_cmp_q.
-func AVCmpQ(a *AVRational, b *AVRational) int {
+func AVCmpQ(a *AVRational, b *AVRational) (int, error) {
 	ret := C.av_cmp_q(a.value, b.value)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_q2d ---
@@ -6887,9 +6887,9 @@ func AVD2Q(d float64, max int) *AVRational {
 // --- Function av_nearer_q ---
 
 // AVNearerQ wraps av_nearer_q.
-func AVNearerQ(q *AVRational, q1 *AVRational, q2 *AVRational) int {
+func AVNearerQ(q *AVRational, q1 *AVRational, q2 *AVRational) (int, error) {
 	ret := C.av_nearer_q(q.value, q1.value, q2.value)
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_find_nearest_q_idx ---
@@ -6972,17 +6972,17 @@ func AVGetSampleFmtString(buf *CStr, bufSize int, sampleFmt AVSampleFormat) *CSt
 // --- Function av_get_bytes_per_sample ---
 
 // AVGetBytesPerSample wraps av_get_bytes_per_sample.
-func AVGetBytesPerSample(sampleFmt AVSampleFormat) int {
+func AVGetBytesPerSample(sampleFmt AVSampleFormat) (int, error) {
 	ret := C.av_get_bytes_per_sample(C.enum_AVSampleFormat(sampleFmt))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_sample_fmt_is_planar ---
 
 // AVSampleFmtIsPlanar wraps av_sample_fmt_is_planar.
-func AVSampleFmtIsPlanar(sampleFmt AVSampleFormat) int {
+func AVSampleFmtIsPlanar(sampleFmt AVSampleFormat) (int, error) {
 	ret := C.av_sample_fmt_is_planar(C.enum_AVSampleFormat(sampleFmt))
-	return int(ret)
+	return int(ret), WrapErr(int(ret))
 }
 
 // --- Function av_samples_get_buffer_size ---
