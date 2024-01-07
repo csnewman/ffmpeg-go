@@ -516,34 +516,26 @@ outer:
 
 			switch v := arg.Type.(type) {
 			case *IdentType:
-				var goType *jen.Statement
-
-				cName := v.Name
-
 				if m, ok := primTypes[v.Name]; ok {
-					goType = jen.Id(m)
+					params = append(params, jen.Id(pName).Id(m))
+					args = append(args, jen.Qual("C", v.Name).Params(jen.Id(pName)))
 				} else if e, ok := g.input.enums[v.Name]; ok {
-					cName = e.CName()
-
-					goType = jen.Id(v.Name)
+					params = append(params, jen.Id(pName).Id(v.Name))
+					args = append(args, jen.Qual("C", e.CName()).Params(jen.Id(pName)))
 				} else if s, ok := g.input.structs[v.Name]; ok {
-					o.Commentf("%v skipped due to %v", fn.Name, pName)
-					o.Line()
+					if s.ByValue {
+						params = append(params, jen.Id(pName).Op("*").Id(s.Name))
+						args = append(args, jen.Id(pName).Dot("value"))
+					} else {
+						o.Commentf("%v skipped due to %v", fn.Name, pName)
+						o.Line()
 
-					//cName = e.CName()
-					//
-					//goType = jen.Id(v.Name)
-
-					_ = s
-
-					continue outer
+						continue outer
+					}
 				} else {
-					goType = jen.Id(v.Name)
+					params = append(params, jen.Id(pName).Id(v.Name))
+					args = append(args, jen.Qual("C", v.Name).Params(jen.Id(pName)))
 				}
-
-				params = append(params, jen.Id(pName).Add(goType))
-
-				args = append(args, jen.Qual("C", cName).Params(jen.Id(pName)))
 
 			case *PointerType:
 				switch iv := v.Inner.(type) {
@@ -722,31 +714,31 @@ outer:
 			body = append(body, postCall...)
 
 		case *IdentType:
-			var goType *jen.Statement
-
-			if m, ok := primTypes[v.Name]; ok {
-				goType = jen.Id(m)
-			} else if s, ok := g.input.structs[v.Name]; ok {
-				//cName = e.CName()
-				//
-				//goType = jen.Id(v.Name)
-
-				_ = s
-
-				o.Commentf("%v skipped due to return", fn.Name)
-				o.Line()
-				continue outer
-			} else {
-				goType = jen.Id(v.Name)
-			}
-
-			retType = []jen.Code{
-				goType,
-			}
 
 			body = append(body, jen.Id("ret").Op(":=").Add(cc))
 			body = append(body, postCall...)
-			body = append(body, jen.Return(goType.Clone().Params(jen.Id("ret"))))
+
+			if m, ok := primTypes[v.Name]; ok {
+				retType = []jen.Code{jen.Id(m)}
+				body = append(body, jen.Return(jen.Id(m).Params(jen.Id("ret"))))
+			} else if s, ok := g.input.structs[v.Name]; ok {
+				if s.ByValue {
+					retType = []jen.Code{jen.Op("*").Id(v.Name)}
+					body = append(
+						body,
+						jen.Return(jen.Op("&").Id(v.Name).Values(jen.Dict{
+							jen.Id("value"): jen.Id("ret"),
+						})),
+					)
+				} else {
+					o.Commentf("%v skipped due to return", fn.Name)
+					o.Line()
+					continue outer
+				}
+			} else {
+				retType = []jen.Code{jen.Id(v.Name)}
+				body = append(body, jen.Return(jen.Id(v.Name).Params(jen.Id("ret"))))
+			}
 
 		case *PointerType:
 			body = append(body,

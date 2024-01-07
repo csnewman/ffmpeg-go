@@ -1083,7 +1083,13 @@ func AVPacketMakeWritable(pkt *AVPacket) int {
 // --- Function av_packet_rescale_ts ---
 
 // AVPacketRescaleTs wraps av_packet_rescale_ts.
-// av_packet_rescale_ts skipped due to tbSrc
+func AVPacketRescaleTs(pkt *AVPacket, tbSrc *AVRational, tbDst *AVRational) {
+	var tmppkt *C.AVPacket
+	if pkt != nil {
+		tmppkt = pkt.ptr
+	}
+	C.av_packet_rescale_ts(tmppkt, tbSrc.value, tbDst.value)
+}
 
 // --- Function avfilter_version ---
 
@@ -1952,7 +1958,14 @@ func AVBuffersinkGetType(ctx *AVFilterContext) AVMediaType {
 // --- Function av_buffersink_get_time_base ---
 
 // AVBuffersinkGetTimeBase wraps av_buffersink_get_time_base.
-// av_buffersink_get_time_base skipped due to return
+func AVBuffersinkGetTimeBase(ctx *AVFilterContext) *AVRational {
+	var tmpctx *C.AVFilterContext
+	if ctx != nil {
+		tmpctx = ctx.ptr
+	}
+	ret := C.av_buffersink_get_time_base(tmpctx)
+	return &AVRational{value: ret}
+}
 
 // --- Function av_buffersink_get_format ---
 
@@ -1969,7 +1982,14 @@ func AVBuffersinkGetFormat(ctx *AVFilterContext) int {
 // --- Function av_buffersink_get_frame_rate ---
 
 // AVBuffersinkGetFrameRate wraps av_buffersink_get_frame_rate.
-// av_buffersink_get_frame_rate skipped due to return
+func AVBuffersinkGetFrameRate(ctx *AVFilterContext) *AVRational {
+	var tmpctx *C.AVFilterContext
+	if ctx != nil {
+		tmpctx = ctx.ptr
+	}
+	ret := C.av_buffersink_get_frame_rate(tmpctx)
+	return &AVRational{value: ret}
+}
 
 // --- Function av_buffersink_get_w ---
 
@@ -1998,7 +2018,14 @@ func AVBuffersinkGetH(ctx *AVFilterContext) int {
 // --- Function av_buffersink_get_sample_aspect_ratio ---
 
 // AVBuffersinkGetSampleAspectRatio wraps av_buffersink_get_sample_aspect_ratio.
-// av_buffersink_get_sample_aspect_ratio skipped due to return
+func AVBuffersinkGetSampleAspectRatio(ctx *AVFilterContext) *AVRational {
+	var tmpctx *C.AVFilterContext
+	if ctx != nil {
+		tmpctx = ctx.ptr
+	}
+	ret := C.av_buffersink_get_sample_aspect_ratio(tmpctx)
+	return &AVRational{value: ret}
+}
 
 // --- Function av_buffersink_get_channels ---
 
@@ -3385,12 +3412,42 @@ func AVFormatGetMovAudioTags() *AVCodecTag {
 // --- Function av_guess_sample_aspect_ratio ---
 
 // AVGuessSampleAspectRatio wraps av_guess_sample_aspect_ratio.
-// av_guess_sample_aspect_ratio skipped due to return
+func AVGuessSampleAspectRatio(format *AVFormatContext, stream *AVStream, frame *AVFrame) *AVRational {
+	var tmpformat *C.AVFormatContext
+	if format != nil {
+		tmpformat = format.ptr
+	}
+	var tmpstream *C.AVStream
+	if stream != nil {
+		tmpstream = stream.ptr
+	}
+	var tmpframe *C.AVFrame
+	if frame != nil {
+		tmpframe = frame.ptr
+	}
+	ret := C.av_guess_sample_aspect_ratio(tmpformat, tmpstream, tmpframe)
+	return &AVRational{value: ret}
+}
 
 // --- Function av_guess_frame_rate ---
 
 // AVGuessFrameRate wraps av_guess_frame_rate.
-// av_guess_frame_rate skipped due to return
+func AVGuessFrameRate(ctx *AVFormatContext, stream *AVStream, frame *AVFrame) *AVRational {
+	var tmpctx *C.AVFormatContext
+	if ctx != nil {
+		tmpctx = ctx.ptr
+	}
+	var tmpstream *C.AVStream
+	if stream != nil {
+		tmpstream = stream.ptr
+	}
+	var tmpframe *C.AVFrame
+	if frame != nil {
+		tmpframe = frame.ptr
+	}
+	ret := C.av_guess_frame_rate(tmpctx, tmpstream, tmpframe)
+	return &AVRational{value: ret}
+}
 
 // --- Function avformat_match_stream_specifier ---
 
@@ -3447,7 +3504,14 @@ func AVFormatTransferInternalStreamTimingInfo(ofmt *AVOutputFormat, ost *AVStrea
 // --- Function av_stream_get_codec_timebase ---
 
 // AVStreamGetCodecTimebase wraps av_stream_get_codec_timebase.
-// av_stream_get_codec_timebase skipped due to return
+func AVStreamGetCodecTimebase(st *AVStream) *AVRational {
+	var tmpst *C.AVStream
+	if st != nil {
+		tmpst = st.ptr
+	}
+	ret := C.av_stream_get_codec_timebase(tmpst)
+	return &AVRational{value: ret}
+}
 
 // --- Function avio_find_protocol_name ---
 
@@ -4394,7 +4458,10 @@ func AVIntListLengthForSize(elsize uint, list unsafe.Pointer, term uint64) uint 
 // --- Function av_get_time_base_q ---
 
 // AVGetTimeBaseQ wraps av_get_time_base_q.
-// av_get_time_base_q skipped due to return
+func AVGetTimeBaseQ() *AVRational {
+	ret := C.av_get_time_base_q()
+	return &AVRational{value: ret}
+}
 
 // --- Function av_fourcc_make_string ---
 
@@ -5935,17 +6002,26 @@ func AVRescaleRnd(a int64, b int64, c int64, rnd AVRounding) int64 {
 // --- Function av_rescale_q ---
 
 // AVRescaleQ wraps av_rescale_q.
-// av_rescale_q skipped due to bq
+func AVRescaleQ(a int64, bq *AVRational, cq *AVRational) int64 {
+	ret := C.av_rescale_q(C.int64_t(a), bq.value, cq.value)
+	return int64(ret)
+}
 
 // --- Function av_rescale_q_rnd ---
 
 // AVRescaleQRnd wraps av_rescale_q_rnd.
-// av_rescale_q_rnd skipped due to bq
+func AVRescaleQRnd(a int64, bq *AVRational, cq *AVRational, rnd AVRounding) int64 {
+	ret := C.av_rescale_q_rnd(C.int64_t(a), bq.value, cq.value, C.enum_AVRounding(rnd))
+	return int64(ret)
+}
 
 // --- Function av_compare_ts ---
 
 // AVCompareTs wraps av_compare_ts.
-// av_compare_ts skipped due to tbA
+func AVCompareTs(tsA int64, tbA *AVRational, tsB int64, tbB *AVRational) int {
+	ret := C.av_compare_ts(C.int64_t(tsA), tbA.value, C.int64_t(tsB), tbB.value)
+	return int(ret)
+}
 
 // --- Function av_compare_mod ---
 
@@ -5958,12 +6034,15 @@ func AVCompareMod(a uint64, b uint64, mod uint64) int64 {
 // --- Function av_rescale_delta ---
 
 // AVRescaleDelta wraps av_rescale_delta.
-// av_rescale_delta skipped due to inTb
+// av_rescale_delta skipped due to last
 
 // --- Function av_add_stable ---
 
 // AVAddStable wraps av_add_stable.
-// av_add_stable skipped due to tsTb
+func AVAddStable(tsTb *AVRational, ts int64, incTb *AVRational, inc int64) int64 {
+	ret := C.av_add_stable(tsTb.value, C.int64_t(ts), incTb.value, C.int64_t(inc))
+	return int64(ret)
+}
 
 // --- Function av_malloc ---
 
@@ -6386,7 +6465,14 @@ func AVOptSetDouble(obj unsafe.Pointer, name *CStr, val float64, searchFlags int
 // --- Function av_opt_set_q ---
 
 // AVOptSetQ wraps av_opt_set_q.
-// av_opt_set_q skipped due to val
+func AVOptSetQ(obj unsafe.Pointer, name *CStr, val *AVRational, searchFlags int) int {
+	var tmpname *C.char
+	if name != nil {
+		tmpname = name.ptr
+	}
+	ret := C.av_opt_set_q(obj, tmpname, val.value, C.int(searchFlags))
+	return int(ret)
+}
 
 // --- Function av_opt_set_bin ---
 
@@ -6439,7 +6525,14 @@ func AVOptSetSampleFmt(obj unsafe.Pointer, name *CStr, fmt AVSampleFormat, searc
 // --- Function av_opt_set_video_rate ---
 
 // AVOptSetVideoRate wraps av_opt_set_video_rate.
-// av_opt_set_video_rate skipped due to val
+func AVOptSetVideoRate(obj unsafe.Pointer, name *CStr, val *AVRational, searchFlags int) int {
+	var tmpname *C.char
+	if name != nil {
+		tmpname = name.ptr
+	}
+	ret := C.av_opt_set_video_rate(obj, tmpname, val.value, C.int(searchFlags))
+	return int(ret)
+}
 
 // --- Function av_opt_set_channel_layout ---
 
@@ -6717,17 +6810,26 @@ func AVOptIsSetToDefaultByName(obj unsafe.Pointer, name *CStr, searchFlags int) 
 // --- Function av_make_q ---
 
 // AVMakeQ wraps av_make_q.
-// av_make_q skipped due to return
+func AVMakeQ(num int, den int) *AVRational {
+	ret := C.av_make_q(C.int(num), C.int(den))
+	return &AVRational{value: ret}
+}
 
 // --- Function av_cmp_q ---
 
 // AVCmpQ wraps av_cmp_q.
-// av_cmp_q skipped due to a
+func AVCmpQ(a *AVRational, b *AVRational) int {
+	ret := C.av_cmp_q(a.value, b.value)
+	return int(ret)
+}
 
 // --- Function av_q2d ---
 
 // AVQ2D wraps av_q2d.
-// av_q2d skipped due to a
+func AVQ2D(a *AVRational) float64 {
+	ret := C.av_q2d(a.value)
+	return float64(ret)
+}
 
 // --- Function av_reduce ---
 
@@ -6737,52 +6839,79 @@ func AVOptIsSetToDefaultByName(obj unsafe.Pointer, name *CStr, searchFlags int) 
 // --- Function av_mul_q ---
 
 // AVMulQ wraps av_mul_q.
-// av_mul_q skipped due to b
+func AVMulQ(b *AVRational, c *AVRational) *AVRational {
+	ret := C.av_mul_q(b.value, c.value)
+	return &AVRational{value: ret}
+}
 
 // --- Function av_div_q ---
 
 // AVDivQ wraps av_div_q.
-// av_div_q skipped due to b
+func AVDivQ(b *AVRational, c *AVRational) *AVRational {
+	ret := C.av_div_q(b.value, c.value)
+	return &AVRational{value: ret}
+}
 
 // --- Function av_add_q ---
 
 // AVAddQ wraps av_add_q.
-// av_add_q skipped due to b
+func AVAddQ(b *AVRational, c *AVRational) *AVRational {
+	ret := C.av_add_q(b.value, c.value)
+	return &AVRational{value: ret}
+}
 
 // --- Function av_sub_q ---
 
 // AVSubQ wraps av_sub_q.
-// av_sub_q skipped due to b
+func AVSubQ(b *AVRational, c *AVRational) *AVRational {
+	ret := C.av_sub_q(b.value, c.value)
+	return &AVRational{value: ret}
+}
 
 // --- Function av_inv_q ---
 
 // AVInvQ wraps av_inv_q.
-// av_inv_q skipped due to q
+func AVInvQ(q *AVRational) *AVRational {
+	ret := C.av_inv_q(q.value)
+	return &AVRational{value: ret}
+}
 
 // --- Function av_d2q ---
 
 // AVD2Q wraps av_d2q.
-// av_d2q skipped due to return
+func AVD2Q(d float64, max int) *AVRational {
+	ret := C.av_d2q(C.double(d), C.int(max))
+	return &AVRational{value: ret}
+}
 
 // --- Function av_nearer_q ---
 
 // AVNearerQ wraps av_nearer_q.
-// av_nearer_q skipped due to q
+func AVNearerQ(q *AVRational, q1 *AVRational, q2 *AVRational) int {
+	ret := C.av_nearer_q(q.value, q1.value, q2.value)
+	return int(ret)
+}
 
 // --- Function av_find_nearest_q_idx ---
 
 // AVFindNearestQIdx wraps av_find_nearest_q_idx.
-// av_find_nearest_q_idx skipped due to q
+// av_find_nearest_q_idx skipped due to qList
 
 // --- Function av_q2intfloat ---
 
 // AVQ2Intfloat wraps av_q2intfloat.
-// av_q2intfloat skipped due to q
+func AVQ2Intfloat(q *AVRational) uint32 {
+	ret := C.av_q2intfloat(q.value)
+	return uint32(ret)
+}
 
 // --- Function av_gcd_q ---
 
 // AVGcdQ wraps av_gcd_q.
-// av_gcd_q skipped due to a
+func AVGcdQ(a *AVRational, b *AVRational, maxDen int, def *AVRational) *AVRational {
+	ret := C.av_gcd_q(a.value, b.value, C.int(maxDen), def.value)
+	return &AVRational{value: ret}
+}
 
 // --- Function av_get_sample_fmt_name ---
 
