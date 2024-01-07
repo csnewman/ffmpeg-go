@@ -10,8 +10,12 @@ import (
 
 #include <errno.h>
 #include <stdlib.h>
+
+#include <libavutil/avutil.h>
 */
 import "C"
+
+var AVTimeBaseQ = &AVRational{value: C.AV_TIME_BASE_Q}
 
 var (
 	EAgain     = AVError{Code: -C.EAGAIN}
