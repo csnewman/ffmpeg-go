@@ -733,10 +733,6 @@ func AVParserClose(s *AVCodecParserContext) {
 // --- Function avcodec_encode_subtitle ---
 
 // AVCodecEncodeSubtitle wraps avcodec_encode_subtitle.
-/*
-  @addtogroup lavc_encoding
-  @{
-*/
 func AVCodecEncodeSubtitle(avctx *AVCodecContext, buf unsafe.Pointer, bufSize int, sub *AVSubtitle) (int, error) {
 	var tmpavctx *C.AVCodecContext
 	if avctx != nil {
@@ -774,8 +770,6 @@ func AVCodecPixFmtToCodecTag(pixFmt AVPixelFormat) uint {
 // --- Function avcodec_string ---
 
 // AVCodecString wraps avcodec_string.
-//
-//	@}
 func AVCodecString(buf *CStr, bufSize int, enc *AVCodecContext, encode int) {
 	var tmpbuf *C.char
 	if buf != nil {
@@ -3107,11 +3101,6 @@ func AVBuffersinkSetFrameSize(ctx *AVFilterContext, frameSize uint) {
 // --- Function av_buffersink_get_type ---
 
 // AVBuffersinkGetType wraps av_buffersink_get_type.
-/*
-  @defgroup lavfi_buffersink_accessors Buffer sink accessors
-  Get the properties of the stream
-  @{
-*/
 func AVBuffersinkGetType(ctx *AVFilterContext) AVMediaType {
 	var tmpctx *C.AVFilterContext
 	if ctx != nil {
@@ -5298,18 +5287,7 @@ func AVFormatQueryCodec(ofmt *AVOutputFormat, codecId AVCodecID, stdCompliance i
 
 // AVFormatGetRiffVideoTags wraps avformat_get_riff_video_tags.
 /*
-  @defgroup riff_fourcc RIFF FourCCs
-  @{
-  Get the tables mapping RIFF FourCCs to libavcodec AVCodecIDs. The tables are
-  meant to be passed to av_codec_get_id()/av_codec_get_tag() as in the
-  following code:
-  @code
-  uint32_t tag = MKTAG('H', '2', '6', '4');
-  const struct AVCodecTag *table[] = { avformat_get_riff_video_tags(), 0 };
-  enum AVCodecID id = av_codec_get_id(table, tag);
-  @endcode
-*/
-/**
+  /**
   @return the table mapping RIFF FourCCs for video to libavcodec AVCodecID.
 */
 func AVFormatGetRiffVideoTags() *AVCodecTag {
@@ -6112,8 +6090,6 @@ func AVIOReadPartial(s *AVIOContext, buf unsafe.Pointer, size int) (int, error) 
 
 // AVIOR8 wraps avio_r8.
 /*
-  @name Functions for reading from AVIOContext
-  @{
 
   @note return 0 if EOF, so you cannot use it if EOF handling is
         necessary
@@ -8560,7 +8536,7 @@ func AVHwdeviceFindTypeByName(name *CStr) AVHWDeviceType {
 
 // AVHwdeviceGetTypeName wraps av_hwdevice_get_type_name.
 /*
-  /** Get the string name of an AVHWDeviceType.
+  Get the string name of an AVHWDeviceType.
 
   @param type Type from enum AVHWDeviceType.
   @return Pointer to a static string containing the name, or NULL if the type
@@ -10033,8 +10009,6 @@ func AVOptChildNext(obj unsafe.Pointer, prev unsafe.Pointer) unsafe.Pointer {
 
 // AVOptSet wraps av_opt_set.
 /*
-  @defgroup opt_set_funcs Option setting functions
-  @{
   Those functions set the field of obj with the given name to value.
 
   @param[in] obj A struct whose first element is a pointer to an AVClass.
@@ -10308,9 +10282,7 @@ func AVOptGetDictVal(obj unsafe.Pointer, name *CStr, searchFlags int, outVal **A
 
 // AVOptPtr wraps av_opt_ptr.
 /*
-  @}
-*/
-/**
+  /**
   Gets a pointer to the requested field in a struct.
   This function allows accessing a struct even when its fields are moved or
   renamed since the application making the access has been compiled,

@@ -38,6 +38,7 @@ type Struct struct {
 	Typedefd bool
 	ByValue  bool
 	Fields   []*Field
+	Comment  string
 }
 
 func (s *Struct) CName() string {
@@ -58,6 +59,7 @@ type Enum struct {
 	Name      string
 	Typedefd  bool
 	Constants []string
+	Comment   string
 }
 
 func (s *Enum) CName() string {

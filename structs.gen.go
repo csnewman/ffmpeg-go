@@ -90,6 +90,19 @@ func (s *AVCodecInternal) RawPtr() unsafe.Pointer {
 // --- Struct AVCodecContext ---
 
 // AVCodecContext wraps AVCodecContext.
+/*
+  main external API structure.
+  New fields can be added to the end with minor version bumps.
+  Removal, reordering and changes to existing fields require a major
+  version bump.
+  You can use AVOptions (av_opt* / av_set/get*()) to access these fields from user
+  applications.
+  The name string for AVOptions options matches the associated command line
+  parameter name and can be found in libavcodec/options_table.h
+  The AVOption/command line parameter names differ in some cases from the C
+  structure field names for historic reasons or brevity.
+  sizeof(AVCodecContext) must not be used outside libav*.
+*/
 type AVCodecContext struct {
 	ptr *C.AVCodecContext
 }
@@ -2167,6 +2180,8 @@ func (s *AVCodecParser) SetPrivDataSize(value int) {
 // --- Struct AVProfile ---
 
 // AVProfile wraps AVProfile.
+//
+//	AVProfile.
 type AVProfile struct {
 	ptr *C.AVProfile
 }
@@ -2195,6 +2210,8 @@ func (s *AVProfile) SetName(value *CStr) {
 // --- Struct AVCodec ---
 
 // AVCodec wraps AVCodec.
+//
+//	AVCodec.
 type AVCodec struct {
 	ptr *C.AVCodec
 }
@@ -2366,6 +2383,11 @@ func (s *AVCodecHWConfig) SetDeviceType(value AVHWDeviceType) {
 // --- Struct AVCodecDescriptor ---
 
 // AVCodecDescriptor wraps AVCodecDescriptor.
+/*
+  This struct describes the properties of a single codec described by an
+  AVCodecID.
+  @see avcodec_descriptor_get()
+*/
 type AVCodecDescriptor struct {
 	ptr *C.AVCodecDescriptor
 }
@@ -2440,6 +2462,13 @@ func (s *AVCodecDescriptor) SetProfiles(value *AVProfile) {
 // --- Struct AVCodecParameters ---
 
 // AVCodecParameters wraps AVCodecParameters.
+/*
+  This struct describes the properties of an encoded stream.
+
+  sizeof(AVCodecParameters) is not a part of the public ABI, this struct must
+  be allocated with avcodec_parameters_alloc() and freed with
+  avcodec_parameters_free().
+*/
 type AVCodecParameters struct {
 	ptr *C.AVCodecParameters
 }
@@ -2713,6 +2742,11 @@ func (s *AVCodecParameters) SetSeekPreroll(value int) {
 // --- Struct AVPanScan ---
 
 // AVPanScan wraps AVPanScan.
+/*
+  Pan Scan area.
+  This specifies the area which should be displayed.
+  Note there may be multiple such areas for one frame.
+*/
 type AVPanScan struct {
 	ptr *C.AVPanScan
 }
@@ -2752,6 +2786,11 @@ func (s *AVPanScan) SetHeight(value int) {
 // --- Struct AVCPBProperties ---
 
 // AVCPBProperties wraps AVCPBProperties.
+/*
+  This structure describes the bitrate properties of an encoded bitstream. It
+  roughly corresponds to a subset the VBV parameters for MPEG-2 or HRD
+  parameters for H.264/HEVC.
+*/
 type AVCPBProperties struct {
 	ptr *C.AVCPBProperties
 }
@@ -2807,6 +2846,11 @@ func (s *AVCPBProperties) SetVbvDelay(value uint64) {
 // --- Struct AVProducerReferenceTime ---
 
 // AVProducerReferenceTime wraps AVProducerReferenceTime.
+/*
+  This structure supplies correlation between a packet timestamp and a wall clock
+  production time. The definition follows the Producer Reference Time ('prft')
+  as defined in ISO/IEC 14496-12
+*/
 type AVProducerReferenceTime struct {
 	ptr *C.AVProducerReferenceTime
 }
@@ -2872,6 +2916,36 @@ func (s *AVPacketSideData) SetType(value AVPacketSideDataType) {
 // --- Struct AVPacket ---
 
 // AVPacket wraps AVPacket.
+/*
+  This structure stores compressed data. It is typically exported by demuxers
+  and then passed as input to decoders, or received as output from encoders and
+  then passed to muxers.
+
+  For video, it should typically contain one compressed frame. For audio it may
+  contain several compressed frames. Encoders are allowed to output empty
+  packets, with no compressed data, containing only side data
+  (e.g. to update some stream parameters at the end of encoding).
+
+  The semantics of data ownership depends on the buf field.
+  If it is set, the packet data is dynamically allocated and is
+  valid indefinitely until a call to av_packet_unref() reduces the
+  reference count to 0.
+
+  If the buf field is not set av_packet_ref() would make a copy instead
+  of increasing the reference count.
+
+  The side data is always allocated with av_malloc(), copied by
+  av_packet_ref() and freed by av_packet_unref().
+
+  sizeof(AVPacket) being a part of the public ABI is deprecated. once
+  av_init_packet() is removed, new packets will only be able to be allocated
+  with av_packet_alloc(), and new fields may be added to the end of the struct
+  with a minor bump.
+
+  @see av_packet_alloc
+  @see av_packet_ref
+  @see av_packet_unref
+*/
 type AVPacket struct {
 	ptr *C.AVPacket
 }
@@ -3062,6 +3136,8 @@ func (s *AVPacketList) SetNext(value *AVPacketList) {
 // --- Struct AVFilterContext ---
 
 // AVFilterContext wraps AVFilterContext.
+//
+//	An instance of a filter
 type AVFilterContext struct {
 	ptr *C.AVFilterContext
 }
@@ -3314,6 +3390,18 @@ func (s *AVFilterContext) SetExtraHwFrames(value int) {
 // --- Struct AVFilterLink ---
 
 // AVFilterLink wraps AVFilterLink.
+/*
+  A link between two filters. This contains pointers to the source and
+  destination filters between which this link exists, and the indexes of
+  the pads involved. In addition, this link also contains the parameters
+  which have been negotiated and agreed upon between the filter, such as
+  image dimensions, format, etc.
+
+  Applications must not normally access the link structure directly.
+  Use the buffersrc and buffersink API instead.
+  In the future, access to the header may be reserved for filters
+  implementation.
+*/
 type AVFilterLink struct {
 	ptr *C.AVFilterLink
 }
@@ -3663,6 +3751,10 @@ func (s *AVFilterChannelLayouts) RawPtr() unsafe.Pointer {
 // --- Struct AVFilter ---
 
 // AVFilter wraps AVFilter.
+/*
+  Filter definition. This defines the pads a filter contains, and all the
+  callback functions used to interact with the filter.
+*/
 type AVFilter struct {
 	ptr *C.AVFilter
 }
@@ -3819,6 +3911,16 @@ func (s *AVFilterInternal) RawPtr() unsafe.Pointer {
 // --- Struct AVFilterFormatsConfig ---
 
 // AVFilterFormatsConfig wraps AVFilterFormatsConfig.
+/*
+  Lists of formats / etc. supported by an end of a link.
+
+  This structure is directly part of AVFilterLink, in two copies:
+  one for the source filter, one for the destination filter.
+
+  These lists are used for negotiating the format to actually be used,
+  which will be loaded into the format and channel_layout members of
+  AVFilterLink, when chosen.
+*/
 type AVFilterFormatsConfig struct {
 	ptr *C.AVFilterFormatsConfig
 }
@@ -4029,6 +4131,15 @@ func (s *AVFilterGraph) SetDisableAutoConvert(value uint) {
 // --- Struct AVFilterInOut ---
 
 // AVFilterInOut wraps AVFilterInOut.
+/*
+  A linked-list of the inputs/outputs of the filter chain.
+
+  This is mainly useful for avfilter_graph_parse() / avfilter_graph_parse2(),
+  where it is used to communicate open (unlinked) inputs and outputs from and
+  to the caller.
+  This struct specifies, per each not connected pad contained in the graph, the
+  filter context and the pad index required for establishing a link.
+*/
 type AVFilterInOut struct {
 	ptr *C.AVFilterInOut
 }
@@ -4091,6 +4202,12 @@ func (s *AVFilterInOut) SetNext(value *AVFilterInOut) {
 // --- Struct AVFilterPadParams ---
 
 // AVFilterPadParams wraps AVFilterPadParams.
+/*
+  Parameters of a filter's input or output pad.
+
+  Created as a child of AVFilterParams by avfilter_graph_segment_parse().
+  Freed in avfilter_graph_segment_free().
+*/
 type AVFilterPadParams struct {
 	ptr *C.AVFilterPadParams
 }
@@ -4110,6 +4227,12 @@ func (s *AVFilterPadParams) SetLabel(value *CStr) {
 // --- Struct AVFilterParams ---
 
 // AVFilterParams wraps AVFilterParams.
+/*
+  Parameters describing a filter to be created in a filtergraph.
+
+  Created as a child of AVFilterGraphSegment by avfilter_graph_segment_parse().
+  Freed in avfilter_graph_segment_free().
+*/
 type AVFilterParams struct {
 	ptr *C.AVFilterParams
 }
@@ -4210,6 +4333,12 @@ func (s *AVFilterParams) SetNbOutputs(value uint) {
 // --- Struct AVFilterChain ---
 
 // AVFilterChain wraps AVFilterChain.
+/*
+  A filterchain is a list of filter specifications.
+
+  Created as a child of AVFilterGraphSegment by avfilter_graph_segment_parse().
+  Freed in avfilter_graph_segment_free().
+*/
 type AVFilterChain struct {
 	ptr *C.AVFilterChain
 }
@@ -4239,6 +4368,15 @@ func (s *AVFilterChain) SetNbFilters(value uint64) {
 // --- Struct AVFilterGraphSegment ---
 
 // AVFilterGraphSegment wraps AVFilterGraphSegment.
+/*
+  A parsed representation of a filtergraph segment.
+
+  A filtergraph segment is conceptually a list of filterchains, with some
+  supplementary information (e.g. format conversion flags).
+
+  Created by avfilter_graph_segment_parse(). Must be freed with
+  avfilter_graph_segment_free().
+*/
 type AVFilterGraphSegment struct {
 	ptr *C.AVFilterGraphSegment
 }
@@ -4294,6 +4432,13 @@ func (s *AVFilterGraphSegment) SetScaleSwsOpts(value *CStr) {
 // --- Struct AVBufferSrcParameters ---
 
 // AVBufferSrcParameters wraps AVBufferSrcParameters.
+/*
+  This structure contains the parameters describing the frames that will be
+  passed to this filter.
+
+  It should be allocated with av_buffersrc_parameters_alloc() and freed with
+  av_free(). All the allocated fields in it remain owned by the caller.
+*/
 type AVBufferSrcParameters struct {
 	ptr *C.AVBufferSrcParameters
 }
@@ -4406,6 +4551,10 @@ func (s *AVDeviceInfoList) RawPtr() unsafe.Pointer {
 // --- Struct AVCodecTag ---
 
 // AVCodecTag wraps AVCodecTag.
+/*
+  /*************************************************/
+/* input/output formats
+ */
 type AVCodecTag struct {
 	ptr *C.struct_AVCodecTag
 }
@@ -4417,6 +4566,8 @@ func (s *AVCodecTag) RawPtr() unsafe.Pointer {
 // --- Struct AVProbeData ---
 
 // AVProbeData wraps AVProbeData.
+//
+//	This structure contains the data a format has to probe a file.
 type AVProbeData struct {
 	ptr *C.AVProbeData
 }
@@ -4735,6 +4886,13 @@ func (s *AVIndexEntry) SetMinDistance(value int) {
 // --- Struct AVStream ---
 
 // AVStream wraps AVStream.
+/*
+  Stream structure.
+  New fields can be added to the end with minor version bumps.
+  Removal, reordering and changes to existing fields require a major
+  version bump.
+  sizeof(AVStream) must not be used outside libav*.
+*/
 type AVStream struct {
 	ptr *C.AVStream
 }
@@ -4950,6 +5108,12 @@ func (s *AVStream) SetPtsWrapBits(value int) {
 // --- Struct AVProgram ---
 
 // AVProgram wraps AVProgram.
+/*
+  New fields can be added to the end with minor version bumps.
+  Removal, reordering and changes to existing fields require a major
+  version bump.
+  sizeof(AVProgram) must not be used outside libav*.
+*/
 type AVProgram struct {
 	ptr *C.AVProgram
 }
@@ -5150,6 +5314,20 @@ func (s *AVChapter) SetMetadata(value *AVDictionary) {
 // --- Struct AVFormatContext ---
 
 // AVFormatContext wraps AVFormatContext.
+/*
+  Format I/O context.
+  New fields can be added to the end with minor version bumps.
+  Removal, reordering and changes to existing fields require a major
+  version bump.
+  sizeof(AVFormatContext) must not be used outside libav*, use
+  avformat_alloc_context() to create an AVFormatContext.
+
+  Fields can be accessed through AVOptions (av_opt*),
+  the name string used matches the associated command line parameter name and
+  can be found in libavformat/options_table.h.
+  The AVOption/command line parameter names differ in some cases from the C
+  structure field names for historic reasons or brevity.
+*/
 type AVFormatContext struct {
 	ptr *C.AVFormatContext
 }
@@ -5857,6 +6035,17 @@ func (s *AVFormatContext) SetMaxProbePackets(value int) {
 // --- Struct AVIOInterruptCB ---
 
 // AVIOInterruptCB wraps AVIOInterruptCB.
+/*
+  Callback for checking whether to abort blocking functions.
+  AVERROR_EXIT is returned in this case by the interrupted
+  function. During blocking operations, callback is called with
+  opaque as parameter. If the callback returns 1, the
+  blocking operation will be aborted.
+
+  No members can be added to this struct without a major bump, if
+  new elements have been added after this struct in AVFormatContext
+  or AVIOContext.
+*/
 type AVIOInterruptCB struct {
 	ptr *C.AVIOInterruptCB
 }
@@ -5879,6 +6068,12 @@ func (s *AVIOInterruptCB) SetOpaque(value unsafe.Pointer) {
 // --- Struct AVIODirEntry ---
 
 // AVIODirEntry wraps AVIODirEntry.
+/*
+  Describes single entry of the directory.
+
+  Only name and type fields are guaranteed be set.
+  Rest of fields are protocol or/and platform dependent and might be unknown.
+*/
 type AVIODirEntry struct {
 	ptr *C.AVIODirEntry
 }
@@ -5992,6 +6187,18 @@ func (s *AVIODirContext) RawPtr() unsafe.Pointer {
 // --- Struct AVIOContext ---
 
 // AVIOContext wraps AVIOContext.
+/*
+  Bytestream IO Context.
+  New public fields can be added with minor version bumps.
+  Removal, reordering and changes to existing public fields require
+  a major version bump.
+  sizeof(AVIOContext) must not be used outside libav*.
+
+  @note None of the function pointers in AVIOContext should be called
+        directly, they should only be set by the client application
+        when implementing custom I/O. Normally these are set to the
+        function pointers specified in avio_alloc_context()
+*/
 type AVIOContext struct {
 	ptr *C.AVIOContext
 }
@@ -6198,6 +6405,12 @@ func (s *AVBuffer) RawPtr() unsafe.Pointer {
 // --- Struct AVBufferRef ---
 
 // AVBufferRef wraps AVBufferRef.
+/*
+  A reference to a data buffer.
+
+  The size of this struct is not a part of the public ABI and it is not meant
+  to be allocated directly.
+*/
 type AVBufferRef struct {
 	ptr *C.AVBufferRef
 }
@@ -6254,6 +6467,14 @@ func (s *AVBufferPool) RawPtr() unsafe.Pointer {
 // --- Struct AVChannelCustom ---
 
 // AVChannelCustom wraps AVChannelCustom.
+/*
+  An AVChannelCustom defines a single channel within a custom order layout
+
+  Unlike most structures in FFmpeg, sizeof(AVChannelCustom) is a part of the
+  public ABI.
+
+  No new fields may be added to it without a major version bump.
+*/
 type AVChannelCustom struct {
 	ptr *C.AVChannelCustom
 }
@@ -6291,6 +6512,36 @@ func (s *AVChannelCustom) SetOpaque(value unsafe.Pointer) {
 // --- Struct AVChannelLayout ---
 
 // AVChannelLayout wraps AVChannelLayout.
+/*
+  An AVChannelLayout holds information about the channel layout of audio data.
+
+  A channel layout here is defined as a set of channels ordered in a specific
+  way (unless the channel order is AV_CHANNEL_ORDER_UNSPEC, in which case an
+  AVChannelLayout carries only the channel count).
+  All orders may be treated as if they were AV_CHANNEL_ORDER_UNSPEC by
+  ignoring everything but the channel count, as long as av_channel_layout_check()
+  considers they are valid.
+
+  Unlike most structures in FFmpeg, sizeof(AVChannelLayout) is a part of the
+  public ABI and may be used by the caller. E.g. it may be allocated on stack
+  or embedded in caller-defined structs.
+
+  AVChannelLayout can be initialized as follows:
+  - default initialization with {0}, followed by setting all used fields
+    correctly;
+  - by assigning one of the predefined AV_CHANNEL_LAYOUT_* initializers;
+  - with a constructor function, such as av_channel_layout_default(),
+    av_channel_layout_from_mask() or av_channel_layout_from_string().
+
+  The channel layout must be unitialized with av_channel_layout_uninit()
+
+  Copying an AVChannelLayout via assigning is forbidden,
+  av_channel_layout_copy() must be used instead (and its return value should
+  be checked)
+
+  No new fields may be added to it without a major version bump, except for
+  new elements of the union fitting in sizeof(uint64_t).
+*/
 type AVChannelLayout struct {
 	ptr *C.AVChannelLayout
 }
@@ -6380,6 +6631,12 @@ func (s *AVDictionary) RawPtr() unsafe.Pointer {
 // --- Struct AVFrameSideData ---
 
 // AVFrameSideData wraps AVFrameSideData.
+/*
+  Structure to hold side data for an AVFrame.
+
+  sizeof(AVFrameSideData) is not a part of the public ABI, so new fields may be added
+  to the end with a minor bump.
+*/
 type AVFrameSideData struct {
 	ptr *C.AVFrameSideData
 }
@@ -6451,6 +6708,17 @@ func (s *AVFrameSideData) SetBuf(value *AVBufferRef) {
 // --- Struct AVRegionOfInterest ---
 
 // AVRegionOfInterest wraps AVRegionOfInterest.
+/*
+  Structure describing a single Region Of Interest.
+
+  When multiple regions are defined in a single side-data block, they
+  should be ordered from most to least important - some encoders are only
+  capable of supporting a limited number of distinct regions, so will have
+  to truncate the list.
+
+  When overlapping regions are defined, the first region containing a given
+  area of the frame applies.
+*/
 type AVRegionOfInterest struct {
 	ptr *C.AVRegionOfInterest
 }
@@ -6515,6 +6783,36 @@ func (s *AVRegionOfInterest) SetQoffset(value *AVRational) {
 // --- Struct AVFrame ---
 
 // AVFrame wraps AVFrame.
+/*
+  This structure describes decoded (raw) audio or video data.
+
+  AVFrame must be allocated using av_frame_alloc(). Note that this only
+  allocates the AVFrame itself, the buffers for the data must be managed
+  through other means (see below).
+  AVFrame must be freed with av_frame_free().
+
+  AVFrame is typically allocated once and then reused multiple times to hold
+  different data (e.g. a single AVFrame to hold frames received from a
+  decoder). In such a case, av_frame_unref() will free any references held by
+  the frame and reset it to its original clean state before it
+  is reused again.
+
+  The data described by an AVFrame is usually reference counted through the
+  AVBuffer API. The underlying buffer references are stored in AVFrame.buf /
+  AVFrame.extended_buf. An AVFrame is considered to be reference counted if at
+  least one reference is set, i.e. if AVFrame.buf[0] != NULL. In such a case,
+  every single data plane must be contained in one of the buffers in
+  AVFrame.buf or AVFrame.extended_buf.
+  There may be a single buffer for all the data, or one separate buffer for
+  each plane, or anything in between.
+
+  sizeof(AVFrame) is not a part of the public ABI, so new fields may be added
+  to the end with a minor bump.
+
+  Fields can be accessed through AVOptions, the name string used, matches the
+  C structure field name for fields accessible through AVOptions. The AVClass
+  for AVFrame can be obtained from avcodec_get_frame_class()
+*/
 type AVFrame struct {
 	ptr *C.AVFrame
 }
@@ -7023,6 +7321,23 @@ func (s *AVHWDeviceInternal) RawPtr() unsafe.Pointer {
 // --- Struct AVHWDeviceContext ---
 
 // AVHWDeviceContext wraps AVHWDeviceContext.
+/*
+  This struct aggregates all the (hardware/vendor-specific) "high-level" state,
+  i.e. state that is not tied to a concrete processing configuration.
+  E.g., in an API that supports hardware-accelerated encoding and decoding,
+  this struct will (if possible) wrap the state that is common to both encoding
+  and decoding and from which specific instances of encoders or decoders can be
+  derived.
+
+  This struct is reference-counted with the AVBuffer mechanism. The
+  av_hwdevice_ctx_alloc() constructor yields a reference, whose data field
+  points to the actual AVHWDeviceContext. Further objects derived from
+  AVHWDeviceContext (such as AVHWFramesContext, describing a frame pool with
+  specific properties) will hold an internal reference to it. After all the
+  references are released, the AVHWDeviceContext itself will be freed,
+  optionally invoking a user-specified callback for uninitializing the hardware
+  state.
+*/
 type AVHWDeviceContext struct {
 	ptr *C.AVHWDeviceContext
 }
@@ -7107,6 +7422,16 @@ func (s *AVHWFramesInternal) RawPtr() unsafe.Pointer {
 // --- Struct AVHWFramesContext ---
 
 // AVHWFramesContext wraps AVHWFramesContext.
+/*
+  This struct describes a set or pool of "hardware" frames (i.e. those with
+  data not located in normal system memory). All the frames in the pool are
+  assumed to be allocated in the same way and interchangeable.
+
+  This struct is reference-counted with the AVBuffer mechanism and tied to a
+  given AVHWDeviceContext instance. The av_hwframe_ctx_alloc() constructor
+  yields a reference, whose data field points to the actual AVHWFramesContext
+  struct.
+*/
 type AVHWFramesContext struct {
 	ptr *C.AVHWFramesContext
 }
@@ -7267,6 +7592,12 @@ func (s *AVHWFramesContext) SetHeight(value int) {
 // --- Struct AVHWFramesConstraints ---
 
 // AVHWFramesConstraints wraps AVHWFramesConstraints.
+/*
+  This struct describes the constraints on hardware frames attached to
+  a given device with a hardware-specific configuration.  This is returned
+  by av_hwdevice_get_hwframe_constraints() and must be freed by
+  av_hwframe_constraints_free() after use.
+*/
 type AVHWFramesConstraints struct {
 	ptr *C.AVHWFramesConstraints
 }
@@ -7318,6 +7649,11 @@ func (s *AVHWFramesConstraints) SetMaxHeight(value int) {
 // --- Struct AVClass ---
 
 // AVClass wraps AVClass.
+/*
+  Describe the class of an AVClass context structure. That is an
+  arbitrary struct of which the first field is a pointer to an
+  AVClass struct (e.g. AVCodecContext, AVFormatContext etc.).
+*/
 type AVClass struct {
 	ptr *C.AVClass
 }
@@ -7400,6 +7736,8 @@ func (s *AVClass) SetCategory(value AVClassCategory) {
 // --- Struct AVOption ---
 
 // AVOption wraps AVOption.
+//
+//	AVOption
 type AVOption struct {
 	ptr *C.AVOption
 }
@@ -7484,6 +7822,8 @@ func (s *AVOption) SetUnit(value *CStr) {
 // --- Struct AVOptionRange ---
 
 // AVOptionRange wraps AVOptionRange.
+//
+//	A single allowed range of values, or a single allowed value.
 type AVOptionRange struct {
 	ptr *C.AVOptionRange
 }
@@ -7548,6 +7888,8 @@ func (s *AVOptionRange) SetIsRange(value int) {
 // --- Struct AVOptionRanges ---
 
 // AVOptionRanges wraps AVOptionRanges.
+//
+//	List of AVOptionRange structs.
 type AVOptionRanges struct {
 	ptr *C.AVOptionRanges
 }
@@ -7586,6 +7928,8 @@ func (s *AVOptionRanges) SetNbComponents(value int) {
 // --- Struct AVRational ---
 
 // AVRational wraps AVRational.
+//
+//	Rational number (pair of numerator and denominator).
 type AVRational struct {
 	value C.AVRational
 }

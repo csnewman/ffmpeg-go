@@ -269,6 +269,25 @@ func processComment(in string) string {
 		s = strings.TrimSpace(s)
 		s = strings.TrimPrefix(s, "* ")
 
+		if strings.HasPrefix(s, "/**") {
+			rebuilt = nil
+			s = strings.TrimPrefix(s, "/** ")
+
+			if strings.TrimSpace(s) == "" {
+				continue
+			}
+		}
+
+		if strings.HasPrefix(s, "@defgroup") || strings.HasPrefix(s, "@ingroup") ||
+			strings.HasPrefix(s, "@addtogroup") || strings.HasPrefix(s, "@}") {
+			continue
+		}
+
+		if strings.HasPrefix(s, "@{") {
+			rebuilt = nil
+			continue
+		}
+
 		if s == "*" {
 			s = ""
 		}
@@ -279,6 +298,7 @@ func processComment(in string) string {
 
 	txt = strings.Join(rebuilt, "\n")
 	txt = strings.TrimRightFunc(txt, unicode.IsSpace)
+
 	return txt
 }
 
@@ -374,9 +394,12 @@ func (p *Parser) parseEnum(indent string, c clang.Cursor, typedef bool) {
 		return
 	}
 
+	comment := processComment(c.RawCommentText())
+
 	enum := &Enum{
 		Name:     name,
 		Typedefd: typedef,
+		Comment:  comment,
 	}
 
 	c.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
@@ -413,9 +436,12 @@ func (p *Parser) parseStruct(indent string, c clang.Cursor, typedef bool) {
 		return
 	}
 
+	comment := processComment(c.RawCommentText())
+
 	s := &Struct{
 		Name:     name,
 		Typedefd: typedef,
+		Comment:  comment,
 	}
 
 	c.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {

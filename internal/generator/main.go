@@ -10,6 +10,7 @@ func main() {
 	m := Parse()
 
 	m.structs["AVRational"].ByValue = true
+	m.enums["AVOptionType"].Comment = ""
 
 	Gen(m)
 }

@@ -95,6 +95,10 @@ func (g *Generator) generateEnums() {
 
 		o.Commentf("%v wraps %v.", goName, enum.Name)
 
+		if enum.Comment != "" {
+			o.Comment(enum.Comment)
+		}
+
 		cName := enum.CName()
 
 		o.Type().Id(goName).Qual("C", cName)
@@ -137,6 +141,10 @@ func (g *Generator) generateStructs() {
 		goName := st.Name
 
 		o.Commentf("%v wraps %v.", goName, st.Name)
+
+		if st.Comment != "" {
+			o.Comment(st.Comment)
+		}
 
 		cName := st.CName()
 

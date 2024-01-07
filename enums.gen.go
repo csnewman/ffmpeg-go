@@ -63,6 +63,21 @@ const (
 // --- Enum AVCodecID ---
 
 // AVCodecID wraps AVCodecID.
+/*
+  Identify the syntax and semantics of the bitstream.
+  The principle is roughly:
+  Two decoders with the same ID can decode the same streams.
+  Two encoders with the same ID can encode compatible streams.
+  There may be slight deviations from the principle due to implementation
+  details.
+
+  If you add a codec ID to this list, add it so that
+  1. no value of an existing codec ID changes (that would break ABI),
+  2. it is as close as possible to similar codecs
+
+  After adding new codec IDs, do not forget to add an entry to the codec
+  descriptor list and bump libavcodec minor version.
+*/
 type AVCodecID C.enum_AVCodecID
 
 const (
@@ -1287,6 +1302,10 @@ const (
 // --- Enum AVDurationEstimationMethod ---
 
 // AVDurationEstimationMethod wraps AVDurationEstimationMethod.
+/*
+  The duration of a video can be estimated through various ways, and this enum can be used
+  to know how the duration was estimated.
+*/
 type AVDurationEstimationMethod C.enum_AVDurationEstimationMethod
 
 const (
@@ -1317,6 +1336,8 @@ const (
 // --- Enum AVIODirEntryType ---
 
 // AVIODirEntryType wraps AVIODirEntryType.
+//
+//	Directory entry types.
 type AVIODirEntryType C.enum_AVIODirEntryType
 
 const (
@@ -1347,6 +1368,10 @@ const (
 // --- Enum AVIODataMarkerType ---
 
 // AVIODataMarkerType wraps AVIODataMarkerType.
+/*
+  Different data types that can be returned via the AVIO
+  write_data_type callback.
+*/
 type AVIODataMarkerType C.enum_AVIODataMarkerType
 
 const (
@@ -1367,6 +1392,8 @@ const (
 // --- Enum AVMediaType ---
 
 // AVMediaType wraps AVMediaType.
+//
+//	@brief Media Type
 type AVMediaType C.enum_AVMediaType
 
 const (
@@ -1531,6 +1558,8 @@ const (
 // --- Enum AVFrameSideDataType ---
 
 // AVFrameSideDataType wraps AVFrameSideDataType.
+//
+//	AVFrame is an abstraction for reference-counted raw multimedia data.
 type AVFrameSideDataType C.enum_AVFrameSideDataType
 
 const (
@@ -1703,6 +1732,8 @@ const (
 // --- Enum AVRounding ---
 
 // AVRounding wraps AVRounding.
+//
+//	Rounding methods.
 type AVRounding C.enum_AVRounding
 
 const (
@@ -1771,6 +1802,35 @@ const (
 // --- Enum AVPixelFormat ---
 
 // AVPixelFormat wraps AVPixelFormat.
+/*
+  Pixel format.
+
+  @note
+  AV_PIX_FMT_RGB32 is handled in an endian-specific manner. An RGBA
+  color is put together as:
+   (A << 24) | (R << 16) | (G << 8) | B
+  This is stored as BGRA on little-endian CPU architectures and ARGB on
+  big-endian CPUs.
+
+  @note
+  If the resolution is not a multiple of the chroma subsampling factor
+  then the chroma plane resolution must be rounded up.
+
+  @par
+  When the pixel format is palettized RGB32 (AV_PIX_FMT_PAL8), the palettized
+  image data is stored in AVFrame.data[0]. The palette is transported in
+  AVFrame.data[1], is 1024 bytes long (256 4-byte entries) and is
+  formatted the same as in AV_PIX_FMT_RGB32 described above (i.e., it is
+  also endian-specific). Note also that the individual RGB32 palette
+  components stored in AVFrame.data[1] should be in the range 0..255.
+  This is important as many custom PAL8 video codecs that were designed
+  to run on the IBM VGA graphics adapter use 6-bit palette components.
+
+  @par
+  For all the 8 bits per pixel formats, an RGB32 palette is in data[1] like
+  for pal8. This palette is filled in automatically by the function
+  allocating the picture.
+*/
 type AVPixelFormat C.enum_AVPixelFormat
 
 const (
@@ -2233,6 +2293,10 @@ const (
 // --- Enum AVColorPrimaries ---
 
 // AVColorPrimaries wraps AVColorPrimaries.
+/*
+  Chromaticity coordinates of the source primaries.
+  These values match the ones defined by ISO/IEC 23091-2_2019 subclause 8.1 and ITU-T H.273.
+*/
 type AVColorPrimaries C.enum_AVColorPrimaries
 
 const (
@@ -2275,6 +2339,10 @@ const (
 // --- Enum AVColorTransferCharacteristic ---
 
 // AVColorTransferCharacteristic wraps AVColorTransferCharacteristic.
+/*
+  Color Transfer Characteristic.
+  These values match the ones defined by ISO/IEC 23091-2_2019 subclause 8.2.
+*/
 type AVColorTransferCharacteristic C.enum_AVColorTransferCharacteristic
 
 const (
@@ -2327,6 +2395,10 @@ const (
 // --- Enum AVColorSpace ---
 
 // AVColorSpace wraps AVColorSpace.
+/*
+  YUV colorspace type.
+  These values match the ones defined by ISO/IEC 23091-2_2019 subclause 8.3.
+*/
 type AVColorSpace C.enum_AVColorSpace
 
 const (
@@ -2369,6 +2441,25 @@ const (
 // --- Enum AVColorRange ---
 
 // AVColorRange wraps AVColorRange.
+/*
+  Visual content value range.
+
+  These values are based on definitions that can be found in multiple
+  specifications, such as ITU-T BT.709 (3.4 - Quantization of RGB, luminance
+  and colour-difference signals), ITU-T BT.2020 (Table 5 - Digital
+  Representation) as well as ITU-T BT.2100 (Table 9 - Digital 10- and 12-bit
+  integer representation). At the time of writing, the BT.2100 one is
+  recommended, as it also defines the full range representation.
+
+  Common definitions:
+    - For RGB and luma planes such as Y in YCbCr and I in ICtCp,
+      'E' is the original value in range of 0.0 to 1.0.
+    - For chroma planes such as Cb,Cr and Ct,Cp, 'E' is the original
+      value in range of -0.5 to 0.5.
+    - 'n' is the output bit depth.
+    - For additional definitions such as rounding and clipping to valid n
+      bit unsigned integer range, please refer to BT.2100 (Table 9).
+*/
 type AVColorRange C.enum_AVColorRange
 
 const (
@@ -2385,6 +2476,21 @@ const (
 // --- Enum AVChromaLocation ---
 
 // AVChromaLocation wraps AVChromaLocation.
+/*
+  Location of chroma samples.
+
+  Illustration showing the location of the first (top left) chroma sample of the
+  image, the left shows only luma, the right
+  shows the location of the chroma sample, the 2 could be imagined to overlay
+  each other but are drawn separately due to limitations of ASCII
+
+                 1st 2nd       1st 2nd horizontal luma sample positions
+                  v   v         v   v
+                  ______        ______
+  *1st luma line > |X   X ...    |3 4 X ...     X are luma samples,
+                 |             |1 2           1-6 are possible chroma positions
+  *2nd luma line > |X   X ...    |5 6 X ...     0 is undefined/unknown position
+*/
 type AVChromaLocation C.enum_AVChromaLocation
 
 const (
@@ -2409,6 +2515,26 @@ const (
 // --- Enum AVSampleFormat ---
 
 // AVSampleFormat wraps AVSampleFormat.
+/*
+  Audio sample formats
+
+  - The data described by the sample format is always in native-endian order.
+    Sample values can be expressed by native C types, hence the lack of a signed
+    24-bit sample format even though it is a common raw audio data format.
+
+  - The floating-point formats are based on full volume being in the range
+    [-1.0, 1.0]. Any values outside this range are beyond full volume level.
+
+  - The data layout as used in av_samples_fill_arrays() and elsewhere in FFmpeg
+    (such as AVFrame in libavcodec) is as follows:
+
+  @par
+  For planar sample formats, each audio channel is in a separate data plane,
+  and linesize is the buffer size, in bytes, for a single plane. All data
+  planes must be the same size. For packed sample formats, only the first data
+  plane is used, and samples for each channel are interleaved. In this case,
+  linesize is the buffer size, in bytes, for the 1 plane.
+*/
 type AVSampleFormat C.enum_AVSampleFormat
 
 const (
