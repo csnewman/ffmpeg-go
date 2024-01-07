@@ -4551,10 +4551,8 @@ func (s *AVDeviceInfoList) RawPtr() unsafe.Pointer {
 // --- Struct AVCodecTag ---
 
 // AVCodecTag wraps AVCodecTag.
-/*
-  /*************************************************/
-/* input/output formats
- */
+//
+//	input/output formats
 type AVCodecTag struct {
 	ptr *C.struct_AVCodecTag
 }

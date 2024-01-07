@@ -58,7 +58,7 @@ type Field struct {
 type Enum struct {
 	Name      string
 	Typedefd  bool
-	Constants []string
+	Constants []*Constant
 	Comment   string
 }
 
@@ -73,4 +73,5 @@ func (s *Enum) CName() string {
 type Constant struct {
 	Name     string
 	FromEnum bool
+	Comment  string
 }

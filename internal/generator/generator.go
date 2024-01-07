@@ -106,13 +106,15 @@ func (g *Generator) generateEnums() {
 		var valDefs []jen.Code
 
 		for _, constant := range enum.Constants {
-			constName := g.convCamel(constant)
+			constName := g.convCamel(constant.Name)
 
-			valDefs = append(
-				valDefs,
-				jen.Commentf("%v wraps %v.", constName, constant),
-				jen.Id(constName).Id(goName).Op("=").Qual("C", constant),
-			)
+			valDefs = append(valDefs, jen.Commentf("%v wraps %v.", constName, constant.Name))
+
+			if constant.Comment != "" {
+				valDefs = append(valDefs, jen.Comment(constant.Comment))
+			}
+
+			valDefs = append(valDefs, jen.Id(constName).Id(goName).Op("=").Qual("C", constant.Name))
 		}
 
 		if len(valDefs) > 0 {

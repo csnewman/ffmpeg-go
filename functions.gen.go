@@ -5286,10 +5286,8 @@ func AVFormatQueryCodec(ofmt *AVOutputFormat, codecId AVCodecID, stdCompliance i
 // --- Function avformat_get_riff_video_tags ---
 
 // AVFormatGetRiffVideoTags wraps avformat_get_riff_video_tags.
-/*
-  /**
-  @return the table mapping RIFF FourCCs for video to libavcodec AVCodecID.
-*/
+//
+//	@return the table mapping RIFF FourCCs for video to libavcodec AVCodecID.
 func AVFormatGetRiffVideoTags() *AVCodecTag {
 	ret := C.avformat_get_riff_video_tags()
 	var retMapped *AVCodecTag
@@ -10282,7 +10280,6 @@ func AVOptGetDictVal(obj unsafe.Pointer, name *CStr, searchFlags int, outVal **A
 
 // AVOptPtr wraps av_opt_ptr.
 /*
-  /**
   Gets a pointer to the requested field in a struct.
   This function allows accessing a struct even when its fields are moved or
   renamed since the application making the access has been compiled,

@@ -268,10 +268,23 @@ func processComment(in string) string {
 	for _, s := range strings.Split(txt, "\n") {
 		s = strings.TrimSpace(s)
 		s = strings.TrimPrefix(s, "* ")
+		s = strings.TrimPrefix(s, "/// ")
+		s = strings.TrimPrefix(s, "///")
 
 		if strings.HasPrefix(s, "/**") {
 			rebuilt = nil
 			s = strings.TrimPrefix(s, "/** ")
+			s = strings.TrimPrefix(s, "/**")
+
+			if strings.TrimSpace(s) == "" {
+				continue
+			}
+		}
+
+		if strings.HasPrefix(s, "/*") {
+			rebuilt = nil
+			s = strings.TrimPrefix(s, "/* ")
+			s = strings.TrimPrefix(s, "/*")
 
 			if strings.TrimSpace(s) == "" {
 				continue
@@ -298,6 +311,16 @@ func processComment(in string) string {
 
 	txt = strings.Join(rebuilt, "\n")
 	txt = strings.TrimRightFunc(txt, unicode.IsSpace)
+
+	if strings.Count(txt, "\n") == 0 {
+		txt = strings.TrimLeftFunc(txt, unicode.IsSpace)
+		txt = strings.TrimPrefix(txt, "<")
+		txt = fmt.Sprintf("  %v", txt)
+	}
+
+	if strings.TrimSpace(txt) == "" {
+		return ""
+	}
 
 	return txt
 }
@@ -407,7 +430,12 @@ func (p *Parser) parseEnum(indent string, c clang.Cursor, typedef bool) {
 			log.Panicln("Unknown enum type", "kind", cursor.Kind().String())
 		}
 
-		enum.Constants = append(enum.Constants, cursor.Spelling())
+		comment := processComment(cursor.RawCommentText())
+
+		enum.Constants = append(enum.Constants, &Constant{
+			Name:    cursor.Spelling(),
+			Comment: comment,
+		})
 
 		return clang.ChildVisit_Continue
 	})
