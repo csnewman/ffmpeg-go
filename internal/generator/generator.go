@@ -216,6 +216,57 @@ func (g *Generator) generateStructs() {
 				Block(jen.Return(jen.Qual("unsafe", "Pointer").Params(jen.Id("s").Dot("ptr"))))
 
 			o.Line()
+
+			o.Func().
+				Id(fmt.Sprintf("To%vArray", goName)).
+				Params(jen.Id("ptr").Qual("unsafe", "Pointer")).
+				Op("*").Id("Array").Types(jen.Op("*").Id(goName)).
+				Block(
+					jen.If(jen.Id("ptr").Op("==").Id("nil")).Block(
+						jen.Return(jen.Id("nil")),
+					),
+					jen.Line(),
+					jen.Return(
+						jen.Op("&").Id("Array").Types(jen.Op("*").Id(goName)).Values(jen.Dict{
+							jen.Id("ptr"):      jen.Id("ptr"),
+							jen.Id("elemSize"): jen.Id("ptrSize"),
+
+							jen.Id("loadPtr"): jen.Func().
+								Params(jen.Id("pointer").Qual("unsafe", "Pointer")).
+								Op("*").Id(goName).
+								Block(
+									jen.Id("ptr").Op(":=").Parens(jen.Op("**").Qual("C", cName)).Parens(jen.Id("pointer")),
+									jen.Id("value").Op(":=").Op("*").Id("ptr"),
+
+									jen.Var().Id("valueMapped").Op("*").Id(goName),
+									jen.If(jen.Id("value").Op("!=").Id("nil")).Block(
+										jen.Id("valueMapped").Op("=").Op("&").Id(goName).Values(jen.Dict{
+											jen.Id("ptr"): jen.Id("value"),
+										}),
+									),
+									jen.Return(jen.Id("valueMapped")),
+								),
+
+							jen.Id("storePtr"): jen.Func().
+								Params(
+									jen.Id("pointer").Qual("unsafe", "Pointer"),
+									jen.Id("value").Op("*").Id(goName),
+								).
+								Block(
+									jen.Id("ptr").Op(":=").Parens(jen.Op("**").Qual("C", cName)).Parens(jen.Id("pointer")),
+
+									jen.If(jen.Id("value").Op("!=").Id("nil")).Block(
+										jen.Op("*").Id("ptr").Op("=").Id("value").Dot("ptr"),
+									).Else().Block(
+										jen.Op("*").Id("ptr").Op("=").Id("nil"),
+									),
+								),
+						}),
+					),
+				)
+
+			o.Line()
+
 		}
 
 	fieldLoop:
@@ -236,35 +287,24 @@ func (g *Generator) generateStructs() {
 				tgt        *jen.Statement
 			)
 
-			genType := field.Type
-
 			if field.BitWidth != -1 {
 				o.Commentf("%v skipped due to bitfield", fName)
 				o.Line()
 
 				continue fieldLoop
-			} else if iv, ok := field.Type.(*ConstArray); ok {
-
-				fName = fmt.Sprintf("%vEntry", fName)
-
-				getParams = append(getParams, jen.Id("i").Id("uint"))
-				setParams = append(setParams, jen.Id("i").Id("uint"))
-
+			} else if _, ok := field.Type.(*ConstArray); ok {
 				if st.ByValue {
-					getBody = append(
-						getBody,
-						jen.Id("value").Op(":=").Id("s").Dot("value").Dot(cName).Index(jen.Id("i")),
-					)
-					tgt = jen.Id("s").Dot("value").Dot(cName).Index(jen.Id("i"))
+					o.Commentf("%v skipped due to const array of value structs", fName)
+					o.Line()
+
+					continue fieldLoop
 				} else {
 					getBody = append(
 						getBody,
-						jen.Id("value").Op(":=").Id("s").Dot("ptr").Dot(cName).Index(jen.Id("i")),
+						jen.Id("value").Op(":=").Op("&").Id("s").Dot("ptr").Dot(cName),
 					)
-					tgt = jen.Id("s").Dot("ptr").Dot(cName).Index(jen.Id("i"))
 				}
 
-				genType = iv.Inner
 			} else {
 				if st.ByValue {
 					getBody = append(
@@ -281,7 +321,7 @@ func (g *Generator) generateStructs() {
 				}
 			}
 
-			switch v := genType.(type) {
+			switch v := field.Type.(type) {
 
 			case *IdentType:
 
@@ -462,27 +502,27 @@ func (g *Generator) generateStructs() {
 						if st, ok := g.input.structs[iiv.Name]; ok {
 
 							getRetType = []jen.Code{
-								jen.Op("*").Id(iiv.Name),
+								jen.Op("*").Id("Array").Types(jen.Op("*").Id(iiv.Name)),
 							}
 
-							cName := st.CName()
-							getParams = append(getParams, jen.Id("i").Id("uint"))
-							fName = fmt.Sprintf("%vEntry", fName)
+							getBody = append(
+								getBody,
+								jen.Return(jen.Id(fmt.Sprintf("To%vArray", iiv.Name)).Params(
+									jen.Qual("unsafe", "Pointer").Params(jen.Id("value")),
+								)),
+							)
 
-							getBody = append(getBody,
-								jen.Id("ptr").Op(":=").Id("arrayGet").
-									Types(jen.Op("*").Qual("C", cName)).
-									Params(
-										jen.Id("value"),
-										jen.Id("uintptr").Params(jen.Id("i")),
-									),
-								jen.Var().Id("valueMapped").Op("*").Id(iiv.Name),
-								jen.If(jen.Id("ptr").Op("!=").Id("nil")).Block(
-									jen.Id("valueMapped").Op("=").Op("&").Id(iiv.Name).Values(jen.Dict{
-										jen.Id("ptr"): jen.Id("ptr"),
-									}),
+							setParams = append(setParams, jen.Id("value").Op("*").Id("Array").Types(jen.Id(iiv.Name)))
+
+							cName := st.CName()
+
+							setBody = append(
+								setBody,
+								jen.If(jen.Id("value").Op("!=").Id("nil")).Block(
+									tgt.Clone().Op("=").Params(jen.Op("**").Qual("C", cName)).Params(jen.Id("value").Dot("ptr")),
+								).Else().Block(
+									tgt.Clone().Op("=").Id("nil"),
 								),
-								jen.Return(jen.Id("valueMapped")),
 							)
 						} else {
 							o.Commentf("%v skipped due to unknown ptr ptr", fName)
@@ -500,10 +540,81 @@ func (g *Generator) generateStructs() {
 				}
 
 			case *ConstArray:
-				o.Commentf("%v skipped due to const array", fName)
-				o.Line()
+				switch iv := v.Inner.(type) {
+				case *IdentType:
+					if pt, ok := primTypes[iv.Name]; ok {
+						getRetType = []jen.Code{
+							jen.Op("*").Id("Array").Types(jen.Id(pt)),
+						}
 
-				continue fieldLoop
+						goName := strcase.ToCamel(pt)
+
+						getBody = append(
+							getBody,
+							jen.Return(jen.Id(fmt.Sprintf("To%vArray", goName)).Params(
+								jen.Qual("unsafe", "Pointer").Params(jen.Id("value")),
+							)),
+						)
+					} else {
+						o.Commentf("%v skipped due to unknown const array", fName)
+						o.Line()
+
+						continue fieldLoop
+					}
+
+				case *PointerType:
+
+					switch iiv := iv.Inner.(type) {
+					case *IdentType:
+						if iiv.Name == "uint8_t" {
+							getRetType = []jen.Code{
+								jen.Op("*").Id("Array").Types(jen.Qual("unsafe", "Pointer")),
+							}
+
+							getBody = append(
+								getBody,
+								jen.Return(jen.Id("ToUint8PtrArray").Params(
+									jen.Qual("unsafe", "Pointer").Params(jen.Id("value")),
+								)),
+							)
+						} else if st, ok := g.input.structs[iiv.Name]; ok {
+							if st.ByValue {
+								o.Commentf("%v skipped due to value ident ptr const array", fName)
+								o.Line()
+
+								continue fieldLoop
+							}
+
+							getRetType = []jen.Code{
+								jen.Op("*").Id("Array").Types(jen.Op("*").Id(iiv.Name)),
+							}
+
+							getBody = append(
+								getBody,
+								jen.Return(jen.Id(fmt.Sprintf("To%vArray", iiv.Name)).Params(
+									jen.Qual("unsafe", "Pointer").Params(jen.Id("value")),
+								)),
+							)
+						} else {
+							o.Commentf("%v skipped due to ident pointer const array", fName)
+							o.Line()
+
+							continue fieldLoop
+						}
+
+					default:
+						log.Panicln("unexpected type", reflect.TypeOf(iv.Inner))
+					}
+
+				case *ConstArray:
+					o.Commentf("%v skipped due to multi dim const array", fName)
+					o.Line()
+
+					continue fieldLoop
+
+				default:
+					log.Panicln("unexpected type", reflect.TypeOf(v.Inner))
+				}
 
 			case *UnionType:
 				o.Commentf("%v skipped due to union type", fName)

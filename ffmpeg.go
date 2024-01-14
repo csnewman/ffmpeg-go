@@ -15,6 +15,13 @@ import (
 */
 import "C"
 
+const (
+	ptrSize   = uintptr(C.sizeof_size_t)
+	intSize   = uintptr(C.sizeof_int)
+	int8Size  = uintptr(C.sizeof_int8_t)
+	int64Size = uintptr(C.sizeof_int64_t)
+)
+
 var AVTimeBaseQ = &AVRational{value: C.AV_TIME_BASE_Q}
 
 var (
@@ -41,12 +48,6 @@ func WrapErr(code int) error {
 	}
 
 	return AVError{Code: code}
-}
-
-func arrayGet[T any](array *T, i uintptr) T {
-	var inner T
-	ptrPtr := (*T)(unsafe.Add(unsafe.Pointer(array), i*unsafe.Sizeof(inner)))
-	return *ptrPtr
 }
 
 type CStr struct {
@@ -116,4 +117,99 @@ func (a *Array[T]) Free() {
 
 func (a *Array[T]) RawPtr() unsafe.Pointer {
 	return a.ptr
+}
+
+func ToIntArray(ptr unsafe.Pointer) *Array[int] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[int]{
+		elemSize: intSize,
+		loadPtr: func(pointer unsafe.Pointer) int {
+			ptr := (*C.int)(pointer)
+			return int(*ptr)
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value int) {
+			ptr := (*C.int)(pointer)
+			*ptr = C.int(value)
+		},
+	}
+}
+
+func ToUint8Array(ptr unsafe.Pointer) *Array[uint8] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[uint8]{
+		elemSize: int8Size,
+		loadPtr: func(pointer unsafe.Pointer) uint8 {
+			ptr := (*C.uint8_t)(pointer)
+			return uint8(*ptr)
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value uint8) {
+			ptr := (*C.uint8_t)(pointer)
+			*ptr = C.uint8_t(value)
+		},
+	}
+}
+
+func ToInt64Array(ptr unsafe.Pointer) *Array[int64] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[int64]{
+		elemSize: int64Size,
+		loadPtr: func(pointer unsafe.Pointer) int64 {
+			ptr := (*C.int64_t)(pointer)
+			return int64(*ptr)
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value int64) {
+			ptr := (*C.int64_t)(pointer)
+			*ptr = C.int64_t(value)
+		},
+	}
+}
+
+func ToUint64Array(ptr unsafe.Pointer) *Array[uint64] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[uint64]{
+		elemSize: int64Size,
+		loadPtr: func(pointer unsafe.Pointer) uint64 {
+			ptr := (*C.uint64_t)(pointer)
+			return uint64(*ptr)
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value uint64) {
+			ptr := (*C.uint64_t)(pointer)
+			*ptr = C.uint64_t(value)
+		},
+	}
+}
+
+func ToUint8PtrArray(ptr unsafe.Pointer) *Array[unsafe.Pointer] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[unsafe.Pointer]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) unsafe.Pointer {
+			ptr := (*unsafe.Pointer)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value unsafe.Pointer) {
+			ptr := (*unsafe.Pointer)(pointer)
+			*ptr = value
+		},
+	}
 }

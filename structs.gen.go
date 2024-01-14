@@ -41,6 +41,34 @@ func (s *RcOverride) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToRcOverrideArray(ptr unsafe.Pointer) *Array[*RcOverride] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*RcOverride]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *RcOverride {
+			ptr := (**C.RcOverride)(pointer)
+			value := *ptr
+			var valueMapped *RcOverride
+			if value != nil {
+				valueMapped = &RcOverride{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *RcOverride) {
+			ptr := (**C.RcOverride)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 func (s *RcOverride) StartFrame() int {
 	value := s.ptr.start_frame
 	return int(value)
@@ -88,6 +116,34 @@ func (s *AVCodecInternal) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVCodecInternalArray(ptr unsafe.Pointer) *Array[*AVCodecInternal] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVCodecInternal]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVCodecInternal {
+			ptr := (**C.struct_AVCodecInternal)(pointer)
+			value := *ptr
+			var valueMapped *AVCodecInternal
+			if value != nil {
+				valueMapped = &AVCodecInternal{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVCodecInternal) {
+			ptr := (**C.struct_AVCodecInternal)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 // --- Struct AVCodecContext ---
 
 // AVCodecContext wraps AVCodecContext.
@@ -110,6 +166,34 @@ type AVCodecContext struct {
 
 func (s *AVCodecContext) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVCodecContextArray(ptr unsafe.Pointer) *Array[*AVCodecContext] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVCodecContext]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVCodecContext {
+			ptr := (**C.AVCodecContext)(pointer)
+			value := *ptr
+			var valueMapped *AVCodecContext
+			if value != nil {
+				valueMapped = &AVCodecContext{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVCodecContext) {
+			ptr := (**C.AVCodecContext)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVCodecContext) AvClass() *AVClass {
@@ -1082,13 +1166,9 @@ func (s *AVCodecContext) SetHwaccelContext(value unsafe.Pointer) {
 	s.ptr.hwaccel_context = value
 }
 
-func (s *AVCodecContext) ErrorEntry(i uint) uint64 {
-	value := s.ptr.error[i]
-	return uint64(value)
-}
-
-func (s *AVCodecContext) SetErrorEntry(i uint, value uint64) {
-	s.ptr.error[i] = (C.uint64_t)(value)
+func (s *AVCodecContext) Error() *Array[uint64] {
+	value := &s.ptr.error
+	return ToUint64Array(unsafe.Pointer(value))
 }
 
 func (s *AVCodecContext) DctAlgo() int {
@@ -1549,6 +1629,34 @@ func (s *AVHWAccel) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVHWAccelArray(ptr unsafe.Pointer) *Array[*AVHWAccel] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVHWAccel]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVHWAccel {
+			ptr := (**C.AVHWAccel)(pointer)
+			value := *ptr
+			var valueMapped *AVHWAccel
+			if value != nil {
+				valueMapped = &AVHWAccel{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVHWAccel) {
+			ptr := (**C.AVHWAccel)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 func (s *AVHWAccel) Name() *CStr {
 	value := s.ptr.name
 	return wrapCStr(value)
@@ -1648,6 +1756,34 @@ func (s *AVSubtitleRect) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVSubtitleRectArray(ptr unsafe.Pointer) *Array[*AVSubtitleRect] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVSubtitleRect]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVSubtitleRect {
+			ptr := (**C.AVSubtitleRect)(pointer)
+			value := *ptr
+			var valueMapped *AVSubtitleRect
+			if value != nil {
+				valueMapped = &AVSubtitleRect{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVSubtitleRect) {
+			ptr := (**C.AVSubtitleRect)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 func (s *AVSubtitleRect) X() int {
 	value := s.ptr.x
 	return int(value)
@@ -1693,22 +1829,14 @@ func (s *AVSubtitleRect) SetNbColors(value int) {
 	s.ptr.nb_colors = (C.int)(value)
 }
 
-func (s *AVSubtitleRect) DataEntry(i uint) unsafe.Pointer {
-	value := s.ptr.data[i]
-	return unsafe.Pointer(value)
+func (s *AVSubtitleRect) Data() *Array[unsafe.Pointer] {
+	value := &s.ptr.data
+	return ToUint8PtrArray(unsafe.Pointer(value))
 }
 
-func (s *AVSubtitleRect) SetDataEntry(i uint, value unsafe.Pointer) {
-	s.ptr.data[i] = (*C.uint8_t)(value)
-}
-
-func (s *AVSubtitleRect) LinesizeEntry(i uint) int {
-	value := s.ptr.linesize[i]
-	return int(value)
-}
-
-func (s *AVSubtitleRect) SetLinesizeEntry(i uint, value int) {
-	s.ptr.linesize[i] = (C.int)(value)
+func (s *AVSubtitleRect) Linesize() *Array[int] {
+	value := &s.ptr.linesize
+	return ToIntArray(unsafe.Pointer(value))
 }
 
 func (s *AVSubtitleRect) Type() AVSubtitleType {
@@ -1758,6 +1886,34 @@ func (s *AVSubtitle) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVSubtitleArray(ptr unsafe.Pointer) *Array[*AVSubtitle] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVSubtitle]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVSubtitle {
+			ptr := (**C.AVSubtitle)(pointer)
+			value := *ptr
+			var valueMapped *AVSubtitle
+			if value != nil {
+				valueMapped = &AVSubtitle{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVSubtitle) {
+			ptr := (**C.AVSubtitle)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 func (s *AVSubtitle) Format() uint16 {
 	value := s.ptr.format
 	return uint16(value)
@@ -1794,14 +1950,17 @@ func (s *AVSubtitle) SetNumRects(value uint) {
 	s.ptr.num_rects = (C.uint)(value)
 }
 
-func (s *AVSubtitle) RectsEntry(i uint) *AVSubtitleRect {
+func (s *AVSubtitle) Rects() *Array[*AVSubtitleRect] {
 	value := s.ptr.rects
-	ptr := arrayGet[*C.AVSubtitleRect](value, uintptr(i))
-	var valueMapped *AVSubtitleRect
-	if ptr != nil {
-		valueMapped = &AVSubtitleRect{ptr: ptr}
+	return ToAVSubtitleRectArray(unsafe.Pointer(value))
+}
+
+func (s *AVSubtitle) SetRects(value *Array[AVSubtitleRect]) {
+	if value != nil {
+		s.ptr.rects = (**C.AVSubtitleRect)(value.ptr)
+	} else {
+		s.ptr.rects = nil
 	}
-	return valueMapped
 }
 
 func (s *AVSubtitle) Pts() int64 {
@@ -1822,6 +1981,34 @@ type AVCodecParserContext struct {
 
 func (s *AVCodecParserContext) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVCodecParserContextArray(ptr unsafe.Pointer) *Array[*AVCodecParserContext] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVCodecParserContext]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVCodecParserContext {
+			ptr := (**C.AVCodecParserContext)(pointer)
+			value := *ptr
+			var valueMapped *AVCodecParserContext
+			if value != nil {
+				valueMapped = &AVCodecParserContext{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVCodecParserContext) {
+			ptr := (**C.AVCodecParserContext)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVCodecParserContext) PrivData() unsafe.Pointer {
@@ -1949,31 +2136,19 @@ func (s *AVCodecParserContext) SetCurFrameStartIndex(value int) {
 	s.ptr.cur_frame_start_index = (C.int)(value)
 }
 
-func (s *AVCodecParserContext) CurFrameOffsetEntry(i uint) int64 {
-	value := s.ptr.cur_frame_offset[i]
-	return int64(value)
+func (s *AVCodecParserContext) CurFrameOffset() *Array[int64] {
+	value := &s.ptr.cur_frame_offset
+	return ToInt64Array(unsafe.Pointer(value))
 }
 
-func (s *AVCodecParserContext) SetCurFrameOffsetEntry(i uint, value int64) {
-	s.ptr.cur_frame_offset[i] = (C.int64_t)(value)
+func (s *AVCodecParserContext) CurFramePts() *Array[int64] {
+	value := &s.ptr.cur_frame_pts
+	return ToInt64Array(unsafe.Pointer(value))
 }
 
-func (s *AVCodecParserContext) CurFramePtsEntry(i uint) int64 {
-	value := s.ptr.cur_frame_pts[i]
-	return int64(value)
-}
-
-func (s *AVCodecParserContext) SetCurFramePtsEntry(i uint, value int64) {
-	s.ptr.cur_frame_pts[i] = (C.int64_t)(value)
-}
-
-func (s *AVCodecParserContext) CurFrameDtsEntry(i uint) int64 {
-	value := s.ptr.cur_frame_dts[i]
-	return int64(value)
-}
-
-func (s *AVCodecParserContext) SetCurFrameDtsEntry(i uint, value int64) {
-	s.ptr.cur_frame_dts[i] = (C.int64_t)(value)
+func (s *AVCodecParserContext) CurFrameDts() *Array[int64] {
+	value := &s.ptr.cur_frame_dts
+	return ToInt64Array(unsafe.Pointer(value))
 }
 
 func (s *AVCodecParserContext) Flags() int {
@@ -1994,13 +2169,9 @@ func (s *AVCodecParserContext) SetOffset(value int64) {
 	s.ptr.offset = (C.int64_t)(value)
 }
 
-func (s *AVCodecParserContext) CurFrameEndEntry(i uint) int64 {
-	value := s.ptr.cur_frame_end[i]
-	return int64(value)
-}
-
-func (s *AVCodecParserContext) SetCurFrameEndEntry(i uint, value int64) {
-	s.ptr.cur_frame_end[i] = (C.int64_t)(value)
+func (s *AVCodecParserContext) CurFrameEnd() *Array[int64] {
+	value := &s.ptr.cur_frame_end
+	return ToInt64Array(unsafe.Pointer(value))
 }
 
 func (s *AVCodecParserContext) KeyFrame() int {
@@ -2039,13 +2210,9 @@ func (s *AVCodecParserContext) SetPtsDtsDelta(value int) {
 	s.ptr.pts_dts_delta = (C.int)(value)
 }
 
-func (s *AVCodecParserContext) CurFramePosEntry(i uint) int64 {
-	value := s.ptr.cur_frame_pos[i]
-	return int64(value)
-}
-
-func (s *AVCodecParserContext) SetCurFramePosEntry(i uint, value int64) {
-	s.ptr.cur_frame_pos[i] = (C.int64_t)(value)
+func (s *AVCodecParserContext) CurFramePos() *Array[int64] {
+	value := &s.ptr.cur_frame_pos
+	return ToInt64Array(unsafe.Pointer(value))
 }
 
 func (s *AVCodecParserContext) Pos() int64 {
@@ -2158,13 +2325,37 @@ func (s *AVCodecParser) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
-func (s *AVCodecParser) CodecIdsEntry(i uint) int {
-	value := s.ptr.codec_ids[i]
-	return int(value)
+func ToAVCodecParserArray(ptr unsafe.Pointer) *Array[*AVCodecParser] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVCodecParser]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVCodecParser {
+			ptr := (**C.AVCodecParser)(pointer)
+			value := *ptr
+			var valueMapped *AVCodecParser
+			if value != nil {
+				valueMapped = &AVCodecParser{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVCodecParser) {
+			ptr := (**C.AVCodecParser)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
-func (s *AVCodecParser) SetCodecIdsEntry(i uint, value int) {
-	s.ptr.codec_ids[i] = (C.int)(value)
+func (s *AVCodecParser) CodecIds() *Array[int] {
+	value := &s.ptr.codec_ids
+	return ToIntArray(unsafe.Pointer(value))
 }
 
 func (s *AVCodecParser) PrivDataSize() int {
@@ -2197,6 +2388,34 @@ func (s *AVProfile) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVProfileArray(ptr unsafe.Pointer) *Array[*AVProfile] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVProfile]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVProfile {
+			ptr := (**C.AVProfile)(pointer)
+			value := *ptr
+			var valueMapped *AVProfile
+			if value != nil {
+				valueMapped = &AVProfile{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVProfile) {
+			ptr := (**C.AVProfile)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 func (s *AVProfile) Profile() int {
 	value := s.ptr.profile
 	return int(value)
@@ -2226,6 +2445,34 @@ type AVCodec struct {
 
 func (s *AVCodec) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVCodecArray(ptr unsafe.Pointer) *Array[*AVCodec] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVCodec]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVCodec {
+			ptr := (**C.AVCodec)(pointer)
+			value := *ptr
+			var valueMapped *AVCodec
+			if value != nil {
+				valueMapped = &AVCodec{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVCodec) {
+			ptr := (**C.AVCodec)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVCodec) Name() *CStr {
@@ -2385,6 +2632,34 @@ func (s *AVCodecHWConfig) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVCodecHWConfigArray(ptr unsafe.Pointer) *Array[*AVCodecHWConfig] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVCodecHWConfig]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVCodecHWConfig {
+			ptr := (**C.AVCodecHWConfig)(pointer)
+			value := *ptr
+			var valueMapped *AVCodecHWConfig
+			if value != nil {
+				valueMapped = &AVCodecHWConfig{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVCodecHWConfig) {
+			ptr := (**C.AVCodecHWConfig)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 func (s *AVCodecHWConfig) PixFmt() AVPixelFormat {
 	value := s.ptr.pix_fmt
 	return AVPixelFormat(value)
@@ -2426,6 +2701,34 @@ type AVCodecDescriptor struct {
 
 func (s *AVCodecDescriptor) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVCodecDescriptorArray(ptr unsafe.Pointer) *Array[*AVCodecDescriptor] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVCodecDescriptor]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVCodecDescriptor {
+			ptr := (**C.AVCodecDescriptor)(pointer)
+			value := *ptr
+			var valueMapped *AVCodecDescriptor
+			if value != nil {
+				valueMapped = &AVCodecDescriptor{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVCodecDescriptor) {
+			ptr := (**C.AVCodecDescriptor)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVCodecDescriptor) Id() AVCodecID {
@@ -2508,6 +2811,34 @@ type AVCodecParameters struct {
 
 func (s *AVCodecParameters) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVCodecParametersArray(ptr unsafe.Pointer) *Array[*AVCodecParameters] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVCodecParameters]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVCodecParameters {
+			ptr := (**C.AVCodecParameters)(pointer)
+			value := *ptr
+			var valueMapped *AVCodecParameters
+			if value != nil {
+				valueMapped = &AVCodecParameters{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVCodecParameters) {
+			ptr := (**C.AVCodecParameters)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVCodecParameters) CodecType() AVMediaType {
@@ -2789,6 +3120,34 @@ func (s *AVPanScan) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVPanScanArray(ptr unsafe.Pointer) *Array[*AVPanScan] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVPanScan]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVPanScan {
+			ptr := (**C.AVPanScan)(pointer)
+			value := *ptr
+			var valueMapped *AVPanScan
+			if value != nil {
+				valueMapped = &AVPanScan{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVPanScan) {
+			ptr := (**C.AVPanScan)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 func (s *AVPanScan) Id() int {
 	value := s.ptr.id
 	return int(value)
@@ -2816,7 +3175,7 @@ func (s *AVPanScan) SetHeight(value int) {
 	s.ptr.height = (C.int)(value)
 }
 
-// PositionEntry skipped due to const array
+// Position skipped due to multi dim const array
 
 // --- Struct AVCPBProperties ---
 
@@ -2832,6 +3191,34 @@ type AVCPBProperties struct {
 
 func (s *AVCPBProperties) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVCPBPropertiesArray(ptr unsafe.Pointer) *Array[*AVCPBProperties] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVCPBProperties]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVCPBProperties {
+			ptr := (**C.AVCPBProperties)(pointer)
+			value := *ptr
+			var valueMapped *AVCPBProperties
+			if value != nil {
+				valueMapped = &AVCPBProperties{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVCPBProperties) {
+			ptr := (**C.AVCPBProperties)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVCPBProperties) MaxBitrate() int64 {
@@ -2895,6 +3282,34 @@ func (s *AVProducerReferenceTime) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVProducerReferenceTimeArray(ptr unsafe.Pointer) *Array[*AVProducerReferenceTime] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVProducerReferenceTime]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVProducerReferenceTime {
+			ptr := (**C.AVProducerReferenceTime)(pointer)
+			value := *ptr
+			var valueMapped *AVProducerReferenceTime
+			if value != nil {
+				valueMapped = &AVProducerReferenceTime{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVProducerReferenceTime) {
+			ptr := (**C.AVProducerReferenceTime)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 func (s *AVProducerReferenceTime) Wallclock() int64 {
 	value := s.ptr.wallclock
 	return int64(value)
@@ -2922,6 +3337,34 @@ type AVPacketSideData struct {
 
 func (s *AVPacketSideData) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVPacketSideDataArray(ptr unsafe.Pointer) *Array[*AVPacketSideData] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVPacketSideData]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVPacketSideData {
+			ptr := (**C.AVPacketSideData)(pointer)
+			value := *ptr
+			var valueMapped *AVPacketSideData
+			if value != nil {
+				valueMapped = &AVPacketSideData{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVPacketSideData) {
+			ptr := (**C.AVPacketSideData)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVPacketSideData) Data() unsafe.Pointer {
@@ -2990,6 +3433,34 @@ type AVPacket struct {
 
 func (s *AVPacket) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVPacketArray(ptr unsafe.Pointer) *Array[*AVPacket] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVPacket]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVPacket {
+			ptr := (**C.AVPacket)(pointer)
+			value := *ptr
+			var valueMapped *AVPacket
+			if value != nil {
+				valueMapped = &AVPacket{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVPacket) {
+			ptr := (**C.AVPacket)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVPacket) Buf() *AVBufferRef {
@@ -3153,6 +3624,34 @@ func (s *AVPacketList) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVPacketListArray(ptr unsafe.Pointer) *Array[*AVPacketList] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVPacketList]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVPacketList {
+			ptr := (**C.AVPacketList)(pointer)
+			value := *ptr
+			var valueMapped *AVPacketList
+			if value != nil {
+				valueMapped = &AVPacketList{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVPacketList) {
+			ptr := (**C.AVPacketList)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 // Pkt skipped due to ident byvalue
 
 func (s *AVPacketList) Next() *AVPacketList {
@@ -3183,6 +3682,34 @@ type AVFilterContext struct {
 
 func (s *AVFilterContext) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVFilterContextArray(ptr unsafe.Pointer) *Array[*AVFilterContext] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVFilterContext]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVFilterContext {
+			ptr := (**C.AVFilterContext)(pointer)
+			value := *ptr
+			var valueMapped *AVFilterContext
+			if value != nil {
+				valueMapped = &AVFilterContext{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVFilterContext) {
+			ptr := (**C.AVFilterContext)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVFilterContext) AvClass() *AVClass {
@@ -3245,14 +3772,17 @@ func (s *AVFilterContext) SetInputPads(value *AVFilterPad) {
 	}
 }
 
-func (s *AVFilterContext) InputsEntry(i uint) *AVFilterLink {
+func (s *AVFilterContext) Inputs() *Array[*AVFilterLink] {
 	value := s.ptr.inputs
-	ptr := arrayGet[*C.AVFilterLink](value, uintptr(i))
-	var valueMapped *AVFilterLink
-	if ptr != nil {
-		valueMapped = &AVFilterLink{ptr: ptr}
+	return ToAVFilterLinkArray(unsafe.Pointer(value))
+}
+
+func (s *AVFilterContext) SetInputs(value *Array[AVFilterLink]) {
+	if value != nil {
+		s.ptr.inputs = (**C.AVFilterLink)(value.ptr)
+	} else {
+		s.ptr.inputs = nil
 	}
-	return valueMapped
 }
 
 func (s *AVFilterContext) NbInputs() uint {
@@ -3281,14 +3811,17 @@ func (s *AVFilterContext) SetOutputPads(value *AVFilterPad) {
 	}
 }
 
-func (s *AVFilterContext) OutputsEntry(i uint) *AVFilterLink {
+func (s *AVFilterContext) Outputs() *Array[*AVFilterLink] {
 	value := s.ptr.outputs
-	ptr := arrayGet[*C.AVFilterLink](value, uintptr(i))
-	var valueMapped *AVFilterLink
-	if ptr != nil {
-		valueMapped = &AVFilterLink{ptr: ptr}
+	return ToAVFilterLinkArray(unsafe.Pointer(value))
+}
+
+func (s *AVFilterContext) SetOutputs(value *Array[AVFilterLink]) {
+	if value != nil {
+		s.ptr.outputs = (**C.AVFilterLink)(value.ptr)
+	} else {
+		s.ptr.outputs = nil
 	}
-	return valueMapped
 }
 
 func (s *AVFilterContext) NbOutputs() uint {
@@ -3448,6 +3981,34 @@ type AVFilterLink struct {
 
 func (s *AVFilterLink) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVFilterLinkArray(ptr unsafe.Pointer) *Array[*AVFilterLink] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVFilterLink]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVFilterLink {
+			ptr := (**C.AVFilterLink)(pointer)
+			value := *ptr
+			var valueMapped *AVFilterLink
+			if value != nil {
+				valueMapped = &AVFilterLink{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVFilterLink) {
+			ptr := (**C.AVFilterLink)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVFilterLink) Src() *AVFilterContext {
@@ -3747,13 +4308,9 @@ func (s *AVFilterLink) SetHwFramesCtx(value *AVBufferRef) {
 	}
 }
 
-func (s *AVFilterLink) ReservedEntry(i uint) uint8 {
-	value := s.ptr.reserved[i]
-	return uint8(value)
-}
-
-func (s *AVFilterLink) SetReservedEntry(i uint, value uint8) {
-	s.ptr.reserved[i] = (C.char)(value)
+func (s *AVFilterLink) Reserved() *Array[uint8] {
+	value := &s.ptr.reserved
+	return ToUint8Array(unsafe.Pointer(value))
 }
 
 // --- Struct AVFilterPad ---
@@ -3767,6 +4324,34 @@ func (s *AVFilterPad) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVFilterPadArray(ptr unsafe.Pointer) *Array[*AVFilterPad] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVFilterPad]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVFilterPad {
+			ptr := (**C.AVFilterPad)(pointer)
+			value := *ptr
+			var valueMapped *AVFilterPad
+			if value != nil {
+				valueMapped = &AVFilterPad{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVFilterPad) {
+			ptr := (**C.AVFilterPad)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 // --- Struct AVFilterFormats ---
 
 // AVFilterFormats wraps AVFilterFormats.
@@ -3778,6 +4363,34 @@ func (s *AVFilterFormats) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVFilterFormatsArray(ptr unsafe.Pointer) *Array[*AVFilterFormats] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVFilterFormats]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVFilterFormats {
+			ptr := (**C.AVFilterFormats)(pointer)
+			value := *ptr
+			var valueMapped *AVFilterFormats
+			if value != nil {
+				valueMapped = &AVFilterFormats{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVFilterFormats) {
+			ptr := (**C.AVFilterFormats)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 // --- Struct AVFilterChannelLayouts ---
 
 // AVFilterChannelLayouts wraps AVFilterChannelLayouts.
@@ -3787,6 +4400,34 @@ type AVFilterChannelLayouts struct {
 
 func (s *AVFilterChannelLayouts) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVFilterChannelLayoutsArray(ptr unsafe.Pointer) *Array[*AVFilterChannelLayouts] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVFilterChannelLayouts]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVFilterChannelLayouts {
+			ptr := (**C.AVFilterChannelLayouts)(pointer)
+			value := *ptr
+			var valueMapped *AVFilterChannelLayouts
+			if value != nil {
+				valueMapped = &AVFilterChannelLayouts{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVFilterChannelLayouts) {
+			ptr := (**C.AVFilterChannelLayouts)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 // --- Struct AVFilter ---
@@ -3802,6 +4443,34 @@ type AVFilter struct {
 
 func (s *AVFilter) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVFilterArray(ptr unsafe.Pointer) *Array[*AVFilter] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVFilter]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVFilter {
+			ptr := (**C.AVFilter)(pointer)
+			value := *ptr
+			var valueMapped *AVFilter
+			if value != nil {
+				valueMapped = &AVFilter{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVFilter) {
+			ptr := (**C.AVFilter)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVFilter) Name() *CStr {
@@ -3950,6 +4619,34 @@ func (s *AVFilterInternal) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVFilterInternalArray(ptr unsafe.Pointer) *Array[*AVFilterInternal] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVFilterInternal]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVFilterInternal {
+			ptr := (**C.AVFilterInternal)(pointer)
+			value := *ptr
+			var valueMapped *AVFilterInternal
+			if value != nil {
+				valueMapped = &AVFilterInternal{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVFilterInternal) {
+			ptr := (**C.AVFilterInternal)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 // --- Struct AVFilterFormatsConfig ---
 
 // AVFilterFormatsConfig wraps AVFilterFormatsConfig.
@@ -3969,6 +4666,34 @@ type AVFilterFormatsConfig struct {
 
 func (s *AVFilterFormatsConfig) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVFilterFormatsConfigArray(ptr unsafe.Pointer) *Array[*AVFilterFormatsConfig] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVFilterFormatsConfig]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVFilterFormatsConfig {
+			ptr := (**C.AVFilterFormatsConfig)(pointer)
+			value := *ptr
+			var valueMapped *AVFilterFormatsConfig
+			if value != nil {
+				valueMapped = &AVFilterFormatsConfig{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVFilterFormatsConfig) {
+			ptr := (**C.AVFilterFormatsConfig)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVFilterFormatsConfig) Formats() *AVFilterFormats {
@@ -4033,6 +4758,34 @@ func (s *AVFilterGraphInternal) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVFilterGraphInternalArray(ptr unsafe.Pointer) *Array[*AVFilterGraphInternal] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVFilterGraphInternal]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVFilterGraphInternal {
+			ptr := (**C.AVFilterGraphInternal)(pointer)
+			value := *ptr
+			var valueMapped *AVFilterGraphInternal
+			if value != nil {
+				valueMapped = &AVFilterGraphInternal{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVFilterGraphInternal) {
+			ptr := (**C.AVFilterGraphInternal)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 // --- Struct AVFilterGraph ---
 
 // AVFilterGraph wraps AVFilterGraph.
@@ -4042,6 +4795,34 @@ type AVFilterGraph struct {
 
 func (s *AVFilterGraph) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVFilterGraphArray(ptr unsafe.Pointer) *Array[*AVFilterGraph] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVFilterGraph]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVFilterGraph {
+			ptr := (**C.AVFilterGraph)(pointer)
+			value := *ptr
+			var valueMapped *AVFilterGraph
+			if value != nil {
+				valueMapped = &AVFilterGraph{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVFilterGraph) {
+			ptr := (**C.AVFilterGraph)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVFilterGraph) AvClass() *AVClass {
@@ -4061,14 +4842,17 @@ func (s *AVFilterGraph) SetAvClass(value *AVClass) {
 	}
 }
 
-func (s *AVFilterGraph) FiltersEntry(i uint) *AVFilterContext {
+func (s *AVFilterGraph) Filters() *Array[*AVFilterContext] {
 	value := s.ptr.filters
-	ptr := arrayGet[*C.AVFilterContext](value, uintptr(i))
-	var valueMapped *AVFilterContext
-	if ptr != nil {
-		valueMapped = &AVFilterContext{ptr: ptr}
+	return ToAVFilterContextArray(unsafe.Pointer(value))
+}
+
+func (s *AVFilterGraph) SetFilters(value *Array[AVFilterContext]) {
+	if value != nil {
+		s.ptr.filters = (**C.AVFilterContext)(value.ptr)
+	} else {
+		s.ptr.filters = nil
 	}
-	return valueMapped
 }
 
 func (s *AVFilterGraph) NbFilters() uint {
@@ -4144,14 +4928,17 @@ func (s *AVFilterGraph) SetAresampleSwrOpts(value *CStr) {
 	s.ptr.aresample_swr_opts = value.ptr
 }
 
-func (s *AVFilterGraph) SinkLinksEntry(i uint) *AVFilterLink {
+func (s *AVFilterGraph) SinkLinks() *Array[*AVFilterLink] {
 	value := s.ptr.sink_links
-	ptr := arrayGet[*C.AVFilterLink](value, uintptr(i))
-	var valueMapped *AVFilterLink
-	if ptr != nil {
-		valueMapped = &AVFilterLink{ptr: ptr}
+	return ToAVFilterLinkArray(unsafe.Pointer(value))
+}
+
+func (s *AVFilterGraph) SetSinkLinks(value *Array[AVFilterLink]) {
+	if value != nil {
+		s.ptr.sink_links = (**C.AVFilterLink)(value.ptr)
+	} else {
+		s.ptr.sink_links = nil
 	}
-	return valueMapped
 }
 
 func (s *AVFilterGraph) SinkLinksCount() int {
@@ -4190,6 +4977,34 @@ type AVFilterInOut struct {
 
 func (s *AVFilterInOut) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVFilterInOutArray(ptr unsafe.Pointer) *Array[*AVFilterInOut] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVFilterInOut]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVFilterInOut {
+			ptr := (**C.AVFilterInOut)(pointer)
+			value := *ptr
+			var valueMapped *AVFilterInOut
+			if value != nil {
+				valueMapped = &AVFilterInOut{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVFilterInOut) {
+			ptr := (**C.AVFilterInOut)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVFilterInOut) Name() *CStr {
@@ -4261,6 +5076,34 @@ func (s *AVFilterPadParams) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVFilterPadParamsArray(ptr unsafe.Pointer) *Array[*AVFilterPadParams] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVFilterPadParams]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVFilterPadParams {
+			ptr := (**C.AVFilterPadParams)(pointer)
+			value := *ptr
+			var valueMapped *AVFilterPadParams
+			if value != nil {
+				valueMapped = &AVFilterPadParams{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVFilterPadParams) {
+			ptr := (**C.AVFilterPadParams)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 func (s *AVFilterPadParams) Label() *CStr {
 	value := s.ptr.label
 	return wrapCStr(value)
@@ -4285,6 +5128,34 @@ type AVFilterParams struct {
 
 func (s *AVFilterParams) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVFilterParamsArray(ptr unsafe.Pointer) *Array[*AVFilterParams] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVFilterParams]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVFilterParams {
+			ptr := (**C.AVFilterParams)(pointer)
+			value := *ptr
+			var valueMapped *AVFilterParams
+			if value != nil {
+				valueMapped = &AVFilterParams{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVFilterParams) {
+			ptr := (**C.AVFilterParams)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVFilterParams) Filter() *AVFilterContext {
@@ -4339,14 +5210,17 @@ func (s *AVFilterParams) SetOpts(value *AVDictionary) {
 	}
 }
 
-func (s *AVFilterParams) InputsEntry(i uint) *AVFilterPadParams {
+func (s *AVFilterParams) Inputs() *Array[*AVFilterPadParams] {
 	value := s.ptr.inputs
-	ptr := arrayGet[*C.AVFilterPadParams](value, uintptr(i))
-	var valueMapped *AVFilterPadParams
-	if ptr != nil {
-		valueMapped = &AVFilterPadParams{ptr: ptr}
+	return ToAVFilterPadParamsArray(unsafe.Pointer(value))
+}
+
+func (s *AVFilterParams) SetInputs(value *Array[AVFilterPadParams]) {
+	if value != nil {
+		s.ptr.inputs = (**C.AVFilterPadParams)(value.ptr)
+	} else {
+		s.ptr.inputs = nil
 	}
-	return valueMapped
 }
 
 func (s *AVFilterParams) NbInputs() uint {
@@ -4358,14 +5232,17 @@ func (s *AVFilterParams) SetNbInputs(value uint) {
 	s.ptr.nb_inputs = (C.uint)(value)
 }
 
-func (s *AVFilterParams) OutputsEntry(i uint) *AVFilterPadParams {
+func (s *AVFilterParams) Outputs() *Array[*AVFilterPadParams] {
 	value := s.ptr.outputs
-	ptr := arrayGet[*C.AVFilterPadParams](value, uintptr(i))
-	var valueMapped *AVFilterPadParams
-	if ptr != nil {
-		valueMapped = &AVFilterPadParams{ptr: ptr}
+	return ToAVFilterPadParamsArray(unsafe.Pointer(value))
+}
+
+func (s *AVFilterParams) SetOutputs(value *Array[AVFilterPadParams]) {
+	if value != nil {
+		s.ptr.outputs = (**C.AVFilterPadParams)(value.ptr)
+	} else {
+		s.ptr.outputs = nil
 	}
-	return valueMapped
 }
 
 func (s *AVFilterParams) NbOutputs() uint {
@@ -4394,14 +5271,45 @@ func (s *AVFilterChain) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
-func (s *AVFilterChain) FiltersEntry(i uint) *AVFilterParams {
-	value := s.ptr.filters
-	ptr := arrayGet[*C.AVFilterParams](value, uintptr(i))
-	var valueMapped *AVFilterParams
-	if ptr != nil {
-		valueMapped = &AVFilterParams{ptr: ptr}
+func ToAVFilterChainArray(ptr unsafe.Pointer) *Array[*AVFilterChain] {
+	if ptr == nil {
+		return nil
 	}
-	return valueMapped
+
+	return &Array[*AVFilterChain]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVFilterChain {
+			ptr := (**C.AVFilterChain)(pointer)
+			value := *ptr
+			var valueMapped *AVFilterChain
+			if value != nil {
+				valueMapped = &AVFilterChain{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVFilterChain) {
+			ptr := (**C.AVFilterChain)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
+func (s *AVFilterChain) Filters() *Array[*AVFilterParams] {
+	value := s.ptr.filters
+	return ToAVFilterParamsArray(unsafe.Pointer(value))
+}
+
+func (s *AVFilterChain) SetFilters(value *Array[AVFilterParams]) {
+	if value != nil {
+		s.ptr.filters = (**C.AVFilterParams)(value.ptr)
+	} else {
+		s.ptr.filters = nil
+	}
 }
 
 func (s *AVFilterChain) NbFilters() uint64 {
@@ -4433,6 +5341,34 @@ func (s *AVFilterGraphSegment) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVFilterGraphSegmentArray(ptr unsafe.Pointer) *Array[*AVFilterGraphSegment] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVFilterGraphSegment]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVFilterGraphSegment {
+			ptr := (**C.AVFilterGraphSegment)(pointer)
+			value := *ptr
+			var valueMapped *AVFilterGraphSegment
+			if value != nil {
+				valueMapped = &AVFilterGraphSegment{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVFilterGraphSegment) {
+			ptr := (**C.AVFilterGraphSegment)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 func (s *AVFilterGraphSegment) Graph() *AVFilterGraph {
 	value := s.ptr.graph
 	var valueMapped *AVFilterGraph
@@ -4450,14 +5386,17 @@ func (s *AVFilterGraphSegment) SetGraph(value *AVFilterGraph) {
 	}
 }
 
-func (s *AVFilterGraphSegment) ChainsEntry(i uint) *AVFilterChain {
+func (s *AVFilterGraphSegment) Chains() *Array[*AVFilterChain] {
 	value := s.ptr.chains
-	ptr := arrayGet[*C.AVFilterChain](value, uintptr(i))
-	var valueMapped *AVFilterChain
-	if ptr != nil {
-		valueMapped = &AVFilterChain{ptr: ptr}
+	return ToAVFilterChainArray(unsafe.Pointer(value))
+}
+
+func (s *AVFilterGraphSegment) SetChains(value *Array[AVFilterChain]) {
+	if value != nil {
+		s.ptr.chains = (**C.AVFilterChain)(value.ptr)
+	} else {
+		s.ptr.chains = nil
 	}
-	return valueMapped
 }
 
 func (s *AVFilterGraphSegment) NbChains() uint64 {
@@ -4494,6 +5433,34 @@ type AVBufferSrcParameters struct {
 
 func (s *AVBufferSrcParameters) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVBufferSrcParametersArray(ptr unsafe.Pointer) *Array[*AVBufferSrcParameters] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVBufferSrcParameters]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVBufferSrcParameters {
+			ptr := (**C.AVBufferSrcParameters)(pointer)
+			value := *ptr
+			var valueMapped *AVBufferSrcParameters
+			if value != nil {
+				valueMapped = &AVBufferSrcParameters{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVBufferSrcParameters) {
+			ptr := (**C.AVBufferSrcParameters)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVBufferSrcParameters) Format() int {
@@ -4598,6 +5565,34 @@ func (s *AVDeviceInfoList) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVDeviceInfoListArray(ptr unsafe.Pointer) *Array[*AVDeviceInfoList] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVDeviceInfoList]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVDeviceInfoList {
+			ptr := (**C.struct_AVDeviceInfoList)(pointer)
+			value := *ptr
+			var valueMapped *AVDeviceInfoList
+			if value != nil {
+				valueMapped = &AVDeviceInfoList{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVDeviceInfoList) {
+			ptr := (**C.struct_AVDeviceInfoList)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 // --- Struct AVCodecTag ---
 
 // AVCodecTag wraps AVCodecTag.
@@ -4611,6 +5606,34 @@ func (s *AVCodecTag) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVCodecTagArray(ptr unsafe.Pointer) *Array[*AVCodecTag] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVCodecTag]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVCodecTag {
+			ptr := (**C.struct_AVCodecTag)(pointer)
+			value := *ptr
+			var valueMapped *AVCodecTag
+			if value != nil {
+				valueMapped = &AVCodecTag{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVCodecTag) {
+			ptr := (**C.struct_AVCodecTag)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 // --- Struct AVProbeData ---
 
 // AVProbeData wraps AVProbeData.
@@ -4622,6 +5645,34 @@ type AVProbeData struct {
 
 func (s *AVProbeData) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVProbeDataArray(ptr unsafe.Pointer) *Array[*AVProbeData] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVProbeData]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVProbeData {
+			ptr := (**C.AVProbeData)(pointer)
+			value := *ptr
+			var valueMapped *AVProbeData
+			if value != nil {
+				valueMapped = &AVProbeData{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVProbeData) {
+			ptr := (**C.AVProbeData)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVProbeData) Filename() *CStr {
@@ -4662,6 +5713,34 @@ type AVOutputFormat struct {
 
 func (s *AVOutputFormat) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVOutputFormatArray(ptr unsafe.Pointer) *Array[*AVOutputFormat] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVOutputFormat]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVOutputFormat {
+			ptr := (**C.AVOutputFormat)(pointer)
+			value := *ptr
+			var valueMapped *AVOutputFormat
+			if value != nil {
+				valueMapped = &AVOutputFormat{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVOutputFormat) {
+			ptr := (**C.AVOutputFormat)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVOutputFormat) Name() *CStr {
@@ -4736,14 +5815,17 @@ func (s *AVOutputFormat) SetFlags(value int) {
 	s.ptr.flags = (C.int)(value)
 }
 
-func (s *AVOutputFormat) CodecTagEntry(i uint) *AVCodecTag {
+func (s *AVOutputFormat) CodecTag() *Array[*AVCodecTag] {
 	value := s.ptr.codec_tag
-	ptr := arrayGet[*C.struct_AVCodecTag](value, uintptr(i))
-	var valueMapped *AVCodecTag
-	if ptr != nil {
-		valueMapped = &AVCodecTag{ptr: ptr}
+	return ToAVCodecTagArray(unsafe.Pointer(value))
+}
+
+func (s *AVOutputFormat) SetCodecTag(value *Array[AVCodecTag]) {
+	if value != nil {
+		s.ptr.codec_tag = (**C.struct_AVCodecTag)(value.ptr)
+	} else {
+		s.ptr.codec_tag = nil
 	}
-	return valueMapped
 }
 
 func (s *AVOutputFormat) PrivClass() *AVClass {
@@ -4772,6 +5854,34 @@ type AVInputFormat struct {
 
 func (s *AVInputFormat) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVInputFormatArray(ptr unsafe.Pointer) *Array[*AVInputFormat] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVInputFormat]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVInputFormat {
+			ptr := (**C.AVInputFormat)(pointer)
+			value := *ptr
+			var valueMapped *AVInputFormat
+			if value != nil {
+				valueMapped = &AVInputFormat{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVInputFormat) {
+			ptr := (**C.AVInputFormat)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVInputFormat) Name() *CStr {
@@ -4810,14 +5920,17 @@ func (s *AVInputFormat) SetExtensions(value *CStr) {
 	s.ptr.extensions = value.ptr
 }
 
-func (s *AVInputFormat) CodecTagEntry(i uint) *AVCodecTag {
+func (s *AVInputFormat) CodecTag() *Array[*AVCodecTag] {
 	value := s.ptr.codec_tag
-	ptr := arrayGet[*C.struct_AVCodecTag](value, uintptr(i))
-	var valueMapped *AVCodecTag
-	if ptr != nil {
-		valueMapped = &AVCodecTag{ptr: ptr}
+	return ToAVCodecTagArray(unsafe.Pointer(value))
+}
+
+func (s *AVInputFormat) SetCodecTag(value *Array[AVCodecTag]) {
+	if value != nil {
+		s.ptr.codec_tag = (**C.struct_AVCodecTag)(value.ptr)
+	} else {
+		s.ptr.codec_tag = nil
 	}
-	return valueMapped
 }
 
 func (s *AVInputFormat) PrivClass() *AVClass {
@@ -4904,6 +6017,34 @@ func (s *AVIndexEntry) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVIndexEntryArray(ptr unsafe.Pointer) *Array[*AVIndexEntry] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVIndexEntry]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVIndexEntry {
+			ptr := (**C.AVIndexEntry)(pointer)
+			value := *ptr
+			var valueMapped *AVIndexEntry
+			if value != nil {
+				valueMapped = &AVIndexEntry{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVIndexEntry) {
+			ptr := (**C.AVIndexEntry)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 func (s *AVIndexEntry) Pos() int64 {
 	value := s.ptr.pos
 	return int64(value)
@@ -4951,6 +6092,34 @@ type AVStream struct {
 
 func (s *AVStream) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVStreamArray(ptr unsafe.Pointer) *Array[*AVStream] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVStream]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVStream {
+			ptr := (**C.AVStream)(pointer)
+			value := *ptr
+			var valueMapped *AVStream
+			if value != nil {
+				valueMapped = &AVStream{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVStream) {
+			ptr := (**C.AVStream)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVStream) AvClass() *AVClass {
@@ -5175,6 +6344,34 @@ func (s *AVProgram) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVProgramArray(ptr unsafe.Pointer) *Array[*AVProgram] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVProgram]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVProgram {
+			ptr := (**C.AVProgram)(pointer)
+			value := *ptr
+			var valueMapped *AVProgram
+			if value != nil {
+				valueMapped = &AVProgram{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVProgram) {
+			ptr := (**C.AVProgram)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 func (s *AVProgram) Id() int {
 	value := s.ptr.id
 	return int(value)
@@ -5313,6 +6510,34 @@ func (s *AVChapter) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVChapterArray(ptr unsafe.Pointer) *Array[*AVChapter] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVChapter]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVChapter {
+			ptr := (**C.AVChapter)(pointer)
+			value := *ptr
+			var valueMapped *AVChapter
+			if value != nil {
+				valueMapped = &AVChapter{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVChapter) {
+			ptr := (**C.AVChapter)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 func (s *AVChapter) Id() int64 {
 	value := s.ptr.id
 	return int64(value)
@@ -5389,6 +6614,34 @@ type AVFormatContext struct {
 
 func (s *AVFormatContext) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVFormatContextArray(ptr unsafe.Pointer) *Array[*AVFormatContext] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVFormatContext]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVFormatContext {
+			ptr := (**C.AVFormatContext)(pointer)
+			value := *ptr
+			var valueMapped *AVFormatContext
+			if value != nil {
+				valueMapped = &AVFormatContext{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVFormatContext) {
+			ptr := (**C.AVFormatContext)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVFormatContext) AvClass() *AVClass {
@@ -5486,14 +6739,17 @@ func (s *AVFormatContext) SetNbStreams(value uint) {
 	s.ptr.nb_streams = (C.uint)(value)
 }
 
-func (s *AVFormatContext) StreamsEntry(i uint) *AVStream {
+func (s *AVFormatContext) Streams() *Array[*AVStream] {
 	value := s.ptr.streams
-	ptr := arrayGet[*C.AVStream](value, uintptr(i))
-	var valueMapped *AVStream
-	if ptr != nil {
-		valueMapped = &AVStream{ptr: ptr}
+	return ToAVStreamArray(unsafe.Pointer(value))
+}
+
+func (s *AVFormatContext) SetStreams(value *Array[AVStream]) {
+	if value != nil {
+		s.ptr.streams = (**C.AVStream)(value.ptr)
+	} else {
+		s.ptr.streams = nil
 	}
-	return valueMapped
 }
 
 func (s *AVFormatContext) Url() *CStr {
@@ -5604,14 +6860,17 @@ func (s *AVFormatContext) SetNbPrograms(value uint) {
 	s.ptr.nb_programs = (C.uint)(value)
 }
 
-func (s *AVFormatContext) ProgramsEntry(i uint) *AVProgram {
+func (s *AVFormatContext) Programs() *Array[*AVProgram] {
 	value := s.ptr.programs
-	ptr := arrayGet[*C.AVProgram](value, uintptr(i))
-	var valueMapped *AVProgram
-	if ptr != nil {
-		valueMapped = &AVProgram{ptr: ptr}
+	return ToAVProgramArray(unsafe.Pointer(value))
+}
+
+func (s *AVFormatContext) SetPrograms(value *Array[AVProgram]) {
+	if value != nil {
+		s.ptr.programs = (**C.AVProgram)(value.ptr)
+	} else {
+		s.ptr.programs = nil
 	}
-	return valueMapped
 }
 
 func (s *AVFormatContext) VideoCodecId() AVCodecID {
@@ -5668,14 +6927,17 @@ func (s *AVFormatContext) SetNbChapters(value uint) {
 	s.ptr.nb_chapters = (C.uint)(value)
 }
 
-func (s *AVFormatContext) ChaptersEntry(i uint) *AVChapter {
+func (s *AVFormatContext) Chapters() *Array[*AVChapter] {
 	value := s.ptr.chapters
-	ptr := arrayGet[*C.AVChapter](value, uintptr(i))
-	var valueMapped *AVChapter
-	if ptr != nil {
-		valueMapped = &AVChapter{ptr: ptr}
+	return ToAVChapterArray(unsafe.Pointer(value))
+}
+
+func (s *AVFormatContext) SetChapters(value *Array[AVChapter]) {
+	if value != nil {
+		s.ptr.chapters = (**C.AVChapter)(value.ptr)
+	} else {
+		s.ptr.chapters = nil
 	}
-	return valueMapped
 }
 
 func (s *AVFormatContext) Metadata() *AVDictionary {
@@ -6110,6 +7372,34 @@ func (s *AVIOInterruptCB) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVIOInterruptCBArray(ptr unsafe.Pointer) *Array[*AVIOInterruptCB] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVIOInterruptCB]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVIOInterruptCB {
+			ptr := (**C.AVIOInterruptCB)(pointer)
+			value := *ptr
+			var valueMapped *AVIOInterruptCB
+			if value != nil {
+				valueMapped = &AVIOInterruptCB{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVIOInterruptCB) {
+			ptr := (**C.AVIOInterruptCB)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 // Callback skipped due to func ptr
 
 func (s *AVIOInterruptCB) Opaque() unsafe.Pointer {
@@ -6136,6 +7426,34 @@ type AVIODirEntry struct {
 
 func (s *AVIODirEntry) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVIODirEntryArray(ptr unsafe.Pointer) *Array[*AVIODirEntry] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVIODirEntry]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVIODirEntry {
+			ptr := (**C.AVIODirEntry)(pointer)
+			value := *ptr
+			var valueMapped *AVIODirEntry
+			if value != nil {
+				valueMapped = &AVIODirEntry{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVIODirEntry) {
+			ptr := (**C.AVIODirEntry)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVIODirEntry) Name() *CStr {
@@ -6239,6 +7557,34 @@ func (s *AVIODirContext) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVIODirContextArray(ptr unsafe.Pointer) *Array[*AVIODirContext] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVIODirContext]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVIODirContext {
+			ptr := (**C.AVIODirContext)(pointer)
+			value := *ptr
+			var valueMapped *AVIODirContext
+			if value != nil {
+				valueMapped = &AVIODirContext{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVIODirContext) {
+			ptr := (**C.AVIODirContext)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 // UrlContext skipped due to ptr to ignored type
 
 // --- Struct AVIOContext ---
@@ -6262,6 +7608,34 @@ type AVIOContext struct {
 
 func (s *AVIOContext) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVIOContextArray(ptr unsafe.Pointer) *Array[*AVIOContext] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVIOContext]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVIOContext {
+			ptr := (**C.AVIOContext)(pointer)
+			value := *ptr
+			var valueMapped *AVIOContext
+			if value != nil {
+				valueMapped = &AVIOContext{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVIOContext) {
+			ptr := (**C.AVIOContext)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVIOContext) AvClass() *AVClass {
@@ -6460,6 +7834,34 @@ func (s *AVBuffer) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVBufferArray(ptr unsafe.Pointer) *Array[*AVBuffer] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVBuffer]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVBuffer {
+			ptr := (**C.AVBuffer)(pointer)
+			value := *ptr
+			var valueMapped *AVBuffer
+			if value != nil {
+				valueMapped = &AVBuffer{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVBuffer) {
+			ptr := (**C.AVBuffer)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 // --- Struct AVBufferRef ---
 
 // AVBufferRef wraps AVBufferRef.
@@ -6475,6 +7877,34 @@ type AVBufferRef struct {
 
 func (s *AVBufferRef) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVBufferRefArray(ptr unsafe.Pointer) *Array[*AVBufferRef] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVBufferRef]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVBufferRef {
+			ptr := (**C.AVBufferRef)(pointer)
+			value := *ptr
+			var valueMapped *AVBufferRef
+			if value != nil {
+				valueMapped = &AVBufferRef{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVBufferRef) {
+			ptr := (**C.AVBufferRef)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVBufferRef) Buffer() *AVBuffer {
@@ -6523,6 +7953,34 @@ func (s *AVBufferPool) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVBufferPoolArray(ptr unsafe.Pointer) *Array[*AVBufferPool] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVBufferPool]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVBufferPool {
+			ptr := (**C.AVBufferPool)(pointer)
+			value := *ptr
+			var valueMapped *AVBufferPool
+			if value != nil {
+				valueMapped = &AVBufferPool{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVBufferPool) {
+			ptr := (**C.AVBufferPool)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 // --- Struct AVChannelCustom ---
 
 // AVChannelCustom wraps AVChannelCustom.
@@ -6542,6 +8000,34 @@ func (s *AVChannelCustom) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVChannelCustomArray(ptr unsafe.Pointer) *Array[*AVChannelCustom] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVChannelCustom]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVChannelCustom {
+			ptr := (**C.AVChannelCustom)(pointer)
+			value := *ptr
+			var valueMapped *AVChannelCustom
+			if value != nil {
+				valueMapped = &AVChannelCustom{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVChannelCustom) {
+			ptr := (**C.AVChannelCustom)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 func (s *AVChannelCustom) Id() AVChannel {
 	value := s.ptr.id
 	return AVChannel(value)
@@ -6551,13 +8037,9 @@ func (s *AVChannelCustom) SetId(value AVChannel) {
 	s.ptr.id = (C.enum_AVChannel)(value)
 }
 
-func (s *AVChannelCustom) NameEntry(i uint) uint8 {
-	value := s.ptr.name[i]
-	return uint8(value)
-}
-
-func (s *AVChannelCustom) SetNameEntry(i uint, value uint8) {
-	s.ptr.name[i] = (C.char)(value)
+func (s *AVChannelCustom) Name() *Array[uint8] {
+	value := &s.ptr.name
+	return ToUint8Array(unsafe.Pointer(value))
 }
 
 func (s *AVChannelCustom) Opaque() unsafe.Pointer {
@@ -6610,6 +8092,34 @@ func (s *AVChannelLayout) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVChannelLayoutArray(ptr unsafe.Pointer) *Array[*AVChannelLayout] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVChannelLayout]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVChannelLayout {
+			ptr := (**C.AVChannelLayout)(pointer)
+			value := *ptr
+			var valueMapped *AVChannelLayout
+			if value != nil {
+				valueMapped = &AVChannelLayout{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVChannelLayout) {
+			ptr := (**C.AVChannelLayout)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 func (s *AVChannelLayout) Order() AVChannelOrder {
 	value := s.ptr.order
 	return AVChannelOrder(value)
@@ -6650,6 +8160,34 @@ func (s *AVBPrint) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVBPrintArray(ptr unsafe.Pointer) *Array[*AVBPrint] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVBPrint]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVBPrint {
+			ptr := (**C.struct_AVBPrint)(pointer)
+			value := *ptr
+			var valueMapped *AVBPrint
+			if value != nil {
+				valueMapped = &AVBPrint{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVBPrint) {
+			ptr := (**C.struct_AVBPrint)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 // --- Struct AVDictionaryEntry ---
 
 // AVDictionaryEntry wraps AVDictionaryEntry.
@@ -6659,6 +8197,34 @@ type AVDictionaryEntry struct {
 
 func (s *AVDictionaryEntry) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVDictionaryEntryArray(ptr unsafe.Pointer) *Array[*AVDictionaryEntry] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVDictionaryEntry]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVDictionaryEntry {
+			ptr := (**C.AVDictionaryEntry)(pointer)
+			value := *ptr
+			var valueMapped *AVDictionaryEntry
+			if value != nil {
+				valueMapped = &AVDictionaryEntry{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVDictionaryEntry) {
+			ptr := (**C.AVDictionaryEntry)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVDictionaryEntry) Key() *CStr {
@@ -6690,6 +8256,34 @@ func (s *AVDictionary) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVDictionaryArray(ptr unsafe.Pointer) *Array[*AVDictionary] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVDictionary]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVDictionary {
+			ptr := (**C.AVDictionary)(pointer)
+			value := *ptr
+			var valueMapped *AVDictionary
+			if value != nil {
+				valueMapped = &AVDictionary{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVDictionary) {
+			ptr := (**C.AVDictionary)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 // --- Struct AVFrameSideData ---
 
 // AVFrameSideData wraps AVFrameSideData.
@@ -6705,6 +8299,34 @@ type AVFrameSideData struct {
 
 func (s *AVFrameSideData) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVFrameSideDataArray(ptr unsafe.Pointer) *Array[*AVFrameSideData] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVFrameSideData]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVFrameSideData {
+			ptr := (**C.AVFrameSideData)(pointer)
+			value := *ptr
+			var valueMapped *AVFrameSideData
+			if value != nil {
+				valueMapped = &AVFrameSideData{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVFrameSideData) {
+			ptr := (**C.AVFrameSideData)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVFrameSideData) Type() AVFrameSideDataType {
@@ -6788,6 +8410,34 @@ type AVRegionOfInterest struct {
 
 func (s *AVRegionOfInterest) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVRegionOfInterestArray(ptr unsafe.Pointer) *Array[*AVRegionOfInterest] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVRegionOfInterest]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVRegionOfInterest {
+			ptr := (**C.AVRegionOfInterest)(pointer)
+			value := *ptr
+			var valueMapped *AVRegionOfInterest
+			if value != nil {
+				valueMapped = &AVRegionOfInterest{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVRegionOfInterest) {
+			ptr := (**C.AVRegionOfInterest)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVRegionOfInterest) SelfSize() uint32 {
@@ -6885,22 +8535,42 @@ func (s *AVFrame) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
-func (s *AVFrame) DataEntry(i uint) unsafe.Pointer {
-	value := s.ptr.data[i]
-	return unsafe.Pointer(value)
+func ToAVFrameArray(ptr unsafe.Pointer) *Array[*AVFrame] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVFrame]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVFrame {
+			ptr := (**C.AVFrame)(pointer)
+			value := *ptr
+			var valueMapped *AVFrame
+			if value != nil {
+				valueMapped = &AVFrame{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVFrame) {
+			ptr := (**C.AVFrame)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
-func (s *AVFrame) SetDataEntry(i uint, value unsafe.Pointer) {
-	s.ptr.data[i] = (*C.uint8_t)(value)
+func (s *AVFrame) Data() *Array[unsafe.Pointer] {
+	value := &s.ptr.data
+	return ToUint8PtrArray(unsafe.Pointer(value))
 }
 
-func (s *AVFrame) LinesizeEntry(i uint) int {
-	value := s.ptr.linesize[i]
-	return int(value)
-}
-
-func (s *AVFrame) SetLinesizeEntry(i uint, value int) {
-	s.ptr.linesize[i] = (C.int)(value)
+func (s *AVFrame) Linesize() *Array[int] {
+	value := &s.ptr.linesize
+	return ToIntArray(unsafe.Pointer(value))
 }
 
 // ExtendedData skipped due to unknown ptr ptr
@@ -7094,31 +8764,22 @@ func (s *AVFrame) SetChannelLayout(value uint64) {
 	s.ptr.channel_layout = (C.uint64_t)(value)
 }
 
-func (s *AVFrame) BufEntry(i uint) *AVBufferRef {
-	value := s.ptr.buf[i]
-	var valueMapped *AVBufferRef
-	if value != nil {
-		valueMapped = &AVBufferRef{ptr: value}
-	}
-	return valueMapped
+func (s *AVFrame) Buf() *Array[*AVBufferRef] {
+	value := &s.ptr.buf
+	return ToAVBufferRefArray(unsafe.Pointer(value))
 }
 
-func (s *AVFrame) SetBufEntry(i uint, value *AVBufferRef) {
-	if value != nil {
-		s.ptr.buf[i] = value.ptr
-	} else {
-		s.ptr.buf[i] = nil
-	}
-}
-
-func (s *AVFrame) ExtendedBufEntry(i uint) *AVBufferRef {
+func (s *AVFrame) ExtendedBuf() *Array[*AVBufferRef] {
 	value := s.ptr.extended_buf
-	ptr := arrayGet[*C.AVBufferRef](value, uintptr(i))
-	var valueMapped *AVBufferRef
-	if ptr != nil {
-		valueMapped = &AVBufferRef{ptr: ptr}
+	return ToAVBufferRefArray(unsafe.Pointer(value))
+}
+
+func (s *AVFrame) SetExtendedBuf(value *Array[AVBufferRef]) {
+	if value != nil {
+		s.ptr.extended_buf = (**C.AVBufferRef)(value.ptr)
+	} else {
+		s.ptr.extended_buf = nil
 	}
-	return valueMapped
 }
 
 func (s *AVFrame) NbExtendedBuf() int {
@@ -7130,14 +8791,17 @@ func (s *AVFrame) SetNbExtendedBuf(value int) {
 	s.ptr.nb_extended_buf = (C.int)(value)
 }
 
-func (s *AVFrame) SideDataEntry(i uint) *AVFrameSideData {
+func (s *AVFrame) SideData() *Array[*AVFrameSideData] {
 	value := s.ptr.side_data
-	ptr := arrayGet[*C.AVFrameSideData](value, uintptr(i))
-	var valueMapped *AVFrameSideData
-	if ptr != nil {
-		valueMapped = &AVFrameSideData{ptr: ptr}
+	return ToAVFrameSideDataArray(unsafe.Pointer(value))
+}
+
+func (s *AVFrame) SetSideData(value *Array[AVFrameSideData]) {
+	if value != nil {
+		s.ptr.side_data = (**C.AVFrameSideData)(value.ptr)
+	} else {
+		s.ptr.side_data = nil
 	}
-	return valueMapped
 }
 
 func (s *AVFrame) NbSideData() int {
@@ -7383,6 +9047,34 @@ func (s *AVHWDeviceInternal) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVHWDeviceInternalArray(ptr unsafe.Pointer) *Array[*AVHWDeviceInternal] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVHWDeviceInternal]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVHWDeviceInternal {
+			ptr := (**C.AVHWDeviceInternal)(pointer)
+			value := *ptr
+			var valueMapped *AVHWDeviceInternal
+			if value != nil {
+				valueMapped = &AVHWDeviceInternal{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVHWDeviceInternal) {
+			ptr := (**C.AVHWDeviceInternal)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 // --- Struct AVHWDeviceContext ---
 
 // AVHWDeviceContext wraps AVHWDeviceContext.
@@ -7409,6 +9101,34 @@ type AVHWDeviceContext struct {
 
 func (s *AVHWDeviceContext) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVHWDeviceContextArray(ptr unsafe.Pointer) *Array[*AVHWDeviceContext] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVHWDeviceContext]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVHWDeviceContext {
+			ptr := (**C.AVHWDeviceContext)(pointer)
+			value := *ptr
+			var valueMapped *AVHWDeviceContext
+			if value != nil {
+				valueMapped = &AVHWDeviceContext{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVHWDeviceContext) {
+			ptr := (**C.AVHWDeviceContext)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVHWDeviceContext) AvClass() *AVClass {
@@ -7485,6 +9205,34 @@ func (s *AVHWFramesInternal) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVHWFramesInternalArray(ptr unsafe.Pointer) *Array[*AVHWFramesInternal] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVHWFramesInternal]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVHWFramesInternal {
+			ptr := (**C.AVHWFramesInternal)(pointer)
+			value := *ptr
+			var valueMapped *AVHWFramesInternal
+			if value != nil {
+				valueMapped = &AVHWFramesInternal{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVHWFramesInternal) {
+			ptr := (**C.AVHWFramesInternal)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 // --- Struct AVHWFramesContext ---
 
 // AVHWFramesContext wraps AVHWFramesContext.
@@ -7504,6 +9252,34 @@ type AVHWFramesContext struct {
 
 func (s *AVHWFramesContext) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVHWFramesContextArray(ptr unsafe.Pointer) *Array[*AVHWFramesContext] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVHWFramesContext]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVHWFramesContext {
+			ptr := (**C.AVHWFramesContext)(pointer)
+			value := *ptr
+			var valueMapped *AVHWFramesContext
+			if value != nil {
+				valueMapped = &AVHWFramesContext{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVHWFramesContext) {
+			ptr := (**C.AVHWFramesContext)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVHWFramesContext) AvClass() *AVClass {
@@ -7673,6 +9449,34 @@ func (s *AVHWFramesConstraints) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVHWFramesConstraintsArray(ptr unsafe.Pointer) *Array[*AVHWFramesConstraints] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVHWFramesConstraints]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVHWFramesConstraints {
+			ptr := (**C.AVHWFramesConstraints)(pointer)
+			value := *ptr
+			var valueMapped *AVHWFramesConstraints
+			if value != nil {
+				valueMapped = &AVHWFramesConstraints{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVHWFramesConstraints) {
+			ptr := (**C.AVHWFramesConstraints)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 func (s *AVHWFramesConstraints) ValidHwFormats() *Array[AVPixelFormat] {
 	value := s.ptr.valid_hw_formats
 	return ToAVPixelFormatArray(unsafe.Pointer(value))
@@ -7749,6 +9553,34 @@ type AVClass struct {
 
 func (s *AVClass) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVClassArray(ptr unsafe.Pointer) *Array[*AVClass] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVClass]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVClass {
+			ptr := (**C.AVClass)(pointer)
+			value := *ptr
+			var valueMapped *AVClass
+			if value != nil {
+				valueMapped = &AVClass{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVClass) {
+			ptr := (**C.AVClass)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVClass) ClassName() *CStr {
@@ -7834,6 +9666,34 @@ type AVOption struct {
 
 func (s *AVOption) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
+}
+
+func ToAVOptionArray(ptr unsafe.Pointer) *Array[*AVOption] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVOption]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVOption {
+			ptr := (**C.AVOption)(pointer)
+			value := *ptr
+			var valueMapped *AVOption
+			if value != nil {
+				valueMapped = &AVOption{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVOption) {
+			ptr := (**C.AVOption)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
 }
 
 func (s *AVOption) Name() *CStr {
@@ -7923,6 +9783,34 @@ func (s *AVOptionRange) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+func ToAVOptionRangeArray(ptr unsafe.Pointer) *Array[*AVOptionRange] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[*AVOptionRange]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVOptionRange {
+			ptr := (**C.AVOptionRange)(pointer)
+			value := *ptr
+			var valueMapped *AVOptionRange
+			if value != nil {
+				valueMapped = &AVOptionRange{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVOptionRange) {
+			ptr := (**C.AVOptionRange)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
 func (s *AVOptionRange) Str() *CStr {
 	value := s.ptr.str
 	return wrapCStr(value)
@@ -7990,14 +9878,45 @@ func (s *AVOptionRanges) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
-func (s *AVOptionRanges) RangeEntry(i uint) *AVOptionRange {
-	value := s.ptr._range
-	ptr := arrayGet[*C.AVOptionRange](value, uintptr(i))
-	var valueMapped *AVOptionRange
-	if ptr != nil {
-		valueMapped = &AVOptionRange{ptr: ptr}
+func ToAVOptionRangesArray(ptr unsafe.Pointer) *Array[*AVOptionRanges] {
+	if ptr == nil {
+		return nil
 	}
-	return valueMapped
+
+	return &Array[*AVOptionRanges]{
+		elemSize: ptrSize,
+		loadPtr: func(pointer unsafe.Pointer) *AVOptionRanges {
+			ptr := (**C.AVOptionRanges)(pointer)
+			value := *ptr
+			var valueMapped *AVOptionRanges
+			if value != nil {
+				valueMapped = &AVOptionRanges{ptr: value}
+			}
+			return valueMapped
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value *AVOptionRanges) {
+			ptr := (**C.AVOptionRanges)(pointer)
+			if value != nil {
+				*ptr = value.ptr
+			} else {
+				*ptr = nil
+			}
+		},
+	}
+}
+
+func (s *AVOptionRanges) Range() *Array[*AVOptionRange] {
+	value := s.ptr._range
+	return ToAVOptionRangeArray(unsafe.Pointer(value))
+}
+
+func (s *AVOptionRanges) SetRange(value *Array[AVOptionRange]) {
+	if value != nil {
+		s.ptr._range = (**C.AVOptionRange)(value.ptr)
+	} else {
+		s.ptr._range = nil
+	}
 }
 
 func (s *AVOptionRanges) NbRanges() int {
