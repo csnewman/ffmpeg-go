@@ -1607,7 +1607,10 @@ func (s *AVCodecContext) SetExportSideData(value int) {
 
 // GetEncodeBuffer skipped due to func ptr
 
-// ChLayout skipped due to ident byvalue
+func (s *AVCodecContext) ChLayout() *AVChannelLayout {
+	value := &s.ptr.ch_layout
+	return &AVChannelLayout{ptr: value}
+}
 
 func (s *AVCodecContext) FrameNum() int64 {
 	value := s.ptr.frame_num
@@ -3102,7 +3105,10 @@ func (s *AVCodecParameters) SetSeekPreroll(value int) {
 	s.ptr.seek_preroll = (C.int)(value)
 }
 
-// ChLayout skipped due to ident byvalue
+func (s *AVCodecParameters) ChLayout() *AVChannelLayout {
+	value := &s.ptr.ch_layout
+	return &AVChannelLayout{ptr: value}
+}
 
 // --- Struct AVPanScan ---
 
@@ -3652,7 +3658,10 @@ func ToAVPacketListArray(ptr unsafe.Pointer) *Array[*AVPacketList] {
 	}
 }
 
-// Pkt skipped due to ident byvalue
+func (s *AVPacketList) Pkt() *AVPacket {
+	value := &s.ptr.pkt
+	return &AVPacket{ptr: value}
+}
 
 func (s *AVPacketList) Next() *AVPacketList {
 	value := s.ptr.next
@@ -4151,11 +4160,20 @@ func (s *AVFilterLink) SetTimeBase(value *AVRational) {
 	s.ptr.time_base = value.value
 }
 
-// ChLayout skipped due to ident byvalue
+func (s *AVFilterLink) ChLayout() *AVChannelLayout {
+	value := &s.ptr.ch_layout
+	return &AVChannelLayout{ptr: value}
+}
 
-// Incfg skipped due to ident byvalue
+func (s *AVFilterLink) Incfg() *AVFilterFormatsConfig {
+	value := &s.ptr.incfg
+	return &AVFilterFormatsConfig{ptr: value}
+}
 
-// Outcfg skipped due to ident byvalue
+func (s *AVFilterLink) Outcfg() *AVFilterFormatsConfig {
+	value := &s.ptr.outcfg
+	return &AVFilterFormatsConfig{ptr: value}
+}
 
 func (s *AVFilterLink) InitState() uint32 {
 	value := s.ptr.init_state
@@ -5552,7 +5570,10 @@ func (s *AVBufferSrcParameters) SetChannelLayout(value uint64) {
 	s.ptr.channel_layout = (C.uint64_t)(value)
 }
 
-// ChLayout skipped due to ident byvalue
+func (s *AVBufferSrcParameters) ChLayout() *AVChannelLayout {
+	value := &s.ptr.ch_layout
+	return &AVChannelLayout{ptr: value}
+}
 
 // --- Struct AVDeviceInfoList ---
 
@@ -6272,7 +6293,10 @@ func (s *AVStream) SetAvgFrameRate(value *AVRational) {
 	s.ptr.avg_frame_rate = value.value
 }
 
-// AttachedPic skipped due to ident byvalue
+func (s *AVStream) AttachedPic() *AVPacket {
+	value := &s.ptr.attached_pic
+	return &AVPacket{ptr: value}
+}
 
 func (s *AVStream) SideData() *AVPacketSideData {
 	value := s.ptr.side_data
@@ -6984,7 +7008,10 @@ func (s *AVFormatContext) SetErrorRecognition(value int) {
 	s.ptr.error_recognition = (C.int)(value)
 }
 
-// InterruptCallback skipped due to ident byvalue
+func (s *AVFormatContext) InterruptCallback() *AVIOInterruptCB {
+	value := &s.ptr.interrupt_callback
+	return &AVIOInterruptCB{ptr: value}
+}
 
 func (s *AVFormatContext) Debug() int {
 	value := s.ptr.debug
@@ -9025,7 +9052,10 @@ func (s *AVFrame) SetPrivateRef(value *AVBufferRef) {
 	}
 }
 
-// ChLayout skipped due to ident byvalue
+func (s *AVFrame) ChLayout() *AVChannelLayout {
+	value := &s.ptr.ch_layout
+	return &AVChannelLayout{ptr: value}
+}
 
 func (s *AVFrame) Duration() int64 {
 	value := s.ptr.duration

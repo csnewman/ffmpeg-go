@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"reflect"
+	"slices"
 	"strings"
 
 	"github.com/dave/jennifer/jen"
@@ -285,6 +286,8 @@ func (g *Generator) generateStructs() {
 				setBody    []jen.Code
 				setParams  []jen.Code
 				tgt        *jen.Statement
+
+				refField bool
 			)
 
 			if field.BitWidth != -1 {
@@ -292,33 +295,12 @@ func (g *Generator) generateStructs() {
 				o.Line()
 
 				continue fieldLoop
-			} else if _, ok := field.Type.(*ConstArray); ok {
-				if st.ByValue {
-					o.Commentf("%v skipped due to const array of value structs", fName)
-					o.Line()
+			}
 
-					continue fieldLoop
-				} else {
-					getBody = append(
-						getBody,
-						jen.Id("value").Op(":=").Op("&").Id("s").Dot("ptr").Dot(cName),
-					)
-				}
-
+			if st.ByValue {
+				tgt = jen.Id("s").Dot("value").Dot(cName)
 			} else {
-				if st.ByValue {
-					getBody = append(
-						getBody,
-						jen.Id("value").Op(":=").Id("s").Dot("value").Dot(cName),
-					)
-					tgt = jen.Id("s").Dot("value").Dot(cName)
-				} else {
-					getBody = append(
-						getBody,
-						jen.Id("value").Op(":=").Id("s").Dot("ptr").Dot(cName),
-					)
-					tgt = jen.Id("s").Dot("ptr").Dot(cName)
-				}
+				tgt = jen.Id("s").Dot("ptr").Dot(cName)
 			}
 
 			switch v := field.Type.(type) {
@@ -343,29 +325,38 @@ func (g *Generator) generateStructs() {
 						)
 					}
 				} else if s, ok := g.input.structs[v.Name]; ok {
-					if !s.ByValue {
-						o.Commentf("%v skipped due to ident byvalue", fName)
-						o.Line()
+					if s.ByValue {
+						getRetType = []jen.Code{
+							jen.Op("*").Id(s.Name),
+						}
+						setParams = append(setParams, jen.Id("value").Op("*").Id(s.Name))
 
-						continue fieldLoop
+						getBody = append(
+							getBody,
+							jen.Return(jen.Op("&").Id(s.Name).Values(jen.Dict{
+								jen.Id("value"): jen.Id("value"),
+							})),
+						)
+
+						setBody = append(
+							setBody,
+							tgt.Op("=").Id("value").Dot("value"),
+						)
+					} else {
+						refField = true
+
+						getRetType = []jen.Code{
+							jen.Op("*").Id(s.Name),
+						}
+
+						getBody = append(
+							getBody,
+							jen.Return(jen.Op("&").Id(s.Name).Values(jen.Dict{
+								jen.Id("ptr"): jen.Id("value"),
+							})),
+						)
 					}
 
-					getRetType = []jen.Code{
-						jen.Op("*").Id(s.Name),
-					}
-					setParams = append(setParams, jen.Id("value").Op("*").Id(s.Name))
-
-					getBody = append(
-						getBody,
-						jen.Return(jen.Op("&").Id(s.Name).Values(jen.Dict{
-							jen.Id("value"): jen.Id("value"),
-						})),
-					)
-
-					setBody = append(
-						setBody,
-						tgt.Op("=").Id("value").Dot("value"),
-					)
 				} else if _, ok := g.input.callbacks[v.Name]; ok {
 					o.Commentf("%v skipped due to ident callback", fName)
 					o.Line()
@@ -540,6 +531,8 @@ func (g *Generator) generateStructs() {
 				}
 
 			case *ConstArray:
+				refField = true
+
 				switch iv := v.Inner.(type) {
 				case *IdentType:
 					if pt, ok := primTypes[iv.Name]; ok {
@@ -624,6 +617,31 @@ func (g *Generator) generateStructs() {
 
 			default:
 				log.Panicln("unexpected type", reflect.TypeOf(field.Type))
+			}
+
+			if refField {
+				if st.ByValue {
+					o.Commentf("%v skipped due to ref field of value struct", fName)
+					o.Line()
+
+					continue fieldLoop
+				} else {
+					getBody = slices.Insert(
+						getBody, 0,
+						jen.Code(jen.Id("value").Op(":=").Op("&").Id("s").Dot("ptr").Dot(cName)),
+					)
+				}
+
+			} else if st.ByValue {
+				getBody = slices.Insert(
+					getBody, 0,
+					jen.Code(jen.Id("value").Op(":=").Id("s").Dot("value").Dot(cName)),
+				)
+			} else {
+				getBody = slices.Insert(
+					getBody, 0,
+					jen.Code(jen.Id("value").Op(":=").Id("s").Dot("ptr").Dot(cName)),
+				)
 			}
 
 			o.Func().
