@@ -2,6 +2,7 @@ package ffmpeg
 
 import (
 	"fmt"
+	"sync"
 	"unsafe"
 )
 
@@ -51,7 +52,8 @@ func WrapErr(code int) error {
 }
 
 type CStr struct {
-	ptr *C.char
+	ptr      *C.char
+	dontFree bool
 }
 
 func AllocCStr(len uint) *CStr {
@@ -66,6 +68,40 @@ func ToCStr(val string) *CStr {
 	return &CStr{
 		ptr: C.CString(val),
 	}
+}
+
+var (
+	strMap  = map[string]*CStr{}
+	strLock = sync.RWMutex{}
+)
+
+func GlobalCStr(val string) *CStr {
+	var (
+		ptr *CStr
+		ok  bool
+	)
+
+	strLock.RLock()
+	ptr, ok = strMap[val]
+	strLock.RUnlock()
+
+	if ok {
+		return ptr
+	}
+
+	strLock.Lock()
+	defer strLock.Unlock()
+
+	ptr, ok = strMap[val]
+	if ok {
+		return ptr
+	}
+
+	ptr = ToCStr(val)
+	ptr.dontFree = true
+	strMap[val] = ptr
+
+	return ptr
 }
 
 func wrapCStr(ptr *C.char) *CStr {
@@ -87,6 +123,10 @@ func (s *CStr) String() string {
 }
 
 func (s *CStr) Free() {
+	if s.dontFree {
+		return
+	}
+
 	C.free(unsafe.Pointer(s.ptr))
 }
 
