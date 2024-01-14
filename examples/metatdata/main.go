@@ -10,6 +10,7 @@ import (
 
 func main() {
 	slog.Info("Metadata")
+
 	var ctx *ffmpeg.AVFormatContext
 
 	url := ffmpeg.ToCStr(os.Args[1])
@@ -29,8 +30,10 @@ func main() {
 	empty := ffmpeg.ToCStr("")
 	defer empty.Free()
 
-	for i := uint(0); i < ctx.NbStreams(); i++ {
-		s := ctx.StreamsEntry(i)
+	streams := ctx.Streams()
+
+	for i := uintptr(0); i < uintptr(ctx.NbStreams()); i++ {
+		s := streams.Get(i)
 
 		slog.Info("  Stream", "i", i, "id", s.Id(), "dur", s.Duration())
 

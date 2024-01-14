@@ -48,7 +48,7 @@ func Open(url string, width int, height int) (*Decoder, error) {
 	// Create decoding context
 	decCtx := ffmpeg.AVCodecAllocContext3(dec)
 
-	vs := fmtCtx.StreamsEntry(uint(vsi))
+	vs := fmtCtx.Streams().Get(uintptr(vsi))
 
 	if _, err := ffmpeg.AVCodecParametersToContext(decCtx, vs.Codecpar()); err != nil {
 		return nil, err
@@ -229,8 +229,8 @@ func (d *Decoder) Start(ctx context.Context, c chan<- *Frame) error {
 						pts = ffmpeg.AVRescaleQ(filtFrame.Pts(), d.timeBase, ffmpeg.AVTimeBaseQ)
 					}
 
-					ptr := filtFrame.DataEntry(0)
-					ls := filtFrame.LinesizeEntry(0)
+					ptr := filtFrame.Data().Get(0)
+					ls := filtFrame.Linesize().Get(0)
 
 					data := unsafe.Slice((*byte)(ptr), filtFrame.Height()*ls)
 					dataCopy := slices.Clone(data)
