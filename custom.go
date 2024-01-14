@@ -5,6 +5,10 @@ import (
 	"unsafe"
 )
 
+// AVOptSetSlice is a helper for storing a slice of primitive data to the named field. This function provides no
+// guarantees for usage with Go wrapper types.
+//
+// See AVOptSet for more information.
 func AVOptSetSlice[T any](obj unsafe.Pointer, name *CStr, val []T, searchFlags int) (int, error) {
 	var ty T
 	ptr := unsafe.SliceData(val)

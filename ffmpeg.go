@@ -30,6 +30,7 @@ var (
 	AVErrorEOF = AVError{Code: AVErrorEofConst}
 )
 
+// AVError represents a non-positive return code from FFmpeg.
 type AVError struct {
 	Code int
 }
@@ -43,6 +44,7 @@ func (e AVError) Error() string {
 	return fmt.Sprintf("averror %v: %v", e.Code, buf.String())
 }
 
+// WrapErr returns a AVError if the code is less than zero, otherwise nil.
 func WrapErr(code int) error {
 	if code >= 0 {
 		return nil
@@ -51,11 +53,14 @@ func WrapErr(code int) error {
 	return AVError{Code: code}
 }
 
+// CStr is a string allocated in the C memory space. You may need to call Free to clean up the string depending on the
+// owner and use-case.
 type CStr struct {
 	ptr      *C.char
 	dontFree bool
 }
 
+// AllocCStr allocates an empty string with the given length. The buffer will be initialised to 0.
 func AllocCStr(len uint) *CStr {
 	ptr := (*C.char)(C.calloc(C.ulong(len), C.sizeof_char))
 
@@ -64,6 +69,7 @@ func AllocCStr(len uint) *CStr {
 	}
 }
 
+// ToCStr allocates a new CStr with the given content. The CStr will not be automatically garbage collected.
 func ToCStr(val string) *CStr {
 	return &CStr{
 		ptr: C.CString(val),
@@ -75,6 +81,9 @@ var (
 	strLock = sync.RWMutex{}
 )
 
+// GlobalCStr resolves the given string to a CStr. Multiple calls with the same input string will return the same CStr.
+// You should not attempt to free the CStr returned. When passing to FFmpeg, you may need to call Dup to create a copy
+// if the FFmpeg code expects to take ownership and will likely free the string.
 func GlobalCStr(val string) *CStr {
 	var (
 		ptr *CStr
@@ -114,14 +123,17 @@ func wrapCStr(ptr *C.char) *CStr {
 	}
 }
 
+// Dup is a wrapper for AVStrdup.
 func (s *CStr) Dup() *CStr {
 	return AVStrdup(s)
 }
 
+// String converts the CStr to a Go string.
 func (s *CStr) String() string {
 	return C.GoString(s.ptr)
 }
 
+// Free frees the backing memory for this string. You should only call this function if you are the owner of the memory.
 func (s *CStr) Free() {
 	if s.dontFree {
 		return
@@ -130,10 +142,16 @@ func (s *CStr) Free() {
 	C.free(unsafe.Pointer(s.ptr))
 }
 
+// RawPtr returns a raw reference to the underlying allocation.
 func (s *CStr) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
+// Array is a helper utility for accessing arrays of FFmpeg types. You can not directly allocate this type, and you must
+// use one of the inbuilt constructors, such as AllocAVCodecIDArray.
+//
+// Arrays have no inbuilt length, matching the behaviour of C code. Getting or setting an out of bound index will lead
+// to undefined behaviour.
 type Array[T any] struct {
 	ptr      unsafe.Pointer
 	elemSize uintptr
@@ -141,20 +159,24 @@ type Array[T any] struct {
 	storePtr func(pointer unsafe.Pointer, value T)
 }
 
+// Get returns the element at the ith offset.
 func (a *Array[T]) Get(i uintptr) T {
 	ptr := unsafe.Add(a.ptr, i*a.elemSize)
 	return a.loadPtr(ptr)
 }
 
+// Set sets the element at the ith offset.
 func (a *Array[T]) Set(i uintptr, value T) {
 	ptr := unsafe.Add(a.ptr, i*a.elemSize)
 	a.storePtr(ptr, value)
 }
 
+// Free deallocates the underlying memory. You should only call this if you own the array.
 func (a *Array[T]) Free() {
 	AVFree(a.ptr)
 }
 
+// RawPtr returns a raw handle the underlying allocation.
 func (a *Array[T]) RawPtr() unsafe.Pointer {
 	return a.ptr
 }
