@@ -1,5 +1,7 @@
 package ffmpeg
 
+import "unsafe"
+
 // #include <libavcodec/avcodec.h>
 // #include <libavcodec/codec.h>
 // #include <libavcodec/codec_desc.h>
@@ -33,6 +35,31 @@ import "C"
 // AVSubtitleType wraps AVSubtitleType.
 type AVSubtitleType C.enum_AVSubtitleType
 
+const SizeOfAVSubtitleType = C.sizeof_enum_AVSubtitleType
+
+func ToAVSubtitleTypeArray(ptr unsafe.Pointer) *Array[AVSubtitleType] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVSubtitleType]{
+		elemSize: SizeOfAVSubtitleType,
+		loadPtr: func(pointer unsafe.Pointer) AVSubtitleType {
+			ptr := (*AVSubtitleType)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVSubtitleType) {
+			ptr := (*AVSubtitleType)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVSubtitleTypeArray(size uint64) *Array[AVSubtitleType] {
+	return ToAVSubtitleTypeArray(AVCalloc(size, SizeOfAVSubtitleType))
+}
+
 const (
 	// SubtitleNone wraps SUBTITLE_NONE.
 	SubtitleNone AVSubtitleType = C.SUBTITLE_NONE
@@ -58,6 +85,31 @@ const (
 
 // AVPictureStructure wraps AVPictureStructure.
 type AVPictureStructure C.enum_AVPictureStructure
+
+const SizeOfAVPictureStructure = C.sizeof_enum_AVPictureStructure
+
+func ToAVPictureStructureArray(ptr unsafe.Pointer) *Array[AVPictureStructure] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVPictureStructure]{
+		elemSize: SizeOfAVPictureStructure,
+		loadPtr: func(pointer unsafe.Pointer) AVPictureStructure {
+			ptr := (*AVPictureStructure)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVPictureStructure) {
+			ptr := (*AVPictureStructure)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVPictureStructureArray(size uint64) *Array[AVPictureStructure] {
+	return ToAVPictureStructureArray(AVCalloc(size, SizeOfAVPictureStructure))
+}
 
 const (
 	// AVPictureStructureUnknown wraps AV_PICTURE_STRUCTURE_UNKNOWN.
@@ -97,6 +149,31 @@ const (
   descriptor list and bump libavcodec minor version.
 */
 type AVCodecID C.enum_AVCodecID
+
+const SizeOfAVCodecID = C.sizeof_enum_AVCodecID
+
+func ToAVCodecIDArray(ptr unsafe.Pointer) *Array[AVCodecID] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVCodecID]{
+		elemSize: SizeOfAVCodecID,
+		loadPtr: func(pointer unsafe.Pointer) AVCodecID {
+			ptr := (*AVCodecID)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVCodecID) {
+			ptr := (*AVCodecID)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVCodecIDArray(size uint64) *Array[AVCodecID] {
+	return ToAVCodecIDArray(AVCalloc(size, SizeOfAVCodecID))
+}
 
 const (
 	// AVCodecIdNone wraps AV_CODEC_ID_NONE.
@@ -1316,6 +1393,31 @@ const (
 // AVFieldOrder wraps AVFieldOrder.
 type AVFieldOrder C.enum_AVFieldOrder
 
+const SizeOfAVFieldOrder = C.sizeof_enum_AVFieldOrder
+
+func ToAVFieldOrderArray(ptr unsafe.Pointer) *Array[AVFieldOrder] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVFieldOrder]{
+		elemSize: SizeOfAVFieldOrder,
+		loadPtr: func(pointer unsafe.Pointer) AVFieldOrder {
+			ptr := (*AVFieldOrder)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVFieldOrder) {
+			ptr := (*AVFieldOrder)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVFieldOrderArray(size uint64) *Array[AVFieldOrder] {
+	return ToAVFieldOrderArray(AVCalloc(size, SizeOfAVFieldOrder))
+}
+
 const (
 	// AVFieldUnknown wraps AV_FIELD_UNKNOWN.
 	AVFieldUnknown AVFieldOrder = C.AV_FIELD_UNKNOWN
@@ -1343,6 +1445,31 @@ const (
 
 // AVDiscard wraps AVDiscard.
 type AVDiscard C.enum_AVDiscard
+
+const SizeOfAVDiscard = C.sizeof_enum_AVDiscard
+
+func ToAVDiscardArray(ptr unsafe.Pointer) *Array[AVDiscard] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVDiscard]{
+		elemSize: SizeOfAVDiscard,
+		loadPtr: func(pointer unsafe.Pointer) AVDiscard {
+			ptr := (*AVDiscard)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVDiscard) {
+			ptr := (*AVDiscard)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVDiscardArray(size uint64) *Array[AVDiscard] {
+	return ToAVDiscardArray(AVCalloc(size, SizeOfAVDiscard))
+}
 
 const (
 	// AVDiscardNone wraps AVDISCARD_NONE.
@@ -1380,6 +1507,31 @@ const (
 // AVAudioServiceType wraps AVAudioServiceType.
 type AVAudioServiceType C.enum_AVAudioServiceType
 
+const SizeOfAVAudioServiceType = C.sizeof_enum_AVAudioServiceType
+
+func ToAVAudioServiceTypeArray(ptr unsafe.Pointer) *Array[AVAudioServiceType] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVAudioServiceType]{
+		elemSize: SizeOfAVAudioServiceType,
+		loadPtr: func(pointer unsafe.Pointer) AVAudioServiceType {
+			ptr := (*AVAudioServiceType)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVAudioServiceType) {
+			ptr := (*AVAudioServiceType)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVAudioServiceTypeArray(size uint64) *Array[AVAudioServiceType] {
+	return ToAVAudioServiceTypeArray(AVCalloc(size, SizeOfAVAudioServiceType))
+}
+
 const (
 	// AVAudioServiceTypeMain wraps AV_AUDIO_SERVICE_TYPE_MAIN.
 	AVAudioServiceTypeMain AVAudioServiceType = C.AV_AUDIO_SERVICE_TYPE_MAIN
@@ -1409,6 +1561,31 @@ const (
 
 // AVPacketSideDataType wraps AVPacketSideDataType.
 type AVPacketSideDataType C.enum_AVPacketSideDataType
+
+const SizeOfAVPacketSideDataType = C.sizeof_enum_AVPacketSideDataType
+
+func ToAVPacketSideDataTypeArray(ptr unsafe.Pointer) *Array[AVPacketSideDataType] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVPacketSideDataType]{
+		elemSize: SizeOfAVPacketSideDataType,
+		loadPtr: func(pointer unsafe.Pointer) AVPacketSideDataType {
+			ptr := (*AVPacketSideDataType)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVPacketSideDataType) {
+			ptr := (*AVPacketSideDataType)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVPacketSideDataTypeArray(size uint64) *Array[AVPacketSideDataType] {
+	return ToAVPacketSideDataTypeArray(AVCalloc(size, SizeOfAVPacketSideDataType))
+}
 
 const (
 	// AVPktDataPalette wraps AV_PKT_DATA_PALETTE.
@@ -1686,6 +1863,31 @@ const (
 // AVSideDataParamChangeFlags wraps AVSideDataParamChangeFlags.
 type AVSideDataParamChangeFlags C.enum_AVSideDataParamChangeFlags
 
+const SizeOfAVSideDataParamChangeFlags = C.sizeof_enum_AVSideDataParamChangeFlags
+
+func ToAVSideDataParamChangeFlagsArray(ptr unsafe.Pointer) *Array[AVSideDataParamChangeFlags] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVSideDataParamChangeFlags]{
+		elemSize: SizeOfAVSideDataParamChangeFlags,
+		loadPtr: func(pointer unsafe.Pointer) AVSideDataParamChangeFlags {
+			ptr := (*AVSideDataParamChangeFlags)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVSideDataParamChangeFlags) {
+			ptr := (*AVSideDataParamChangeFlags)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVSideDataParamChangeFlagsArray(size uint64) *Array[AVSideDataParamChangeFlags] {
+	return ToAVSideDataParamChangeFlagsArray(AVCalloc(size, SizeOfAVSideDataParamChangeFlags))
+}
+
 const (
 	// AVSideDataParamChangeChannelCount wraps AV_SIDE_DATA_PARAM_CHANGE_CHANNEL_COUNT.
 	//
@@ -1705,6 +1907,31 @@ const (
 
 // AVStreamParseType wraps AVStreamParseType.
 type AVStreamParseType C.enum_AVStreamParseType
+
+const SizeOfAVStreamParseType = C.sizeof_enum_AVStreamParseType
+
+func ToAVStreamParseTypeArray(ptr unsafe.Pointer) *Array[AVStreamParseType] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVStreamParseType]{
+		elemSize: SizeOfAVStreamParseType,
+		loadPtr: func(pointer unsafe.Pointer) AVStreamParseType {
+			ptr := (*AVStreamParseType)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVStreamParseType) {
+			ptr := (*AVStreamParseType)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVStreamParseTypeArray(size uint64) *Array[AVStreamParseType] {
+	return ToAVStreamParseTypeArray(AVCalloc(size, SizeOfAVStreamParseType))
+}
 
 const (
 	// AVStreamParseNone wraps AVSTREAM_PARSE_NONE.
@@ -1743,6 +1970,31 @@ const (
 */
 type AVDurationEstimationMethod C.enum_AVDurationEstimationMethod
 
+const SizeOfAVDurationEstimationMethod = C.sizeof_enum_AVDurationEstimationMethod
+
+func ToAVDurationEstimationMethodArray(ptr unsafe.Pointer) *Array[AVDurationEstimationMethod] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVDurationEstimationMethod]{
+		elemSize: SizeOfAVDurationEstimationMethod,
+		loadPtr: func(pointer unsafe.Pointer) AVDurationEstimationMethod {
+			ptr := (*AVDurationEstimationMethod)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVDurationEstimationMethod) {
+			ptr := (*AVDurationEstimationMethod)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVDurationEstimationMethodArray(size uint64) *Array[AVDurationEstimationMethod] {
+	return ToAVDurationEstimationMethodArray(AVCalloc(size, SizeOfAVDurationEstimationMethod))
+}
+
 const (
 	// AVFmtDurationFromPts wraps AVFMT_DURATION_FROM_PTS.
 	//
@@ -1763,6 +2015,31 @@ const (
 // AVTimebaseSource wraps AVTimebaseSource.
 type AVTimebaseSource C.enum_AVTimebaseSource
 
+const SizeOfAVTimebaseSource = C.sizeof_enum_AVTimebaseSource
+
+func ToAVTimebaseSourceArray(ptr unsafe.Pointer) *Array[AVTimebaseSource] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVTimebaseSource]{
+		elemSize: SizeOfAVTimebaseSource,
+		loadPtr: func(pointer unsafe.Pointer) AVTimebaseSource {
+			ptr := (*AVTimebaseSource)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVTimebaseSource) {
+			ptr := (*AVTimebaseSource)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVTimebaseSourceArray(size uint64) *Array[AVTimebaseSource] {
+	return ToAVTimebaseSourceArray(AVCalloc(size, SizeOfAVTimebaseSource))
+}
+
 const (
 	// AVFmtTbcfAuto wraps AVFMT_TBCF_AUTO.
 	AVFmtTbcfAuto AVTimebaseSource = C.AVFMT_TBCF_AUTO
@@ -1780,6 +2057,31 @@ const (
 //
 //	Directory entry types.
 type AVIODirEntryType C.enum_AVIODirEntryType
+
+const SizeOfAVIODirEntryType = C.sizeof_enum_AVIODirEntryType
+
+func ToAVIODirEntryTypeArray(ptr unsafe.Pointer) *Array[AVIODirEntryType] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVIODirEntryType]{
+		elemSize: SizeOfAVIODirEntryType,
+		loadPtr: func(pointer unsafe.Pointer) AVIODirEntryType {
+			ptr := (*AVIODirEntryType)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVIODirEntryType) {
+			ptr := (*AVIODirEntryType)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVIODirEntryTypeArray(size uint64) *Array[AVIODirEntryType] {
+	return ToAVIODirEntryTypeArray(AVCalloc(size, SizeOfAVIODirEntryType))
+}
 
 const (
 	// AVIOEntryUnknown wraps AVIO_ENTRY_UNKNOWN.
@@ -1814,6 +2116,31 @@ const (
   write_data_type callback.
 */
 type AVIODataMarkerType C.enum_AVIODataMarkerType
+
+const SizeOfAVIODataMarkerType = C.sizeof_enum_AVIODataMarkerType
+
+func ToAVIODataMarkerTypeArray(ptr unsafe.Pointer) *Array[AVIODataMarkerType] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVIODataMarkerType]{
+		elemSize: SizeOfAVIODataMarkerType,
+		loadPtr: func(pointer unsafe.Pointer) AVIODataMarkerType {
+			ptr := (*AVIODataMarkerType)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVIODataMarkerType) {
+			ptr := (*AVIODataMarkerType)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVIODataMarkerTypeArray(size uint64) *Array[AVIODataMarkerType] {
+	return ToAVIODataMarkerTypeArray(AVCalloc(size, SizeOfAVIODataMarkerType))
+}
 
 const (
 	// AVIODataMarkerHeader wraps AVIO_DATA_MARKER_HEADER.
@@ -1865,6 +2192,31 @@ const (
 //	@brief Media Type
 type AVMediaType C.enum_AVMediaType
 
+const SizeOfAVMediaType = C.sizeof_enum_AVMediaType
+
+func ToAVMediaTypeArray(ptr unsafe.Pointer) *Array[AVMediaType] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVMediaType]{
+		elemSize: SizeOfAVMediaType,
+		loadPtr: func(pointer unsafe.Pointer) AVMediaType {
+			ptr := (*AVMediaType)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVMediaType) {
+			ptr := (*AVMediaType)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVMediaTypeArray(size uint64) *Array[AVMediaType] {
+	return ToAVMediaTypeArray(AVCalloc(size, SizeOfAVMediaType))
+}
+
 const (
 	// AVMediaTypeUnknown wraps AVMEDIA_TYPE_UNKNOWN.
 	//
@@ -1892,6 +2244,31 @@ const (
 
 // AVPictureType wraps AVPictureType.
 type AVPictureType C.enum_AVPictureType
+
+const SizeOfAVPictureType = C.sizeof_enum_AVPictureType
+
+func ToAVPictureTypeArray(ptr unsafe.Pointer) *Array[AVPictureType] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVPictureType]{
+		elemSize: SizeOfAVPictureType,
+		loadPtr: func(pointer unsafe.Pointer) AVPictureType {
+			ptr := (*AVPictureType)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVPictureType) {
+			ptr := (*AVPictureType)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVPictureTypeArray(size uint64) *Array[AVPictureType] {
+	return ToAVPictureTypeArray(AVCalloc(size, SizeOfAVPictureType))
+}
 
 const (
 	// AVPictureTypeNone wraps AV_PICTURE_TYPE_NONE.
@@ -1932,6 +2309,31 @@ const (
 
 // AVChannel wraps AVChannel.
 type AVChannel C.enum_AVChannel
+
+const SizeOfAVChannel = C.sizeof_enum_AVChannel
+
+func ToAVChannelArray(ptr unsafe.Pointer) *Array[AVChannel] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVChannel]{
+		elemSize: SizeOfAVChannel,
+		loadPtr: func(pointer unsafe.Pointer) AVChannel {
+			ptr := (*AVChannel)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVChannel) {
+			ptr := (*AVChannel)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVChannelArray(size uint64) *Array[AVChannel] {
+	return ToAVChannelArray(AVCalloc(size, SizeOfAVChannel))
+}
 
 const (
 	// AVChanNone wraps AV_CHAN_NONE.
@@ -2055,6 +2457,31 @@ const (
 // AVChannelOrder wraps AVChannelOrder.
 type AVChannelOrder C.enum_AVChannelOrder
 
+const SizeOfAVChannelOrder = C.sizeof_enum_AVChannelOrder
+
+func ToAVChannelOrderArray(ptr unsafe.Pointer) *Array[AVChannelOrder] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVChannelOrder]{
+		elemSize: SizeOfAVChannelOrder,
+		loadPtr: func(pointer unsafe.Pointer) AVChannelOrder {
+			ptr := (*AVChannelOrder)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVChannelOrder) {
+			ptr := (*AVChannelOrder)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVChannelOrderArray(size uint64) *Array[AVChannelOrder] {
+	return ToAVChannelOrderArray(AVCalloc(size, SizeOfAVChannelOrder))
+}
+
 const (
 	// AVChannelOrderUnspec wraps AV_CHANNEL_ORDER_UNSPEC.
 	/*
@@ -2108,6 +2535,31 @@ const (
 // AVMatrixEncoding wraps AVMatrixEncoding.
 type AVMatrixEncoding C.enum_AVMatrixEncoding
 
+const SizeOfAVMatrixEncoding = C.sizeof_enum_AVMatrixEncoding
+
+func ToAVMatrixEncodingArray(ptr unsafe.Pointer) *Array[AVMatrixEncoding] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVMatrixEncoding]{
+		elemSize: SizeOfAVMatrixEncoding,
+		loadPtr: func(pointer unsafe.Pointer) AVMatrixEncoding {
+			ptr := (*AVMatrixEncoding)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVMatrixEncoding) {
+			ptr := (*AVMatrixEncoding)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVMatrixEncodingArray(size uint64) *Array[AVMatrixEncoding] {
+	return ToAVMatrixEncodingArray(AVCalloc(size, SizeOfAVMatrixEncoding))
+}
+
 const (
 	// AVMatrixEncodingNone wraps AV_MATRIX_ENCODING_NONE.
 	AVMatrixEncodingNone AVMatrixEncoding = C.AV_MATRIX_ENCODING_NONE
@@ -2133,6 +2585,31 @@ const (
 //
 //	AVFrame is an abstraction for reference-counted raw multimedia data.
 type AVFrameSideDataType C.enum_AVFrameSideDataType
+
+const SizeOfAVFrameSideDataType = C.sizeof_enum_AVFrameSideDataType
+
+func ToAVFrameSideDataTypeArray(ptr unsafe.Pointer) *Array[AVFrameSideDataType] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVFrameSideDataType]{
+		elemSize: SizeOfAVFrameSideDataType,
+		loadPtr: func(pointer unsafe.Pointer) AVFrameSideDataType {
+			ptr := (*AVFrameSideDataType)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVFrameSideDataType) {
+			ptr := (*AVFrameSideDataType)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVFrameSideDataTypeArray(size uint64) *Array[AVFrameSideDataType] {
+	return ToAVFrameSideDataTypeArray(AVCalloc(size, SizeOfAVFrameSideDataType))
+}
 
 const (
 	// AVFrameDataPanscan wraps AV_FRAME_DATA_PANSCAN.
@@ -2317,6 +2794,31 @@ const (
 // AVActiveFormatDescription wraps AVActiveFormatDescription.
 type AVActiveFormatDescription C.enum_AVActiveFormatDescription
 
+const SizeOfAVActiveFormatDescription = C.sizeof_enum_AVActiveFormatDescription
+
+func ToAVActiveFormatDescriptionArray(ptr unsafe.Pointer) *Array[AVActiveFormatDescription] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVActiveFormatDescription]{
+		elemSize: SizeOfAVActiveFormatDescription,
+		loadPtr: func(pointer unsafe.Pointer) AVActiveFormatDescription {
+			ptr := (*AVActiveFormatDescription)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVActiveFormatDescription) {
+			ptr := (*AVActiveFormatDescription)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVActiveFormatDescriptionArray(size uint64) *Array[AVActiveFormatDescription] {
+	return ToAVActiveFormatDescriptionArray(AVCalloc(size, SizeOfAVActiveFormatDescription))
+}
+
 const (
 	// AVAfdSame wraps AV_AFD_SAME.
 	AVAfdSame AVActiveFormatDescription = C.AV_AFD_SAME
@@ -2338,6 +2840,31 @@ const (
 
 // AVHWDeviceType wraps AVHWDeviceType.
 type AVHWDeviceType C.enum_AVHWDeviceType
+
+const SizeOfAVHWDeviceType = C.sizeof_enum_AVHWDeviceType
+
+func ToAVHWDeviceTypeArray(ptr unsafe.Pointer) *Array[AVHWDeviceType] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVHWDeviceType]{
+		elemSize: SizeOfAVHWDeviceType,
+		loadPtr: func(pointer unsafe.Pointer) AVHWDeviceType {
+			ptr := (*AVHWDeviceType)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVHWDeviceType) {
+			ptr := (*AVHWDeviceType)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVHWDeviceTypeArray(size uint64) *Array[AVHWDeviceType] {
+	return ToAVHWDeviceTypeArray(AVCalloc(size, SizeOfAVHWDeviceType))
+}
 
 const (
 	// AVHwdeviceTypeNone wraps AV_HWDEVICE_TYPE_NONE.
@@ -2371,6 +2898,31 @@ const (
 // AVHWFrameTransferDirection wraps AVHWFrameTransferDirection.
 type AVHWFrameTransferDirection C.enum_AVHWFrameTransferDirection
 
+const SizeOfAVHWFrameTransferDirection = C.sizeof_enum_AVHWFrameTransferDirection
+
+func ToAVHWFrameTransferDirectionArray(ptr unsafe.Pointer) *Array[AVHWFrameTransferDirection] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVHWFrameTransferDirection]{
+		elemSize: SizeOfAVHWFrameTransferDirection,
+		loadPtr: func(pointer unsafe.Pointer) AVHWFrameTransferDirection {
+			ptr := (*AVHWFrameTransferDirection)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVHWFrameTransferDirection) {
+			ptr := (*AVHWFrameTransferDirection)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVHWFrameTransferDirectionArray(size uint64) *Array[AVHWFrameTransferDirection] {
+	return ToAVHWFrameTransferDirectionArray(AVCalloc(size, SizeOfAVHWFrameTransferDirection))
+}
+
 const (
 	// AVHwframeTransferDirectionFrom wraps AV_HWFRAME_TRANSFER_DIRECTION_FROM.
 	//
@@ -2386,6 +2938,31 @@ const (
 
 // AVClassCategory wraps AVClassCategory.
 type AVClassCategory C.AVClassCategory
+
+const SizeOfAVClassCategory = C.sizeof_AVClassCategory
+
+func ToAVClassCategoryArray(ptr unsafe.Pointer) *Array[AVClassCategory] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVClassCategory]{
+		elemSize: SizeOfAVClassCategory,
+		loadPtr: func(pointer unsafe.Pointer) AVClassCategory {
+			ptr := (*AVClassCategory)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVClassCategory) {
+			ptr := (*AVClassCategory)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVClassCategoryArray(size uint64) *Array[AVClassCategory] {
+	return ToAVClassCategoryArray(AVCalloc(size, SizeOfAVClassCategory))
+}
 
 const (
 	// AVClassCategoryNa wraps AV_CLASS_CATEGORY_NA.
@@ -2434,6 +3011,31 @@ const (
 //
 //	Rounding methods.
 type AVRounding C.enum_AVRounding
+
+const SizeOfAVRounding = C.sizeof_enum_AVRounding
+
+func ToAVRoundingArray(ptr unsafe.Pointer) *Array[AVRounding] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVRounding]{
+		elemSize: SizeOfAVRounding,
+		loadPtr: func(pointer unsafe.Pointer) AVRounding {
+			ptr := (*AVRounding)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVRounding) {
+			ptr := (*AVRounding)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVRoundingArray(size uint64) *Array[AVRounding] {
+	return ToAVRoundingArray(AVCalloc(size, SizeOfAVRounding))
+}
 
 const (
 	// AVRoundZero wraps AV_ROUND_ZERO.
@@ -2487,6 +3089,31 @@ const (
 
 // AVOptionType wraps AVOptionType.
 type AVOptionType C.enum_AVOptionType
+
+const SizeOfAVOptionType = C.sizeof_enum_AVOptionType
+
+func ToAVOptionTypeArray(ptr unsafe.Pointer) *Array[AVOptionType] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVOptionType]{
+		elemSize: SizeOfAVOptionType,
+		loadPtr: func(pointer unsafe.Pointer) AVOptionType {
+			ptr := (*AVOptionType)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVOptionType) {
+			ptr := (*AVOptionType)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVOptionTypeArray(size uint64) *Array[AVOptionType] {
+	return ToAVOptionTypeArray(AVCalloc(size, SizeOfAVOptionType))
+}
 
 const (
 	// AVOptTypeFlags wraps AV_OPT_TYPE_FLAGS.
@@ -2570,6 +3197,31 @@ const (
   allocating the picture.
 */
 type AVPixelFormat C.enum_AVPixelFormat
+
+const SizeOfAVPixelFormat = C.sizeof_enum_AVPixelFormat
+
+func ToAVPixelFormatArray(ptr unsafe.Pointer) *Array[AVPixelFormat] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVPixelFormat]{
+		elemSize: SizeOfAVPixelFormat,
+		loadPtr: func(pointer unsafe.Pointer) AVPixelFormat {
+			ptr := (*AVPixelFormat)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVPixelFormat) {
+			ptr := (*AVPixelFormat)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVPixelFormatArray(size uint64) *Array[AVPixelFormat] {
+	return ToAVPixelFormatArray(AVCalloc(size, SizeOfAVPixelFormat))
+}
 
 const (
 	// AVPixFmtNone wraps AV_PIX_FMT_NONE.
@@ -3543,6 +4195,31 @@ const (
 */
 type AVColorPrimaries C.enum_AVColorPrimaries
 
+const SizeOfAVColorPrimaries = C.sizeof_enum_AVColorPrimaries
+
+func ToAVColorPrimariesArray(ptr unsafe.Pointer) *Array[AVColorPrimaries] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVColorPrimaries]{
+		elemSize: SizeOfAVColorPrimaries,
+		loadPtr: func(pointer unsafe.Pointer) AVColorPrimaries {
+			ptr := (*AVColorPrimaries)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVColorPrimaries) {
+			ptr := (*AVColorPrimaries)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVColorPrimariesArray(size uint64) *Array[AVColorPrimaries] {
+	return ToAVColorPrimariesArray(AVCalloc(size, SizeOfAVColorPrimaries))
+}
+
 const (
 	// AVColPriReserved0 wraps AVCOL_PRI_RESERVED0.
 	AVColPriReserved0 AVColorPrimaries = C.AVCOL_PRI_RESERVED0
@@ -3612,6 +4289,31 @@ const (
   These values match the ones defined by ISO/IEC 23091-2_2019 subclause 8.2.
 */
 type AVColorTransferCharacteristic C.enum_AVColorTransferCharacteristic
+
+const SizeOfAVColorTransferCharacteristic = C.sizeof_enum_AVColorTransferCharacteristic
+
+func ToAVColorTransferCharacteristicArray(ptr unsafe.Pointer) *Array[AVColorTransferCharacteristic] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVColorTransferCharacteristic]{
+		elemSize: SizeOfAVColorTransferCharacteristic,
+		loadPtr: func(pointer unsafe.Pointer) AVColorTransferCharacteristic {
+			ptr := (*AVColorTransferCharacteristic)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVColorTransferCharacteristic) {
+			ptr := (*AVColorTransferCharacteristic)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVColorTransferCharacteristicArray(size uint64) *Array[AVColorTransferCharacteristic] {
+	return ToAVColorTransferCharacteristicArray(AVCalloc(size, SizeOfAVColorTransferCharacteristic))
+}
 
 const (
 	// AVColTrcReserved0 wraps AVCOL_TRC_RESERVED0.
@@ -3700,6 +4402,31 @@ const (
   These values match the ones defined by ISO/IEC 23091-2_2019 subclause 8.3.
 */
 type AVColorSpace C.enum_AVColorSpace
+
+const SizeOfAVColorSpace = C.sizeof_enum_AVColorSpace
+
+func ToAVColorSpaceArray(ptr unsafe.Pointer) *Array[AVColorSpace] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVColorSpace]{
+		elemSize: SizeOfAVColorSpace,
+		loadPtr: func(pointer unsafe.Pointer) AVColorSpace {
+			ptr := (*AVColorSpace)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVColorSpace) {
+			ptr := (*AVColorSpace)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVColorSpaceArray(size uint64) *Array[AVColorSpace] {
+	return ToAVColorSpaceArray(AVCalloc(size, SizeOfAVColorSpace))
+}
 
 const (
 	// AVColSpcRgb wraps AVCOL_SPC_RGB.
@@ -3792,6 +4519,31 @@ const (
 */
 type AVColorRange C.enum_AVColorRange
 
+const SizeOfAVColorRange = C.sizeof_enum_AVColorRange
+
+func ToAVColorRangeArray(ptr unsafe.Pointer) *Array[AVColorRange] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVColorRange]{
+		elemSize: SizeOfAVColorRange,
+		loadPtr: func(pointer unsafe.Pointer) AVColorRange {
+			ptr := (*AVColorRange)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVColorRange) {
+			ptr := (*AVColorRange)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVColorRangeArray(size uint64) *Array[AVColorRange] {
+	return ToAVColorRangeArray(AVCalloc(size, SizeOfAVColorRange))
+}
+
 const (
 	// AVColRangeUnspecified wraps AVCOL_RANGE_UNSPECIFIED.
 	AVColRangeUnspecified AVColorRange = C.AVCOL_RANGE_UNSPECIFIED
@@ -3855,6 +4607,31 @@ const (
 */
 type AVChromaLocation C.enum_AVChromaLocation
 
+const SizeOfAVChromaLocation = C.sizeof_enum_AVChromaLocation
+
+func ToAVChromaLocationArray(ptr unsafe.Pointer) *Array[AVChromaLocation] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVChromaLocation]{
+		elemSize: SizeOfAVChromaLocation,
+		loadPtr: func(pointer unsafe.Pointer) AVChromaLocation {
+			ptr := (*AVChromaLocation)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVChromaLocation) {
+			ptr := (*AVChromaLocation)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVChromaLocationArray(size uint64) *Array[AVChromaLocation] {
+	return ToAVChromaLocationArray(AVCalloc(size, SizeOfAVChromaLocation))
+}
+
 const (
 	// AVChromaLocUnspecified wraps AVCHROMA_LOC_UNSPECIFIED.
 	AVChromaLocUnspecified AVChromaLocation = C.AVCHROMA_LOC_UNSPECIFIED
@@ -3906,6 +4683,31 @@ const (
   linesize is the buffer size, in bytes, for the 1 plane.
 */
 type AVSampleFormat C.enum_AVSampleFormat
+
+const SizeOfAVSampleFormat = C.sizeof_enum_AVSampleFormat
+
+func ToAVSampleFormatArray(ptr unsafe.Pointer) *Array[AVSampleFormat] {
+	if ptr == nil {
+		return nil
+	}
+
+	return &Array[AVSampleFormat]{
+		elemSize: SizeOfAVSampleFormat,
+		loadPtr: func(pointer unsafe.Pointer) AVSampleFormat {
+			ptr := (*AVSampleFormat)(pointer)
+			return *ptr
+		},
+		ptr: ptr,
+		storePtr: func(pointer unsafe.Pointer, value AVSampleFormat) {
+			ptr := (*AVSampleFormat)(pointer)
+			*ptr = value
+		},
+	}
+}
+
+func AllocAVSampleFormatArray(size uint64) *Array[AVSampleFormat] {
+	return ToAVSampleFormatArray(AVCalloc(size, SizeOfAVSampleFormat))
+}
 
 const (
 	// AVSampleFmtNone wraps AV_SAMPLE_FMT_NONE.

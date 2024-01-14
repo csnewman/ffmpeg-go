@@ -40,6 +40,7 @@ type RcOverride struct {
 func (s *RcOverride) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *RcOverride) StartFrame() int {
 	value := s.ptr.start_frame
 	return int(value)
@@ -110,6 +111,7 @@ type AVCodecContext struct {
 func (s *AVCodecContext) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVCodecContext) AvClass() *AVClass {
 	value := s.ptr.av_class
 	var valueMapped *AVClass
@@ -1546,6 +1548,7 @@ type AVHWAccel struct {
 func (s *AVHWAccel) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVHWAccel) Name() *CStr {
 	value := s.ptr.name
 	return wrapCStr(value)
@@ -1644,6 +1647,7 @@ type AVSubtitleRect struct {
 func (s *AVSubtitleRect) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVSubtitleRect) X() int {
 	value := s.ptr.x
 	return int(value)
@@ -1753,6 +1757,7 @@ type AVSubtitle struct {
 func (s *AVSubtitle) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVSubtitle) Format() uint16 {
 	value := s.ptr.format
 	return uint16(value)
@@ -1818,6 +1823,7 @@ type AVCodecParserContext struct {
 func (s *AVCodecParserContext) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVCodecParserContext) PrivData() unsafe.Pointer {
 	value := s.ptr.priv_data
 	return value
@@ -2151,6 +2157,7 @@ type AVCodecParser struct {
 func (s *AVCodecParser) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVCodecParser) CodecIdsEntry(i uint) int {
 	value := s.ptr.codec_ids[i]
 	return int(value)
@@ -2189,6 +2196,7 @@ type AVProfile struct {
 func (s *AVProfile) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVProfile) Profile() int {
 	value := s.ptr.profile
 	return int(value)
@@ -2219,6 +2227,7 @@ type AVCodec struct {
 func (s *AVCodec) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVCodec) Name() *CStr {
 	value := s.ptr.name
 	return wrapCStr(value)
@@ -2275,11 +2284,33 @@ func (s *AVCodec) SetMaxLowres(value uint8) {
 
 // SupportedFramerates skipped due to struct value ptr
 
-// PixFmts skipped due to enum ptr
+func (s *AVCodec) PixFmts() *Array[AVPixelFormat] {
+	value := s.ptr.pix_fmts
+	return ToAVPixelFormatArray(unsafe.Pointer(value))
+}
+
+func (s *AVCodec) SetPixFmts(value *Array[AVPixelFormat]) {
+	if value != nil {
+		s.ptr.pix_fmts = (*C.enum_AVPixelFormat)(value.ptr)
+	} else {
+		s.ptr.pix_fmts = nil
+	}
+}
 
 // SupportedSamplerates skipped due to prim ptr
 
-// SampleFmts skipped due to enum ptr
+func (s *AVCodec) SampleFmts() *Array[AVSampleFormat] {
+	value := s.ptr.sample_fmts
+	return ToAVSampleFormatArray(unsafe.Pointer(value))
+}
+
+func (s *AVCodec) SetSampleFmts(value *Array[AVSampleFormat]) {
+	if value != nil {
+		s.ptr.sample_fmts = (*C.enum_AVSampleFormat)(value.ptr)
+	} else {
+		s.ptr.sample_fmts = nil
+	}
+}
 
 // ChannelLayouts skipped due to prim ptr
 
@@ -2353,6 +2384,7 @@ type AVCodecHWConfig struct {
 func (s *AVCodecHWConfig) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVCodecHWConfig) PixFmt() AVPixelFormat {
 	value := s.ptr.pix_fmt
 	return AVPixelFormat(value)
@@ -2395,6 +2427,7 @@ type AVCodecDescriptor struct {
 func (s *AVCodecDescriptor) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVCodecDescriptor) Id() AVCodecID {
 	value := s.ptr.id
 	return AVCodecID(value)
@@ -2476,6 +2509,7 @@ type AVCodecParameters struct {
 func (s *AVCodecParameters) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVCodecParameters) CodecType() AVMediaType {
 	value := s.ptr.codec_type
 	return AVMediaType(value)
@@ -2754,6 +2788,7 @@ type AVPanScan struct {
 func (s *AVPanScan) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVPanScan) Id() int {
 	value := s.ptr.id
 	return int(value)
@@ -2798,6 +2833,7 @@ type AVCPBProperties struct {
 func (s *AVCPBProperties) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVCPBProperties) MaxBitrate() int64 {
 	value := s.ptr.max_bitrate
 	return int64(value)
@@ -2858,6 +2894,7 @@ type AVProducerReferenceTime struct {
 func (s *AVProducerReferenceTime) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVProducerReferenceTime) Wallclock() int64 {
 	value := s.ptr.wallclock
 	return int64(value)
@@ -2886,6 +2923,7 @@ type AVPacketSideData struct {
 func (s *AVPacketSideData) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVPacketSideData) Data() unsafe.Pointer {
 	value := s.ptr.data
 	return unsafe.Pointer(value)
@@ -2953,6 +2991,7 @@ type AVPacket struct {
 func (s *AVPacket) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVPacket) Buf() *AVBufferRef {
 	value := s.ptr.buf
 	var valueMapped *AVBufferRef
@@ -3145,6 +3184,7 @@ type AVFilterContext struct {
 func (s *AVFilterContext) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVFilterContext) AvClass() *AVClass {
 	value := s.ptr.av_class
 	var valueMapped *AVClass
@@ -3409,6 +3449,7 @@ type AVFilterLink struct {
 func (s *AVFilterLink) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVFilterLink) Src() *AVFilterContext {
 	value := s.ptr.src
 	var valueMapped *AVFilterContext
@@ -3762,6 +3803,7 @@ type AVFilter struct {
 func (s *AVFilter) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVFilter) Name() *CStr {
 	value := s.ptr.name
 	return wrapCStr(value)
@@ -3928,6 +3970,7 @@ type AVFilterFormatsConfig struct {
 func (s *AVFilterFormatsConfig) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVFilterFormatsConfig) Formats() *AVFilterFormats {
 	value := s.ptr.formats
 	var valueMapped *AVFilterFormats
@@ -4000,6 +4043,7 @@ type AVFilterGraph struct {
 func (s *AVFilterGraph) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVFilterGraph) AvClass() *AVClass {
 	value := s.ptr.av_class
 	var valueMapped *AVClass
@@ -4147,6 +4191,7 @@ type AVFilterInOut struct {
 func (s *AVFilterInOut) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVFilterInOut) Name() *CStr {
 	value := s.ptr.name
 	return wrapCStr(value)
@@ -4215,6 +4260,7 @@ type AVFilterPadParams struct {
 func (s *AVFilterPadParams) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVFilterPadParams) Label() *CStr {
 	value := s.ptr.label
 	return wrapCStr(value)
@@ -4240,6 +4286,7 @@ type AVFilterParams struct {
 func (s *AVFilterParams) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVFilterParams) Filter() *AVFilterContext {
 	value := s.ptr.filter
 	var valueMapped *AVFilterContext
@@ -4346,6 +4393,7 @@ type AVFilterChain struct {
 func (s *AVFilterChain) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVFilterChain) FiltersEntry(i uint) *AVFilterParams {
 	value := s.ptr.filters
 	ptr := arrayGet[*C.AVFilterParams](value, uintptr(i))
@@ -4384,6 +4432,7 @@ type AVFilterGraphSegment struct {
 func (s *AVFilterGraphSegment) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVFilterGraphSegment) Graph() *AVFilterGraph {
 	value := s.ptr.graph
 	var valueMapped *AVFilterGraph
@@ -4446,6 +4495,7 @@ type AVBufferSrcParameters struct {
 func (s *AVBufferSrcParameters) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVBufferSrcParameters) Format() int {
 	value := s.ptr.format
 	return int(value)
@@ -4573,6 +4623,7 @@ type AVProbeData struct {
 func (s *AVProbeData) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVProbeData) Filename() *CStr {
 	value := s.ptr.filename
 	return wrapCStr(value)
@@ -4612,6 +4663,7 @@ type AVOutputFormat struct {
 func (s *AVOutputFormat) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVOutputFormat) Name() *CStr {
 	value := s.ptr.name
 	return wrapCStr(value)
@@ -4721,6 +4773,7 @@ type AVInputFormat struct {
 func (s *AVInputFormat) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVInputFormat) Name() *CStr {
 	value := s.ptr.name
 	return wrapCStr(value)
@@ -4850,6 +4903,7 @@ type AVIndexEntry struct {
 func (s *AVIndexEntry) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVIndexEntry) Pos() int64 {
 	value := s.ptr.pos
 	return int64(value)
@@ -4898,6 +4952,7 @@ type AVStream struct {
 func (s *AVStream) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVStream) AvClass() *AVClass {
 	value := s.ptr.av_class
 	var valueMapped *AVClass
@@ -5119,6 +5174,7 @@ type AVProgram struct {
 func (s *AVProgram) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVProgram) Id() int {
 	value := s.ptr.id
 	return int(value)
@@ -5256,6 +5312,7 @@ type AVChapter struct {
 func (s *AVChapter) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVChapter) Id() int64 {
 	value := s.ptr.id
 	return int64(value)
@@ -5333,6 +5390,7 @@ type AVFormatContext struct {
 func (s *AVFormatContext) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVFormatContext) AvClass() *AVClass {
 	value := s.ptr.av_class
 	var valueMapped *AVClass
@@ -6079,6 +6137,7 @@ type AVIODirEntry struct {
 func (s *AVIODirEntry) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVIODirEntry) Name() *CStr {
 	value := s.ptr.name
 	return wrapCStr(value)
@@ -6204,6 +6263,7 @@ type AVIOContext struct {
 func (s *AVIOContext) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVIOContext) AvClass() *AVClass {
 	value := s.ptr.av_class
 	var valueMapped *AVClass
@@ -6416,6 +6476,7 @@ type AVBufferRef struct {
 func (s *AVBufferRef) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVBufferRef) Buffer() *AVBuffer {
 	value := s.ptr.buffer
 	var valueMapped *AVBuffer
@@ -6480,6 +6541,7 @@ type AVChannelCustom struct {
 func (s *AVChannelCustom) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVChannelCustom) Id() AVChannel {
 	value := s.ptr.id
 	return AVChannel(value)
@@ -6547,6 +6609,7 @@ type AVChannelLayout struct {
 func (s *AVChannelLayout) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVChannelLayout) Order() AVChannelOrder {
 	value := s.ptr.order
 	return AVChannelOrder(value)
@@ -6597,6 +6660,7 @@ type AVDictionaryEntry struct {
 func (s *AVDictionaryEntry) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVDictionaryEntry) Key() *CStr {
 	value := s.ptr.key
 	return wrapCStr(value)
@@ -6642,6 +6706,7 @@ type AVFrameSideData struct {
 func (s *AVFrameSideData) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVFrameSideData) Type() AVFrameSideDataType {
 	value := s.ptr._type
 	return AVFrameSideDataType(value)
@@ -6724,6 +6789,7 @@ type AVRegionOfInterest struct {
 func (s *AVRegionOfInterest) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVRegionOfInterest) SelfSize() uint32 {
 	value := s.ptr.self_size
 	return uint32(value)
@@ -6818,6 +6884,7 @@ type AVFrame struct {
 func (s *AVFrame) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVFrame) DataEntry(i uint) unsafe.Pointer {
 	value := s.ptr.data[i]
 	return unsafe.Pointer(value)
@@ -7343,6 +7410,7 @@ type AVHWDeviceContext struct {
 func (s *AVHWDeviceContext) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVHWDeviceContext) AvClass() *AVClass {
 	value := s.ptr.av_class
 	var valueMapped *AVClass
@@ -7437,6 +7505,7 @@ type AVHWFramesContext struct {
 func (s *AVHWFramesContext) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVHWFramesContext) AvClass() *AVClass {
 	value := s.ptr.av_class
 	var valueMapped *AVClass
@@ -7604,9 +7673,31 @@ func (s *AVHWFramesConstraints) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
 
-// ValidHwFormats skipped due to enum ptr
+func (s *AVHWFramesConstraints) ValidHwFormats() *Array[AVPixelFormat] {
+	value := s.ptr.valid_hw_formats
+	return ToAVPixelFormatArray(unsafe.Pointer(value))
+}
 
-// ValidSwFormats skipped due to enum ptr
+func (s *AVHWFramesConstraints) SetValidHwFormats(value *Array[AVPixelFormat]) {
+	if value != nil {
+		s.ptr.valid_hw_formats = (*C.enum_AVPixelFormat)(value.ptr)
+	} else {
+		s.ptr.valid_hw_formats = nil
+	}
+}
+
+func (s *AVHWFramesConstraints) ValidSwFormats() *Array[AVPixelFormat] {
+	value := s.ptr.valid_sw_formats
+	return ToAVPixelFormatArray(unsafe.Pointer(value))
+}
+
+func (s *AVHWFramesConstraints) SetValidSwFormats(value *Array[AVPixelFormat]) {
+	if value != nil {
+		s.ptr.valid_sw_formats = (*C.enum_AVPixelFormat)(value.ptr)
+	} else {
+		s.ptr.valid_sw_formats = nil
+	}
+}
 
 func (s *AVHWFramesConstraints) MinWidth() int {
 	value := s.ptr.min_width
@@ -7659,6 +7750,7 @@ type AVClass struct {
 func (s *AVClass) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVClass) ClassName() *CStr {
 	value := s.ptr.class_name
 	return wrapCStr(value)
@@ -7743,6 +7835,7 @@ type AVOption struct {
 func (s *AVOption) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVOption) Name() *CStr {
 	value := s.ptr.name
 	return wrapCStr(value)
@@ -7829,6 +7922,7 @@ type AVOptionRange struct {
 func (s *AVOptionRange) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVOptionRange) Str() *CStr {
 	value := s.ptr.str
 	return wrapCStr(value)
@@ -7895,6 +7989,7 @@ type AVOptionRanges struct {
 func (s *AVOptionRanges) RawPtr() unsafe.Pointer {
 	return unsafe.Pointer(s.ptr)
 }
+
 func (s *AVOptionRanges) RangeEntry(i uint) *AVOptionRange {
 	value := s.ptr._range
 	ptr := arrayGet[*C.AVOptionRange](value, uintptr(i))

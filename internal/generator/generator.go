@@ -103,6 +103,55 @@ func (g *Generator) generateEnums() {
 
 		o.Type().Id(goName).Qual("C", cName)
 
+		o.Const().Id(fmt.Sprintf("SizeOf%v", goName)).Op("=").Qual("C", fmt.Sprintf("sizeof_%v", cName))
+
+		o.Func().
+			Id(fmt.Sprintf("To%vArray", goName)).
+			Params(jen.Id("ptr").Qual("unsafe", "Pointer")).
+			Op("*").Id("Array").Types(jen.Id(goName)).
+			Block(
+				jen.If(jen.Id("ptr").Op("==").Id("nil")).Block(
+					jen.Return(jen.Id("nil")),
+				),
+				jen.Line(),
+				jen.Return(
+					jen.Op("&").Id("Array").Types(jen.Id(goName)).Values(jen.Dict{
+						jen.Id("ptr"):      jen.Id("ptr"),
+						jen.Id("elemSize"): jen.Id(fmt.Sprintf("SizeOf%v", goName)),
+
+						jen.Id("loadPtr"): jen.Func().
+							Params(jen.Id("pointer").Qual("unsafe", "Pointer")).
+							Id(goName).
+							Block(
+								jen.Id("ptr").Op(":=").Parens(jen.Op("*").Id(goName)).Parens(jen.Id("pointer")),
+								jen.Return(jen.Op("*").Id("ptr")),
+							),
+
+						jen.Id("storePtr"): jen.Func().
+							Params(
+								jen.Id("pointer").Qual("unsafe", "Pointer"),
+								jen.Id("value").Id(goName),
+							).
+							Block(
+								jen.Id("ptr").Op(":=").Parens(jen.Op("*").Id(goName)).Parens(jen.Id("pointer")),
+								jen.Op("*").Id("ptr").Op("=").Id("value"),
+							),
+					}),
+				),
+			)
+
+		o.Line()
+
+		o.Func().
+			Id(fmt.Sprintf("Alloc%vArray", goName)).
+			Params(jen.Id("size").Id("uint64")).
+			Op("*").Id("Array").Types(jen.Id(goName)).
+			Block(
+				jen.Return(jen.Id(fmt.Sprintf("To%vArray", goName)).Params(
+					jen.Id("AVCalloc").Params(jen.Id("size"), jen.Id(fmt.Sprintf("SizeOf%v", goName))),
+				)),
+			)
+
 		var valDefs []jen.Code
 
 		for _, constant := range enum.Constants {
@@ -165,6 +214,8 @@ func (g *Generator) generateStructs() {
 				Params().
 				Qual("unsafe", "Pointer").
 				Block(jen.Return(jen.Qual("unsafe", "Pointer").Params(jen.Id("s").Dot("ptr"))))
+
+			o.Line()
 		}
 
 	fieldLoop:
@@ -332,11 +383,31 @@ func (g *Generator) generateStructs() {
 						o.Line()
 
 						continue fieldLoop
-					} else if _, ok := g.input.enums[iv.Name]; ok {
-						o.Commentf("%v skipped due to enum ptr", fName)
-						o.Line()
+					} else if enum, ok := g.input.enums[iv.Name]; ok {
+						getRetType = []jen.Code{
+							jen.Op("*").Id("Array").Types(jen.Id(iv.Name)),
+						}
 
-						continue fieldLoop
+						getBody = append(
+							getBody,
+							jen.Return(jen.Id(fmt.Sprintf("To%vArray", iv.Name)).Params(
+								jen.Qual("unsafe", "Pointer").Params(jen.Id("value")),
+							)),
+						)
+
+						setParams = append(setParams, jen.Id("value").Op("*").Id("Array").Types(jen.Id(iv.Name)))
+
+						cName := enum.CName()
+
+						setBody = append(
+							setBody,
+							jen.If(jen.Id("value").Op("!=").Id("nil")).Block(
+								tgt.Clone().Op("=").Params(jen.Op("*").Qual("C", cName)).Params(jen.Id("value").Dot("ptr")),
+							).Else().Block(
+								tgt.Clone().Op("=").Id("nil"),
+							),
+						)
+
 					} else if _, ok := g.input.callbacks[iv.Name]; ok {
 						o.Commentf("%v skipped due to callback ptr", fName)
 						o.Line()
