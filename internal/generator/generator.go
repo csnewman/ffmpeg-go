@@ -291,7 +291,7 @@ func (g *Generator) generateStructs() {
 			)
 
 			if field.BitWidth != -1 {
-				o.Commentf("%v skipped due to bitfield", fName)
+				o.Commentf("%v skipped due to bitfield", field.Name)
 				o.Line()
 
 				continue fieldLoop
@@ -358,7 +358,7 @@ func (g *Generator) generateStructs() {
 					}
 
 				} else if _, ok := g.input.callbacks[v.Name]; ok {
-					o.Commentf("%v skipped due to ident callback", fName)
+					o.Commentf("%v skipped due to ident callback", field.Name)
 					o.Line()
 
 					continue fieldLoop
@@ -389,7 +389,7 @@ func (g *Generator) generateStructs() {
 				case *IdentType:
 
 					if iv.Name == "URLContext" || iv.Name == "AVFilterCommand" {
-						o.Commentf("%v skipped due to ptr to ignored type", fName)
+						o.Commentf("%v skipped due to ptr to ignored type", field.Name)
 						o.Line()
 
 						continue fieldLoop
@@ -410,7 +410,7 @@ func (g *Generator) generateStructs() {
 						setParams = append(setParams, jen.Id("value").Qual("unsafe", "Pointer"))
 						setBody = append(setBody, tgt.Op("=").Params(jen.Op("*").Qual("C", iv.Name)).Params(jen.Id("value")))
 					} else if _, ok := primTypes[iv.Name]; ok {
-						o.Commentf("%v skipped due to prim ptr", fName)
+						o.Commentf("%v skipped due to prim ptr", field.Name)
 						o.Line()
 
 						continue fieldLoop
@@ -440,13 +440,13 @@ func (g *Generator) generateStructs() {
 						)
 
 					} else if _, ok := g.input.callbacks[iv.Name]; ok {
-						o.Commentf("%v skipped due to callback ptr", fName)
+						o.Commentf("%v skipped due to callback ptr", field.Name)
 						o.Line()
 
 						continue fieldLoop
 					} else if ist, ok := g.input.structs[iv.Name]; ok {
 						if ist.ByValue {
-							o.Commentf("%v skipped due to struct value ptr", fName)
+							o.Commentf("%v skipped due to struct value ptr", field.Name)
 							o.Line()
 
 							continue fieldLoop
@@ -481,7 +481,7 @@ func (g *Generator) generateStructs() {
 					}
 
 				case *FuncType:
-					o.Commentf("%v skipped due to func ptr", fName)
+					o.Commentf("%v skipped due to func ptr", field.Name)
 					o.Line()
 
 					continue fieldLoop
@@ -516,7 +516,7 @@ func (g *Generator) generateStructs() {
 								),
 							)
 						} else {
-							o.Commentf("%v skipped due to unknown ptr ptr", fName)
+							o.Commentf("%v skipped due to unknown ptr ptr", field.Name)
 							o.Line()
 
 							continue fieldLoop
@@ -549,7 +549,7 @@ func (g *Generator) generateStructs() {
 							)),
 						)
 					} else {
-						o.Commentf("%v skipped due to unknown const array", fName)
+						o.Commentf("%v skipped due to unknown const array", field.Name)
 						o.Line()
 
 						continue fieldLoop
@@ -572,7 +572,7 @@ func (g *Generator) generateStructs() {
 							)
 						} else if st, ok := g.input.structs[iiv.Name]; ok {
 							if st.ByValue {
-								o.Commentf("%v skipped due to value ident ptr const array", fName)
+								o.Commentf("%v skipped due to value ident ptr const array", field.Name)
 								o.Line()
 
 								continue fieldLoop
@@ -589,7 +589,7 @@ func (g *Generator) generateStructs() {
 								)),
 							)
 						} else {
-							o.Commentf("%v skipped due to ident pointer const array", fName)
+							o.Commentf("%v skipped due to ident pointer const array", field.Name)
 							o.Line()
 
 							continue fieldLoop
@@ -600,7 +600,7 @@ func (g *Generator) generateStructs() {
 					}
 
 				case *ConstArray:
-					o.Commentf("%v skipped due to multi dim const array", fName)
+					o.Commentf("%v skipped due to multi dim const array", field.Name)
 					o.Line()
 
 					continue fieldLoop
@@ -610,7 +610,7 @@ func (g *Generator) generateStructs() {
 				}
 
 			case *UnionType:
-				o.Commentf("%v skipped due to union type", fName)
+				o.Commentf("%v skipped due to union type", field.Name)
 				o.Line()
 
 				continue fieldLoop
@@ -621,7 +621,7 @@ func (g *Generator) generateStructs() {
 
 			if refField {
 				if st.ByValue {
-					o.Commentf("%v skipped due to ref field of value struct", fName)
+					o.Commentf("%v skipped due to ref field of value struct", field.Name)
 					o.Line()
 
 					continue fieldLoop
@@ -644,6 +644,7 @@ func (g *Generator) generateStructs() {
 				)
 			}
 
+			o.Commentf("%v gets the %v field.", fName, field.Name)
 			o.Func().
 				Params(jen.Id("s").Op("*").Id(goName)).
 				Id(fName).
@@ -654,6 +655,7 @@ func (g *Generator) generateStructs() {
 			o.Line()
 
 			if len(setBody) > 0 {
+				o.Commentf("Set%v sets the %v field.", fName, field.Name)
 				o.Func().
 					Params(jen.Id("s").Op("*").Id(goName)).
 					Id(fmt.Sprintf("Set%v", fName)).
