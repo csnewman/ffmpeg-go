@@ -1,3 +1,4 @@
+// Based on doc/examples/decode_video.c
 package main
 
 import (

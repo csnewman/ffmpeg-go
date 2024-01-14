@@ -27,9 +27,6 @@ func main() {
 		log.Panicln(err)
 	}
 
-	empty := ffmpeg.ToCStr("")
-	defer empty.Free()
-
 	streams := ctx.Streams()
 
 	for i := uintptr(0); i < uintptr(ctx.NbStreams()); i++ {
@@ -42,7 +39,7 @@ func main() {
 		var entry *ffmpeg.AVDictionaryEntry
 
 		for {
-			entry = ffmpeg.AVDictGet(meta, empty, entry, ffmpeg.AVDictIgnoreSuffix)
+			entry = ffmpeg.AVDictGet(meta, ffmpeg.GlobalCStr(""), entry, ffmpeg.AVDictIgnoreSuffix)
 			if entry == nil {
 				break
 			}
