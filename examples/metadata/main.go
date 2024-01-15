@@ -27,6 +27,8 @@ func main() {
 		log.Panicln(err)
 	}
 
+	ffmpeg.AVDumpFormat(ctx, 0, url, 0)
+
 	streams := ctx.Streams()
 
 	for i := uintptr(0); i < uintptr(ctx.NbStreams()); i++ {
