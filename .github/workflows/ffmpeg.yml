@@ -17,6 +17,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - run: uname -a
+
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
@@ -45,9 +47,11 @@ jobs:
           add-paths: libffmpeg_linux_amd64.a
 
   darwin_amd64:
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v4
+
+      - run: uname -a
 
       - name: Set up Go
         uses: actions/setup-go@v5
@@ -77,9 +81,11 @@ jobs:
           add-paths: libffmpeg_darwin_amd64.a
 
   darwin_arm64:
-    runs-on: macos-13
+    runs-on: macos-13-arm64
     steps:
       - uses: actions/checkout@v4
+
+      - run: uname -a
 
       - name: Set up Go
         uses: actions/setup-go@v5
