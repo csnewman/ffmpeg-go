@@ -4,11 +4,15 @@ on:
   push:
     branches: [ master ]
 
+permissions:
+  pull-requests: write
+  contents: write
+
 jobs:
   linux_amd64:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Set up Go
         uses: actions/setup-go@v2
