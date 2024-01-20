@@ -72,3 +72,35 @@ jobs:
           author: GitHub CI <noreply@github.com>
           branch: ci/darwin-amd64
           add-paths: libffmpeg_darwin_amd64.a
+
+  darwin_arm64:
+    runs-on: macos-13
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.21
+
+      - name: Install deps
+        run: brew install yasm
+
+      - run: mkdir build
+
+      - name: Build
+        working-directory: build
+        run: go run ../internal/builder/ ../libffmpeg_darwin_arm64.a
+
+      - run: ls -la
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          title: "[CI] Rebuild darwin arm64 library"
+          body: Automated changes by CI pipeline.
+          commit-message: "[CI] Rebuild darwin arm64 library"
+          committer: GitHub CI <noreply@github.com>
+          author: GitHub CI <noreply@github.com>
+          branch: ci/darwin-arm64
+          add-paths: libffmpeg_darwin_arm64.a
