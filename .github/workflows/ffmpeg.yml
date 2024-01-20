@@ -24,6 +24,8 @@ jobs:
         working-directory: build
         run: go run ../internal/builder/ ../libffmpeg_linux_amd64.a
 
+      - run: ls -la
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
