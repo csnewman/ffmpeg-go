@@ -212,9 +212,16 @@ func AVCodecParametersToContext(codec *AVCodecContext, par *AVCodecParameters) (
   avcodec_find_decoder() and avcodec_find_encoder() provide an easy way for
   retrieving a codec.
 
-  @note Always call this function before using decoding routines (such as
-  @ref avcodec_receive_frame()).
+  Depending on the codec, you might need to set options in the codec context
+  also for decoding (e.g. width, height, or the pixel or audio sample format in
+  the case the information is not available in the bitstream, as when decoding
+  raw audio or video).
 
+  Options in the codec context can be set either by setting them in the options
+  AVDictionary, or by setting the values in the context itself, directly or by
+  using the av_opt_set() API before calling this function.
+
+  Example:
   @code
   av_dict_set(&opts, "b", "2.5M", 0);
   codec = avcodec_find_decoder(AV_CODEC_ID_H264);
@@ -227,17 +234,36 @@ func AVCodecParametersToContext(codec *AVCodecContext, par *AVCodecParameters) (
       exit(1);
   @endcode
 
+  In the case AVCodecParameters are available (e.g. when demuxing a stream
+  using libavformat, and accessing the AVStream contained in the demuxer), the
+  codec parameters can be copied to the codec context using
+  avcodec_parameters_to_context(), as in the following example:
+
+  @code
+  AVStream *stream = ...;
+  context = avcodec_alloc_context3(codec);
+  if (avcodec_parameters_to_context(context, stream->codecpar) < 0)
+      exit(1);
+  if (avcodec_open2(context, codec, NULL) < 0)
+      exit(1);
+  @endcode
+
+  @note Always call this function before using decoding routines (such as
+  @ref avcodec_receive_frame()).
+
   @param avctx The context to initialize.
   @param codec The codec to open this context for. If a non-NULL codec has been
                previously passed to avcodec_alloc_context3() or
                for this context, then this parameter MUST be either NULL or
                equal to the previously passed codec.
-  @param options A dictionary filled with AVCodecContext and codec-private options.
-                 On return this object will be filled with options that were not found.
+  @param options A dictionary filled with AVCodecContext and codec-private
+                 options, which are set on top of the options already set in
+                 avctx, can be NULL. On return this object will be filled with
+                 options that were not found in the avctx codec context.
 
   @return zero on success, a negative value on error
   @see avcodec_alloc_context3(), avcodec_find_decoder(), avcodec_find_encoder(),
-       av_dict_set(), av_opt_find().
+       av_dict_set(), av_opt_set(), av_opt_find(), avcodec_parameters_to_context()
 */
 func AVCodecOpen2(avctx *AVCodecContext, codec *AVCodec, options **AVDictionary) (int, error) {
 	var tmpavctx *C.AVCodecContext
@@ -454,7 +480,7 @@ func AVCodecSendPacket(avctx *AVCodecContext, avpkt *AVPacket) (int, error) {
 // AVCodecReceiveFrame wraps avcodec_receive_frame.
 /*
   Return decoded output data from a decoder or encoder (when the
-  AV_CODEC_FLAG_RECON_FRAME flag is used).
+  @ref AV_CODEC_FLAG_RECON_FRAME flag is used).
 
   @param avctx codec context
   @param frame This will be set to a reference-counted video or audio
@@ -468,10 +494,7 @@ func AVCodecSendPacket(avctx *AVCodecContext, avpkt *AVPacket) (int, error) {
   @retval AVERROR_EOF      the codec has been fully flushed, and there will be
                            no more output frames
   @retval AVERROR(EINVAL)  codec not opened, or it is an encoder without the
-                           AV_CODEC_FLAG_RECON_FRAME flag enabled
-  @retval AVERROR_INPUT_CHANGED current decoded frame has changed parameters with
-                           respect to first decoded frame. Applicable when flag
-                           AV_CODEC_FLAG_DROPCHANGED is set.
+                           @ref AV_CODEC_FLAG_RECON_FRAME flag enabled
   @retval "other negative error code" legitimate decoding errors
 */
 func AVCodecReceiveFrame(avctx *AVCodecContext, frame *AVFrame) (int, error) {
@@ -1293,6 +1316,55 @@ func AVXiphlacing(s unsafe.Pointer, v uint) uint {
 	return uint(ret)
 }
 
+// --- Function av_packet_side_data_new ---
+
+// av_packet_side_data_new skipped due to pnbSd
+
+// --- Function av_packet_side_data_add ---
+
+// av_packet_side_data_add skipped due to nbSd
+
+// --- Function av_packet_side_data_get ---
+
+// AVPacketSideDataGet wraps av_packet_side_data_get.
+/*
+  Get side information from a side data array.
+
+  @param sd    the array from which the side data should be fetched
+  @param nb_sd value containing the number of entries in the array.
+  @param type  desired side information type
+
+  @return pointer to side data if present or NULL otherwise
+*/
+func AVPacketSideDataGet(sd *AVPacketSideData, nbSd int, _type AVPacketSideDataType) *AVPacketSideData {
+	var tmpsd *C.AVPacketSideData
+	if sd != nil {
+		tmpsd = sd.ptr
+	}
+	ret := C.av_packet_side_data_get(tmpsd, C.int(nbSd), C.enum_AVPacketSideDataType(_type))
+	var retMapped *AVPacketSideData
+	if ret != nil {
+		retMapped = &AVPacketSideData{ptr: ret}
+	}
+	return retMapped
+}
+
+// --- Function av_packet_side_data_remove ---
+
+// av_packet_side_data_remove skipped due to nbSd
+
+// --- Function av_packet_side_data_free ---
+
+// av_packet_side_data_free skipped due to nbSd
+
+// --- Function av_packet_side_data_name ---
+
+// AVPacketSideDataName wraps av_packet_side_data_name.
+func AVPacketSideDataName(_type AVPacketSideDataType) *CStr {
+	ret := C.av_packet_side_data_name(C.enum_AVPacketSideDataType(_type))
+	return wrapCStr(ret)
+}
+
 // --- Function av_packet_alloc ---
 
 // AVPacketAlloc wraps av_packet_alloc.
@@ -1547,14 +1619,6 @@ func AVPacketShrinkSideData(pkt *AVPacket, _type AVPacketSideDataType, size uint
 // --- Function av_packet_get_side_data ---
 
 // av_packet_get_side_data skipped due to size
-
-// --- Function av_packet_side_data_name ---
-
-// AVPacketSideDataName wraps av_packet_side_data_name.
-func AVPacketSideDataName(_type AVPacketSideDataType) *CStr {
-	ret := C.av_packet_side_data_name(C.enum_AVPacketSideDataType(_type))
-	return wrapCStr(ret)
-}
 
 // --- Function av_packet_pack_dictionary ---
 
@@ -3608,26 +3672,18 @@ func AVStreamGetEndPts(st *AVStream) int64 {
 	return int64(ret)
 }
 
-// --- Function av_stream_get_first_dts ---
-
-// AVStreamGetFirstDts wraps av_stream_get_first_dts.
-//
-//	// Chromium: We use the internal field first_dts vvv
-func AVStreamGetFirstDts(st *AVStream) int64 {
-	var tmpst *C.AVStream
-	if st != nil {
-		tmpst = st.ptr
-	}
-	ret := C.av_stream_get_first_dts(tmpst)
-	return int64(ret)
-}
-
 // --- Function av_format_inject_global_side_data ---
 
 // AVFormatInjectGlobalSideData wraps av_format_inject_global_side_data.
 /*
   This function will cause global side data to be injected in the next packet
   of each stream as well as after any subsequent seek.
+
+  @note global side data is always available in every AVStream's
+        @ref AVCodecParameters.coded_side_data "codecpar side data" array, and
+        in a @ref AVCodecContext.coded_side_data "decoder's side data" array if
+        initialized with said stream's codecpar.
+  @see av_packet_side_data_get()
 */
 func AVFormatInjectGlobalSideData(s *AVFormatContext) {
 	var tmps *C.AVFormatContext
@@ -3846,6 +3902,8 @@ func AVFormatNewStream(s *AVFormatContext, c *AVCodec) *AVStream {
 
   @return zero on success, a negative AVERROR code on failure. On failure,
           the stream is unchanged and the data remains owned by the caller.
+  @deprecated use av_packet_side_data_add() with the stream's
+              @ref AVCodecParameters.coded_side_data "codecpar side data"
 */
 func AVStreamAddSideData(st *AVStream, _type AVPacketSideDataType, data unsafe.Pointer, size uint64) (int, error) {
 	var tmpst *C.AVStream
@@ -3867,6 +3925,8 @@ func AVStreamAddSideData(st *AVStream, _type AVPacketSideDataType, data unsafe.P
   @param size   side information size
 
   @return pointer to fresh allocated data or NULL otherwise
+  @deprecated use av_packet_side_data_new() with the stream's
+              @ref AVCodecParameters.coded_side_data "codecpar side data"
 */
 func AVStreamNewSideData(stream *AVStream, _type AVPacketSideDataType, size uint64) unsafe.Pointer {
 	var tmpstream *C.AVStream
@@ -8166,6 +8226,33 @@ func AVFrameRef(dst *AVFrame, src *AVFrame) (int, error) {
 	return int(ret), WrapErr(int(ret))
 }
 
+// --- Function av_frame_replace ---
+
+// AVFrameReplace wraps av_frame_replace.
+/*
+  Ensure the destination frame refers to the same data described by the source
+  frame, either by creating a new reference for each AVBufferRef from src if
+  they differ from those in dst, by allocating new buffers and copying data if
+  src is not reference counted, or by unrefencing it if src is empty.
+
+  Frame properties on dst will be replaced by those from src.
+
+  @return 0 on success, a negative AVERROR on error. On error, dst is
+          unreferenced.
+*/
+func AVFrameReplace(dst *AVFrame, src *AVFrame) (int, error) {
+	var tmpdst *C.AVFrame
+	if dst != nil {
+		tmpdst = dst.ptr
+	}
+	var tmpsrc *C.AVFrame
+	if src != nil {
+		tmpsrc = src.ptr
+	}
+	ret := C.av_frame_replace(tmpdst, tmpsrc)
+	return int(ret), WrapErr(int(ret))
+}
+
 // --- Function av_frame_clone ---
 
 // AVFrameClone wraps av_frame_clone.
@@ -9313,6 +9400,16 @@ func AVCompareMod(a uint64, b uint64, mod uint64) int64 {
 func AVAddStable(tsTb *AVRational, ts int64, incTb *AVRational, inc int64) int64 {
 	ret := C.av_add_stable(tsTb.value, C.int64_t(ts), incTb.value, C.int64_t(inc))
 	return int64(ret)
+}
+
+// --- Function av_bessel_i0 ---
+
+// AVBesselI0 wraps av_bessel_i0.
+//
+//	0th order modified bessel function of the first kind.
+func AVBesselI0(x float64) float64 {
+	ret := C.av_bessel_i0(C.double(x))
+	return float64(ret)
 }
 
 // --- Function av_malloc ---

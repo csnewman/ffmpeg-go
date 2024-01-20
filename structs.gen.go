@@ -113,45 +113,6 @@ func (s *RcOverride) SetQualityFactor(value float32) {
 	s.ptr.quality_factor = (C.float)(value)
 }
 
-// --- Struct AVCodecInternal ---
-
-// AVCodecInternal wraps AVCodecInternal.
-type AVCodecInternal struct {
-	ptr *C.struct_AVCodecInternal
-}
-
-func (s *AVCodecInternal) RawPtr() unsafe.Pointer {
-	return unsafe.Pointer(s.ptr)
-}
-
-func ToAVCodecInternalArray(ptr unsafe.Pointer) *Array[*AVCodecInternal] {
-	if ptr == nil {
-		return nil
-	}
-
-	return &Array[*AVCodecInternal]{
-		elemSize: ptrSize,
-		loadPtr: func(pointer unsafe.Pointer) *AVCodecInternal {
-			ptr := (**C.struct_AVCodecInternal)(pointer)
-			value := *ptr
-			var valueMapped *AVCodecInternal
-			if value != nil {
-				valueMapped = &AVCodecInternal{ptr: value}
-			}
-			return valueMapped
-		},
-		ptr: ptr,
-		storePtr: func(pointer unsafe.Pointer, value *AVCodecInternal) {
-			ptr := (**C.struct_AVCodecInternal)(pointer)
-			if value != nil {
-				*ptr = value.ptr
-			} else {
-				*ptr = nil
-			}
-		},
-	}
-}
-
 // --- Struct AVCodecContext ---
 
 // AVCodecContext wraps AVCodecContext.
@@ -297,24 +258,7 @@ func (s *AVCodecContext) SetPrivData(value unsafe.Pointer) {
 	s.ptr.priv_data = value
 }
 
-// Internal gets the internal field.
-func (s *AVCodecContext) Internal() *AVCodecInternal {
-	value := s.ptr.internal
-	var valueMapped *AVCodecInternal
-	if value != nil {
-		valueMapped = &AVCodecInternal{ptr: value}
-	}
-	return valueMapped
-}
-
-// SetInternal sets the internal field.
-func (s *AVCodecContext) SetInternal(value *AVCodecInternal) {
-	if value != nil {
-		s.ptr.internal = value.ptr
-	} else {
-		s.ptr.internal = nil
-	}
-}
+// internal skipped due to ptr to ignored type
 
 // Opaque gets the opaque field.
 func (s *AVCodecContext) Opaque() unsafe.Pointer {
@@ -2019,55 +1963,6 @@ func (s *AVHWAccel) SetCapabilities(value int) {
 	s.ptr.capabilities = (C.int)(value)
 }
 
-// alloc_frame skipped due to func ptr
-
-// start_frame skipped due to func ptr
-
-// decode_params skipped due to func ptr
-
-// decode_slice skipped due to func ptr
-
-// end_frame skipped due to func ptr
-
-// FramePrivDataSize gets the frame_priv_data_size field.
-func (s *AVHWAccel) FramePrivDataSize() int {
-	value := s.ptr.frame_priv_data_size
-	return int(value)
-}
-
-// SetFramePrivDataSize sets the frame_priv_data_size field.
-func (s *AVHWAccel) SetFramePrivDataSize(value int) {
-	s.ptr.frame_priv_data_size = (C.int)(value)
-}
-
-// init skipped due to func ptr
-
-// uninit skipped due to func ptr
-
-// PrivDataSize gets the priv_data_size field.
-func (s *AVHWAccel) PrivDataSize() int {
-	value := s.ptr.priv_data_size
-	return int(value)
-}
-
-// SetPrivDataSize sets the priv_data_size field.
-func (s *AVHWAccel) SetPrivDataSize(value int) {
-	s.ptr.priv_data_size = (C.int)(value)
-}
-
-// CapsInternal gets the caps_internal field.
-func (s *AVHWAccel) CapsInternal() int {
-	value := s.ptr.caps_internal
-	return int(value)
-}
-
-// SetCapsInternal sets the caps_internal field.
-func (s *AVHWAccel) SetCapsInternal(value int) {
-	s.ptr.caps_internal = (C.int)(value)
-}
-
-// frame_params skipped due to func ptr
-
 // --- Struct AVSubtitleRect ---
 
 // AVSubtitleRect wraps AVSubtitleRect.
@@ -3635,6 +3530,47 @@ func (s *AVCodecParameters) ChLayout() *AVChannelLayout {
 	return &AVChannelLayout{ptr: value}
 }
 
+// Framerate gets the framerate field.
+func (s *AVCodecParameters) Framerate() *AVRational {
+	value := s.ptr.framerate
+	return &AVRational{value: value}
+}
+
+// SetFramerate sets the framerate field.
+func (s *AVCodecParameters) SetFramerate(value *AVRational) {
+	s.ptr.framerate = value.value
+}
+
+// CodedSideData gets the coded_side_data field.
+func (s *AVCodecParameters) CodedSideData() *AVPacketSideData {
+	value := s.ptr.coded_side_data
+	var valueMapped *AVPacketSideData
+	if value != nil {
+		valueMapped = &AVPacketSideData{ptr: value}
+	}
+	return valueMapped
+}
+
+// SetCodedSideData sets the coded_side_data field.
+func (s *AVCodecParameters) SetCodedSideData(value *AVPacketSideData) {
+	if value != nil {
+		s.ptr.coded_side_data = value.ptr
+	} else {
+		s.ptr.coded_side_data = nil
+	}
+}
+
+// NbCodedSideData gets the nb_coded_side_data field.
+func (s *AVCodecParameters) NbCodedSideData() int {
+	value := s.ptr.nb_coded_side_data
+	return int(value)
+}
+
+// SetNbCodedSideData sets the nb_coded_side_data field.
+func (s *AVCodecParameters) SetNbCodedSideData(value int) {
+	s.ptr.nb_coded_side_data = (C.int)(value)
+}
+
 // --- Struct AVPanScan ---
 
 // AVPanScan wraps AVPanScan.
@@ -3882,6 +3818,33 @@ func (s *AVProducerReferenceTime) SetFlags(value int) {
 // --- Struct AVPacketSideData ---
 
 // AVPacketSideData wraps AVPacketSideData.
+/*
+  This structure stores auxiliary information for decoding, presenting, or
+  otherwise processing the coded stream. It is typically exported by demuxers
+  and encoders and can be fed to decoders and muxers either in a per packet
+  basis, or as global side data (applying to the entire coded stream).
+
+  Global side data is handled as follows:
+  - During demuxing, it may be exported through
+    @ref AVStream.codecpar.side_data "AVStream's codec parameters", which can
+    then be passed as input to decoders through the
+    @ref AVCodecContext.coded_side_data "decoder context's side data", for
+    initialization.
+  - For muxing, it can be fed through @ref AVStream.codecpar.side_data
+    "AVStream's codec parameters", typically  the output of encoders through
+    the @ref AVCodecContext.coded_side_data "encoder context's side data", for
+    initialization.
+
+  Packet specific side data is handled as follows:
+  - During demuxing, it may be exported through @ref AVPacket.side_data
+    "AVPacket's side data", which can then be passed as input to decoders.
+  - For muxing, it can be fed through @ref AVPacket.side_data "AVPacket's
+    side data", typically the output of encoders.
+
+  Different modules may accept or export different types of side data
+  depending on media type and codec. Refer to @ref AVPacketSideDataType for a
+  list of defined types and where they may be found or used.
+*/
 type AVPacketSideData struct {
 	ptr *C.AVPacketSideData
 }

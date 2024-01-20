@@ -451,6 +451,18 @@ const FfProfileDtsHdMa = C.FF_PROFILE_DTS_HD_MA
 // FfProfileDtsExpress wraps FF_PROFILE_DTS_EXPRESS.
 const FfProfileDtsExpress = C.FF_PROFILE_DTS_EXPRESS
 
+// FfProfileDtsHdMaX wraps FF_PROFILE_DTS_HD_MA_X.
+const FfProfileDtsHdMaX = C.FF_PROFILE_DTS_HD_MA_X
+
+// FfProfileDtsHdMaXImax wraps FF_PROFILE_DTS_HD_MA_X_IMAX.
+const FfProfileDtsHdMaXImax = C.FF_PROFILE_DTS_HD_MA_X_IMAX
+
+// FfProfileEac3DdpAtmos wraps FF_PROFILE_EAC3_DDP_ATMOS.
+const FfProfileEac3DdpAtmos = C.FF_PROFILE_EAC3_DDP_ATMOS
+
+// FfProfileTruehdAtmos wraps FF_PROFILE_TRUEHD_ATMOS.
+const FfProfileTruehdAtmos = C.FF_PROFILE_TRUEHD_ATMOS
+
 // FfProfileMpeg2422 wraps FF_PROFILE_MPEG2_422.
 const FfProfileMpeg2422 = C.FF_PROFILE_MPEG2_422
 
@@ -619,6 +631,9 @@ const FfProfileHevcMainStillPicture = C.FF_PROFILE_HEVC_MAIN_STILL_PICTURE
 // FfProfileHevcRext wraps FF_PROFILE_HEVC_REXT.
 const FfProfileHevcRext = C.FF_PROFILE_HEVC_REXT
 
+// FfProfileHevcScc wraps FF_PROFILE_HEVC_SCC.
+const FfProfileHevcScc = C.FF_PROFILE_HEVC_SCC
+
 // FfProfileVvcMain10 wraps FF_PROFILE_VVC_MAIN_10.
 const FfProfileVvcMain10 = C.FF_PROFILE_VVC_MAIN_10
 
@@ -681,6 +696,12 @@ const FfProfileKlvaSync = C.FF_PROFILE_KLVA_SYNC
 
 // FfProfileKlvaAsync wraps FF_PROFILE_KLVA_ASYNC.
 const FfProfileKlvaAsync = C.FF_PROFILE_KLVA_ASYNC
+
+// FfProfileEvcBaseline wraps FF_PROFILE_EVC_BASELINE.
+const FfProfileEvcBaseline = C.FF_PROFILE_EVC_BASELINE
+
+// FfProfileEvcMain wraps FF_PROFILE_EVC_MAIN.
+const FfProfileEvcMain = C.FF_PROFILE_EVC_MAIN
 
 // FfLevelUnknown wraps FF_LEVEL_UNKNOWN.
 const FfLevelUnknown = C.FF_LEVEL_UNKNOWN
@@ -817,6 +838,9 @@ const AVCodecPropLossless = C.AV_CODEC_PROP_LOSSLESS
 // AVCodecPropReorder wraps AV_CODEC_PROP_REORDER.
 const AVCodecPropReorder = C.AV_CODEC_PROP_REORDER
 
+// AVCodecPropFields wraps AV_CODEC_PROP_FIELDS.
+const AVCodecPropFields = C.AV_CODEC_PROP_FIELDS
+
 // AVCodecPropBitmapSub wraps AV_CODEC_PROP_BITMAP_SUB.
 const AVCodecPropBitmapSub = C.AV_CODEC_PROP_BITMAP_SUB
 
@@ -874,6 +898,333 @@ const FfComplianceUnofficial = C.FF_COMPLIANCE_UNOFFICIAL
 // FfComplianceExperimental wraps FF_COMPLIANCE_EXPERIMENTAL.
 const FfComplianceExperimental = C.FF_COMPLIANCE_EXPERIMENTAL
 
+// AVProfileUnknown wraps AV_PROFILE_UNKNOWN.
+const AVProfileUnknown = C.AV_PROFILE_UNKNOWN
+
+// AVProfileReserved wraps AV_PROFILE_RESERVED.
+const AVProfileReserved = C.AV_PROFILE_RESERVED
+
+// AVProfileAacMain wraps AV_PROFILE_AAC_MAIN.
+const AVProfileAacMain = C.AV_PROFILE_AAC_MAIN
+
+// AVProfileAacLow wraps AV_PROFILE_AAC_LOW.
+const AVProfileAacLow = C.AV_PROFILE_AAC_LOW
+
+// AVProfileAacSsr wraps AV_PROFILE_AAC_SSR.
+const AVProfileAacSsr = C.AV_PROFILE_AAC_SSR
+
+// AVProfileAacLtp wraps AV_PROFILE_AAC_LTP.
+const AVProfileAacLtp = C.AV_PROFILE_AAC_LTP
+
+// AVProfileAacHe wraps AV_PROFILE_AAC_HE.
+const AVProfileAacHe = C.AV_PROFILE_AAC_HE
+
+// AVProfileAacHeV2 wraps AV_PROFILE_AAC_HE_V2.
+const AVProfileAacHeV2 = C.AV_PROFILE_AAC_HE_V2
+
+// AVProfileAacLd wraps AV_PROFILE_AAC_LD.
+const AVProfileAacLd = C.AV_PROFILE_AAC_LD
+
+// AVProfileAacEld wraps AV_PROFILE_AAC_ELD.
+const AVProfileAacEld = C.AV_PROFILE_AAC_ELD
+
+// AVProfileMpeg2AacLow wraps AV_PROFILE_MPEG2_AAC_LOW.
+const AVProfileMpeg2AacLow = C.AV_PROFILE_MPEG2_AAC_LOW
+
+// AVProfileMpeg2AacHe wraps AV_PROFILE_MPEG2_AAC_HE.
+const AVProfileMpeg2AacHe = C.AV_PROFILE_MPEG2_AAC_HE
+
+// AVProfileDnxhd wraps AV_PROFILE_DNXHD.
+const AVProfileDnxhd = C.AV_PROFILE_DNXHD
+
+// AVProfileDnxhrLb wraps AV_PROFILE_DNXHR_LB.
+const AVProfileDnxhrLb = C.AV_PROFILE_DNXHR_LB
+
+// AVProfileDnxhrSq wraps AV_PROFILE_DNXHR_SQ.
+const AVProfileDnxhrSq = C.AV_PROFILE_DNXHR_SQ
+
+// AVProfileDnxhrHq wraps AV_PROFILE_DNXHR_HQ.
+const AVProfileDnxhrHq = C.AV_PROFILE_DNXHR_HQ
+
+// AVProfileDnxhrHqx wraps AV_PROFILE_DNXHR_HQX.
+const AVProfileDnxhrHqx = C.AV_PROFILE_DNXHR_HQX
+
+// AVProfileDnxhr444 wraps AV_PROFILE_DNXHR_444.
+const AVProfileDnxhr444 = C.AV_PROFILE_DNXHR_444
+
+// AVProfileDts wraps AV_PROFILE_DTS.
+const AVProfileDts = C.AV_PROFILE_DTS
+
+// AVProfileDtsEs wraps AV_PROFILE_DTS_ES.
+const AVProfileDtsEs = C.AV_PROFILE_DTS_ES
+
+// AVProfileDts9624 wraps AV_PROFILE_DTS_96_24.
+const AVProfileDts9624 = C.AV_PROFILE_DTS_96_24
+
+// AVProfileDtsHdHra wraps AV_PROFILE_DTS_HD_HRA.
+const AVProfileDtsHdHra = C.AV_PROFILE_DTS_HD_HRA
+
+// AVProfileDtsHdMa wraps AV_PROFILE_DTS_HD_MA.
+const AVProfileDtsHdMa = C.AV_PROFILE_DTS_HD_MA
+
+// AVProfileDtsExpress wraps AV_PROFILE_DTS_EXPRESS.
+const AVProfileDtsExpress = C.AV_PROFILE_DTS_EXPRESS
+
+// AVProfileDtsHdMaX wraps AV_PROFILE_DTS_HD_MA_X.
+const AVProfileDtsHdMaX = C.AV_PROFILE_DTS_HD_MA_X
+
+// AVProfileDtsHdMaXImax wraps AV_PROFILE_DTS_HD_MA_X_IMAX.
+const AVProfileDtsHdMaXImax = C.AV_PROFILE_DTS_HD_MA_X_IMAX
+
+// AVProfileEac3DdpAtmos wraps AV_PROFILE_EAC3_DDP_ATMOS.
+const AVProfileEac3DdpAtmos = C.AV_PROFILE_EAC3_DDP_ATMOS
+
+// AVProfileTruehdAtmos wraps AV_PROFILE_TRUEHD_ATMOS.
+const AVProfileTruehdAtmos = C.AV_PROFILE_TRUEHD_ATMOS
+
+// AVProfileMpeg2422 wraps AV_PROFILE_MPEG2_422.
+const AVProfileMpeg2422 = C.AV_PROFILE_MPEG2_422
+
+// AVProfileMpeg2High wraps AV_PROFILE_MPEG2_HIGH.
+const AVProfileMpeg2High = C.AV_PROFILE_MPEG2_HIGH
+
+// AVProfileMpeg2Ss wraps AV_PROFILE_MPEG2_SS.
+const AVProfileMpeg2Ss = C.AV_PROFILE_MPEG2_SS
+
+// AVProfileMpeg2SnrScalable wraps AV_PROFILE_MPEG2_SNR_SCALABLE.
+const AVProfileMpeg2SnrScalable = C.AV_PROFILE_MPEG2_SNR_SCALABLE
+
+// AVProfileMpeg2Main wraps AV_PROFILE_MPEG2_MAIN.
+const AVProfileMpeg2Main = C.AV_PROFILE_MPEG2_MAIN
+
+// AVProfileMpeg2Simple wraps AV_PROFILE_MPEG2_SIMPLE.
+const AVProfileMpeg2Simple = C.AV_PROFILE_MPEG2_SIMPLE
+
+// AVProfileH264Constrained wraps AV_PROFILE_H264_CONSTRAINED.
+const AVProfileH264Constrained = C.AV_PROFILE_H264_CONSTRAINED
+
+// AVProfileH264Intra wraps AV_PROFILE_H264_INTRA.
+const AVProfileH264Intra = C.AV_PROFILE_H264_INTRA
+
+// AVProfileH264Baseline wraps AV_PROFILE_H264_BASELINE.
+const AVProfileH264Baseline = C.AV_PROFILE_H264_BASELINE
+
+// AVProfileH264ConstrainedBaseline wraps AV_PROFILE_H264_CONSTRAINED_BASELINE.
+const AVProfileH264ConstrainedBaseline = C.AV_PROFILE_H264_CONSTRAINED_BASELINE
+
+// AVProfileH264Main wraps AV_PROFILE_H264_MAIN.
+const AVProfileH264Main = C.AV_PROFILE_H264_MAIN
+
+// AVProfileH264Extended wraps AV_PROFILE_H264_EXTENDED.
+const AVProfileH264Extended = C.AV_PROFILE_H264_EXTENDED
+
+// AVProfileH264High wraps AV_PROFILE_H264_HIGH.
+const AVProfileH264High = C.AV_PROFILE_H264_HIGH
+
+// AVProfileH264High10 wraps AV_PROFILE_H264_HIGH_10.
+const AVProfileH264High10 = C.AV_PROFILE_H264_HIGH_10
+
+// AVProfileH264High10Intra wraps AV_PROFILE_H264_HIGH_10_INTRA.
+const AVProfileH264High10Intra = C.AV_PROFILE_H264_HIGH_10_INTRA
+
+// AVProfileH264MultiviewHigh wraps AV_PROFILE_H264_MULTIVIEW_HIGH.
+const AVProfileH264MultiviewHigh = C.AV_PROFILE_H264_MULTIVIEW_HIGH
+
+// AVProfileH264High422 wraps AV_PROFILE_H264_HIGH_422.
+const AVProfileH264High422 = C.AV_PROFILE_H264_HIGH_422
+
+// AVProfileH264High422Intra wraps AV_PROFILE_H264_HIGH_422_INTRA.
+const AVProfileH264High422Intra = C.AV_PROFILE_H264_HIGH_422_INTRA
+
+// AVProfileH264StereoHigh wraps AV_PROFILE_H264_STEREO_HIGH.
+const AVProfileH264StereoHigh = C.AV_PROFILE_H264_STEREO_HIGH
+
+// AVProfileH264High444 wraps AV_PROFILE_H264_HIGH_444.
+const AVProfileH264High444 = C.AV_PROFILE_H264_HIGH_444
+
+// AVProfileH264High444Predictive wraps AV_PROFILE_H264_HIGH_444_PREDICTIVE.
+const AVProfileH264High444Predictive = C.AV_PROFILE_H264_HIGH_444_PREDICTIVE
+
+// AVProfileH264High444Intra wraps AV_PROFILE_H264_HIGH_444_INTRA.
+const AVProfileH264High444Intra = C.AV_PROFILE_H264_HIGH_444_INTRA
+
+// AVProfileH264Cavlc444 wraps AV_PROFILE_H264_CAVLC_444.
+const AVProfileH264Cavlc444 = C.AV_PROFILE_H264_CAVLC_444
+
+// AVProfileVc1Simple wraps AV_PROFILE_VC1_SIMPLE.
+const AVProfileVc1Simple = C.AV_PROFILE_VC1_SIMPLE
+
+// AVProfileVc1Main wraps AV_PROFILE_VC1_MAIN.
+const AVProfileVc1Main = C.AV_PROFILE_VC1_MAIN
+
+// AVProfileVc1Complex wraps AV_PROFILE_VC1_COMPLEX.
+const AVProfileVc1Complex = C.AV_PROFILE_VC1_COMPLEX
+
+// AVProfileVc1Advanced wraps AV_PROFILE_VC1_ADVANCED.
+const AVProfileVc1Advanced = C.AV_PROFILE_VC1_ADVANCED
+
+// AVProfileMpeg4Simple wraps AV_PROFILE_MPEG4_SIMPLE.
+const AVProfileMpeg4Simple = C.AV_PROFILE_MPEG4_SIMPLE
+
+// AVProfileMpeg4SimpleScalable wraps AV_PROFILE_MPEG4_SIMPLE_SCALABLE.
+const AVProfileMpeg4SimpleScalable = C.AV_PROFILE_MPEG4_SIMPLE_SCALABLE
+
+// AVProfileMpeg4Core wraps AV_PROFILE_MPEG4_CORE.
+const AVProfileMpeg4Core = C.AV_PROFILE_MPEG4_CORE
+
+// AVProfileMpeg4Main wraps AV_PROFILE_MPEG4_MAIN.
+const AVProfileMpeg4Main = C.AV_PROFILE_MPEG4_MAIN
+
+// AVProfileMpeg4NBit wraps AV_PROFILE_MPEG4_N_BIT.
+const AVProfileMpeg4NBit = C.AV_PROFILE_MPEG4_N_BIT
+
+// AVProfileMpeg4ScalableTexture wraps AV_PROFILE_MPEG4_SCALABLE_TEXTURE.
+const AVProfileMpeg4ScalableTexture = C.AV_PROFILE_MPEG4_SCALABLE_TEXTURE
+
+// AVProfileMpeg4SimpleFaceAnimation wraps AV_PROFILE_MPEG4_SIMPLE_FACE_ANIMATION.
+const AVProfileMpeg4SimpleFaceAnimation = C.AV_PROFILE_MPEG4_SIMPLE_FACE_ANIMATION
+
+// AVProfileMpeg4BasicAnimatedTexture wraps AV_PROFILE_MPEG4_BASIC_ANIMATED_TEXTURE.
+const AVProfileMpeg4BasicAnimatedTexture = C.AV_PROFILE_MPEG4_BASIC_ANIMATED_TEXTURE
+
+// AVProfileMpeg4Hybrid wraps AV_PROFILE_MPEG4_HYBRID.
+const AVProfileMpeg4Hybrid = C.AV_PROFILE_MPEG4_HYBRID
+
+// AVProfileMpeg4AdvancedRealTime wraps AV_PROFILE_MPEG4_ADVANCED_REAL_TIME.
+const AVProfileMpeg4AdvancedRealTime = C.AV_PROFILE_MPEG4_ADVANCED_REAL_TIME
+
+// AVProfileMpeg4CoreScalable wraps AV_PROFILE_MPEG4_CORE_SCALABLE.
+const AVProfileMpeg4CoreScalable = C.AV_PROFILE_MPEG4_CORE_SCALABLE
+
+// AVProfileMpeg4AdvancedCoding wraps AV_PROFILE_MPEG4_ADVANCED_CODING.
+const AVProfileMpeg4AdvancedCoding = C.AV_PROFILE_MPEG4_ADVANCED_CODING
+
+// AVProfileMpeg4AdvancedCore wraps AV_PROFILE_MPEG4_ADVANCED_CORE.
+const AVProfileMpeg4AdvancedCore = C.AV_PROFILE_MPEG4_ADVANCED_CORE
+
+// AVProfileMpeg4AdvancedScalableTexture wraps AV_PROFILE_MPEG4_ADVANCED_SCALABLE_TEXTURE.
+const AVProfileMpeg4AdvancedScalableTexture = C.AV_PROFILE_MPEG4_ADVANCED_SCALABLE_TEXTURE
+
+// AVProfileMpeg4SimpleStudio wraps AV_PROFILE_MPEG4_SIMPLE_STUDIO.
+const AVProfileMpeg4SimpleStudio = C.AV_PROFILE_MPEG4_SIMPLE_STUDIO
+
+// AVProfileMpeg4AdvancedSimple wraps AV_PROFILE_MPEG4_ADVANCED_SIMPLE.
+const AVProfileMpeg4AdvancedSimple = C.AV_PROFILE_MPEG4_ADVANCED_SIMPLE
+
+// AVProfileJpeg2000CstreamRestriction0 wraps AV_PROFILE_JPEG2000_CSTREAM_RESTRICTION_0.
+const AVProfileJpeg2000CstreamRestriction0 = C.AV_PROFILE_JPEG2000_CSTREAM_RESTRICTION_0
+
+// AVProfileJpeg2000CstreamRestriction1 wraps AV_PROFILE_JPEG2000_CSTREAM_RESTRICTION_1.
+const AVProfileJpeg2000CstreamRestriction1 = C.AV_PROFILE_JPEG2000_CSTREAM_RESTRICTION_1
+
+// AVProfileJpeg2000CstreamNoRestriction wraps AV_PROFILE_JPEG2000_CSTREAM_NO_RESTRICTION.
+const AVProfileJpeg2000CstreamNoRestriction = C.AV_PROFILE_JPEG2000_CSTREAM_NO_RESTRICTION
+
+// AVProfileJpeg2000Dcinema2K wraps AV_PROFILE_JPEG2000_DCINEMA_2K.
+const AVProfileJpeg2000Dcinema2K = C.AV_PROFILE_JPEG2000_DCINEMA_2K
+
+// AVProfileJpeg2000Dcinema4K wraps AV_PROFILE_JPEG2000_DCINEMA_4K.
+const AVProfileJpeg2000Dcinema4K = C.AV_PROFILE_JPEG2000_DCINEMA_4K
+
+// AVProfileVp90 wraps AV_PROFILE_VP9_0.
+const AVProfileVp90 = C.AV_PROFILE_VP9_0
+
+// AVProfileVp91 wraps AV_PROFILE_VP9_1.
+const AVProfileVp91 = C.AV_PROFILE_VP9_1
+
+// AVProfileVp92 wraps AV_PROFILE_VP9_2.
+const AVProfileVp92 = C.AV_PROFILE_VP9_2
+
+// AVProfileVp93 wraps AV_PROFILE_VP9_3.
+const AVProfileVp93 = C.AV_PROFILE_VP9_3
+
+// AVProfileHevcMain wraps AV_PROFILE_HEVC_MAIN.
+const AVProfileHevcMain = C.AV_PROFILE_HEVC_MAIN
+
+// AVProfileHevcMain10 wraps AV_PROFILE_HEVC_MAIN_10.
+const AVProfileHevcMain10 = C.AV_PROFILE_HEVC_MAIN_10
+
+// AVProfileHevcMainStillPicture wraps AV_PROFILE_HEVC_MAIN_STILL_PICTURE.
+const AVProfileHevcMainStillPicture = C.AV_PROFILE_HEVC_MAIN_STILL_PICTURE
+
+// AVProfileHevcRext wraps AV_PROFILE_HEVC_REXT.
+const AVProfileHevcRext = C.AV_PROFILE_HEVC_REXT
+
+// AVProfileHevcScc wraps AV_PROFILE_HEVC_SCC.
+const AVProfileHevcScc = C.AV_PROFILE_HEVC_SCC
+
+// AVProfileVvcMain10 wraps AV_PROFILE_VVC_MAIN_10.
+const AVProfileVvcMain10 = C.AV_PROFILE_VVC_MAIN_10
+
+// AVProfileVvcMain10444 wraps AV_PROFILE_VVC_MAIN_10_444.
+const AVProfileVvcMain10444 = C.AV_PROFILE_VVC_MAIN_10_444
+
+// AVProfileAv1Main wraps AV_PROFILE_AV1_MAIN.
+const AVProfileAv1Main = C.AV_PROFILE_AV1_MAIN
+
+// AVProfileAv1High wraps AV_PROFILE_AV1_HIGH.
+const AVProfileAv1High = C.AV_PROFILE_AV1_HIGH
+
+// AVProfileAv1Professional wraps AV_PROFILE_AV1_PROFESSIONAL.
+const AVProfileAv1Professional = C.AV_PROFILE_AV1_PROFESSIONAL
+
+// AVProfileMjpegHuffmanBaselineDct wraps AV_PROFILE_MJPEG_HUFFMAN_BASELINE_DCT.
+const AVProfileMjpegHuffmanBaselineDct = C.AV_PROFILE_MJPEG_HUFFMAN_BASELINE_DCT
+
+// AVProfileMjpegHuffmanExtendedSequentialDct wraps AV_PROFILE_MJPEG_HUFFMAN_EXTENDED_SEQUENTIAL_DCT.
+const AVProfileMjpegHuffmanExtendedSequentialDct = C.AV_PROFILE_MJPEG_HUFFMAN_EXTENDED_SEQUENTIAL_DCT
+
+// AVProfileMjpegHuffmanProgressiveDct wraps AV_PROFILE_MJPEG_HUFFMAN_PROGRESSIVE_DCT.
+const AVProfileMjpegHuffmanProgressiveDct = C.AV_PROFILE_MJPEG_HUFFMAN_PROGRESSIVE_DCT
+
+// AVProfileMjpegHuffmanLossless wraps AV_PROFILE_MJPEG_HUFFMAN_LOSSLESS.
+const AVProfileMjpegHuffmanLossless = C.AV_PROFILE_MJPEG_HUFFMAN_LOSSLESS
+
+// AVProfileMjpegJpegLs wraps AV_PROFILE_MJPEG_JPEG_LS.
+const AVProfileMjpegJpegLs = C.AV_PROFILE_MJPEG_JPEG_LS
+
+// AVProfileSbcMsbc wraps AV_PROFILE_SBC_MSBC.
+const AVProfileSbcMsbc = C.AV_PROFILE_SBC_MSBC
+
+// AVProfileProresProxy wraps AV_PROFILE_PRORES_PROXY.
+const AVProfileProresProxy = C.AV_PROFILE_PRORES_PROXY
+
+// AVProfileProresLt wraps AV_PROFILE_PRORES_LT.
+const AVProfileProresLt = C.AV_PROFILE_PRORES_LT
+
+// AVProfileProresStandard wraps AV_PROFILE_PRORES_STANDARD.
+const AVProfileProresStandard = C.AV_PROFILE_PRORES_STANDARD
+
+// AVProfileProresHq wraps AV_PROFILE_PRORES_HQ.
+const AVProfileProresHq = C.AV_PROFILE_PRORES_HQ
+
+// AVProfileProres4444 wraps AV_PROFILE_PRORES_4444.
+const AVProfileProres4444 = C.AV_PROFILE_PRORES_4444
+
+// AVProfileProresXq wraps AV_PROFILE_PRORES_XQ.
+const AVProfileProresXq = C.AV_PROFILE_PRORES_XQ
+
+// AVProfileAribProfileA wraps AV_PROFILE_ARIB_PROFILE_A.
+const AVProfileAribProfileA = C.AV_PROFILE_ARIB_PROFILE_A
+
+// AVProfileAribProfileC wraps AV_PROFILE_ARIB_PROFILE_C.
+const AVProfileAribProfileC = C.AV_PROFILE_ARIB_PROFILE_C
+
+// AVProfileKlvaSync wraps AV_PROFILE_KLVA_SYNC.
+const AVProfileKlvaSync = C.AV_PROFILE_KLVA_SYNC
+
+// AVProfileKlvaAsync wraps AV_PROFILE_KLVA_ASYNC.
+const AVProfileKlvaAsync = C.AV_PROFILE_KLVA_ASYNC
+
+// AVProfileEvcBaseline wraps AV_PROFILE_EVC_BASELINE.
+const AVProfileEvcBaseline = C.AV_PROFILE_EVC_BASELINE
+
+// AVProfileEvcMain wraps AV_PROFILE_EVC_MAIN.
+const AVProfileEvcMain = C.AV_PROFILE_EVC_MAIN
+
+// AVLevelUnknown wraps AV_LEVEL_UNKNOWN.
+const AVLevelUnknown = C.AV_LEVEL_UNKNOWN
+
 // AVPktDataQualityFactor wraps AV_PKT_DATA_QUALITY_FACTOR.
 const AVPktDataQualityFactor = C.AV_PKT_DATA_QUALITY_FACTOR
 
@@ -903,6 +1254,9 @@ const AVFilterFlagSliceThreads = C.AVFILTER_FLAG_SLICE_THREADS
 
 // AVFilterFlagMetadataOnly wraps AVFILTER_FLAG_METADATA_ONLY.
 const AVFilterFlagMetadataOnly = C.AVFILTER_FLAG_METADATA_ONLY
+
+// AVFilterFlagHwdevice wraps AVFILTER_FLAG_HWDEVICE.
+const AVFilterFlagHwdevice = C.AVFILTER_FLAG_HWDEVICE
 
 // AVFilterFlagSupportTimelineGeneric wraps AVFILTER_FLAG_SUPPORT_TIMELINE_GENERIC.
 const AVFilterFlagSupportTimelineGeneric = C.AVFILTER_FLAG_SUPPORT_TIMELINE_GENERIC
@@ -1387,6 +1741,9 @@ const AVChLayout6Point0Front = C.AV_CH_LAYOUT_6POINT0_FRONT
 // AVChLayoutHexagonal wraps AV_CH_LAYOUT_HEXAGONAL.
 const AVChLayoutHexagonal = C.AV_CH_LAYOUT_HEXAGONAL
 
+// AVChLayout3Point1Point2 wraps AV_CH_LAYOUT_3POINT1POINT2.
+const AVChLayout3Point1Point2 = C.AV_CH_LAYOUT_3POINT1POINT2
+
 // AVChLayout6Point1 wraps AV_CH_LAYOUT_6POINT1.
 const AVChLayout6Point1 = C.AV_CH_LAYOUT_6POINT1
 
@@ -1411,14 +1768,23 @@ const AVChLayout7Point1Wide = C.AV_CH_LAYOUT_7POINT1_WIDE
 // AVChLayout7Point1WideBack wraps AV_CH_LAYOUT_7POINT1_WIDE_BACK.
 const AVChLayout7Point1WideBack = C.AV_CH_LAYOUT_7POINT1_WIDE_BACK
 
-// AVChLayout7Point1TopBack wraps AV_CH_LAYOUT_7POINT1_TOP_BACK.
-const AVChLayout7Point1TopBack = C.AV_CH_LAYOUT_7POINT1_TOP_BACK
+// AVChLayout5Point1Point2Back wraps AV_CH_LAYOUT_5POINT1POINT2_BACK.
+const AVChLayout5Point1Point2Back = C.AV_CH_LAYOUT_5POINT1POINT2_BACK
 
 // AVChLayoutOctagonal wraps AV_CH_LAYOUT_OCTAGONAL.
 const AVChLayoutOctagonal = C.AV_CH_LAYOUT_OCTAGONAL
 
 // AVChLayoutCube wraps AV_CH_LAYOUT_CUBE.
 const AVChLayoutCube = C.AV_CH_LAYOUT_CUBE
+
+// AVChLayout5Point1Point4Back wraps AV_CH_LAYOUT_5POINT1POINT4_BACK.
+const AVChLayout5Point1Point4Back = C.AV_CH_LAYOUT_5POINT1POINT4_BACK
+
+// AVChLayout7Point1Point2 wraps AV_CH_LAYOUT_7POINT1POINT2.
+const AVChLayout7Point1Point2 = C.AV_CH_LAYOUT_7POINT1POINT2
+
+// AVChLayout7Point1Point4Back wraps AV_CH_LAYOUT_7POINT1POINT4_BACK.
+const AVChLayout7Point1Point4Back = C.AV_CH_LAYOUT_7POINT1POINT4_BACK
 
 // AVChLayoutHexadecagonal wraps AV_CH_LAYOUT_HEXADECAGONAL.
 const AVChLayoutHexadecagonal = C.AV_CH_LAYOUT_HEXADECAGONAL
@@ -1428,6 +1794,9 @@ const AVChLayoutStereoDownmix = C.AV_CH_LAYOUT_STEREO_DOWNMIX
 
 // AVChLayout22Point2 wraps AV_CH_LAYOUT_22POINT2.
 const AVChLayout22Point2 = C.AV_CH_LAYOUT_22POINT2
+
+// AVChLayout7Point1TopBack wraps AV_CH_LAYOUT_7POINT1_TOP_BACK.
+const AVChLayout7Point1TopBack = C.AV_CH_LAYOUT_7POINT1_TOP_BACK
 
 // AVDictMatchCase wraps AV_DICT_MATCH_CASE.
 const AVDictMatchCase = C.AV_DICT_MATCH_CASE
@@ -1540,8 +1909,17 @@ const AVNumDataPointers = C.AV_NUM_DATA_POINTERS
 // AVFrameFlagCorrupt wraps AV_FRAME_FLAG_CORRUPT.
 const AVFrameFlagCorrupt = C.AV_FRAME_FLAG_CORRUPT
 
+// AVFrameFlagKey wraps AV_FRAME_FLAG_KEY.
+const AVFrameFlagKey = C.AV_FRAME_FLAG_KEY
+
 // AVFrameFlagDiscard wraps AV_FRAME_FLAG_DISCARD.
 const AVFrameFlagDiscard = C.AV_FRAME_FLAG_DISCARD
+
+// AVFrameFlagInterlaced wraps AV_FRAME_FLAG_INTERLACED.
+const AVFrameFlagInterlaced = C.AV_FRAME_FLAG_INTERLACED
+
+// AVFrameFlagTopFieldFirst wraps AV_FRAME_FLAG_TOP_FIELD_FIRST.
+const AVFrameFlagTopFieldFirst = C.AV_FRAME_FLAG_TOP_FIELD_FIRST
 
 // FfDecodeErrorInvalidBitstream wraps FF_DECODE_ERROR_INVALID_BITSTREAM.
 const FfDecodeErrorInvalidBitstream = C.FF_DECODE_ERROR_INVALID_BITSTREAM
@@ -1606,11 +1984,50 @@ const AVLogSkipRepeated = C.AV_LOG_SKIP_REPEATED
 // AVLogPrintLevel wraps AV_LOG_PRINT_LEVEL.
 const AVLogPrintLevel = C.AV_LOG_PRINT_LEVEL
 
+// MEf wraps M_Ef.
+const MEf = C.M_Ef
+
+// MLn2F wraps M_LN2f.
+const MLn2F = C.M_LN2f
+
+// MLn10F wraps M_LN10f.
+const MLn10F = C.M_LN10f
+
 // MLog210 wraps M_LOG2_10.
 const MLog210 = C.M_LOG2_10
 
+// MLog210F wraps M_LOG2_10f.
+const MLog210F = C.M_LOG2_10f
+
 // MPhi wraps M_PHI.
 const MPhi = C.M_PHI
+
+// MPhif wraps M_PHIf.
+const MPhif = C.M_PHIf
+
+// MPif wraps M_PIf.
+const MPif = C.M_PIf
+
+// MPi2F wraps M_PI_2f.
+const MPi2F = C.M_PI_2f
+
+// MPi4F wraps M_PI_4f.
+const MPi4F = C.M_PI_4f
+
+// M1Pif wraps M_1_PIf.
+const M1Pif = C.M_1_PIf
+
+// M2Pif wraps M_2_PIf.
+const M2Pif = C.M_2_PIf
+
+// M2Sqrtpif wraps M_2_SQRTPIf.
+const M2Sqrtpif = C.M_2_SQRTPIf
+
+// MSqrt12F wraps M_SQRT1_2f.
+const MSqrt12F = C.M_SQRT1_2f
+
+// MSqrt2F wraps M_SQRT2f.
+const MSqrt2F = C.M_SQRT2f
 
 // AVOptFlagEncodingParam wraps AV_OPT_FLAG_ENCODING_PARAM.
 const AVOptFlagEncodingParam = C.AV_OPT_FLAG_ENCODING_PARAM
@@ -1813,6 +2230,9 @@ const AVPixFmtGbrap10 = C.AV_PIX_FMT_GBRAP10
 // AVPixFmtGbrap12 wraps AV_PIX_FMT_GBRAP12.
 const AVPixFmtGbrap12 = C.AV_PIX_FMT_GBRAP12
 
+// AVPixFmtGbrap14 wraps AV_PIX_FMT_GBRAP14.
+const AVPixFmtGbrap14 = C.AV_PIX_FMT_GBRAP14
+
 // AVPixFmtGbrap16 wraps AV_PIX_FMT_GBRAP16.
 const AVPixFmtGbrap16 = C.AV_PIX_FMT_GBRAP16
 
@@ -1911,6 +2331,12 @@ const AVPixFmtP210 = C.AV_PIX_FMT_P210
 
 // AVPixFmtP410 wraps AV_PIX_FMT_P410.
 const AVPixFmtP410 = C.AV_PIX_FMT_P410
+
+// AVPixFmtP212 wraps AV_PIX_FMT_P212.
+const AVPixFmtP212 = C.AV_PIX_FMT_P212
+
+// AVPixFmtP412 wraps AV_PIX_FMT_P412.
+const AVPixFmtP412 = C.AV_PIX_FMT_P412
 
 // AVPixFmtP216 wraps AV_PIX_FMT_P216.
 const AVPixFmtP216 = C.AV_PIX_FMT_P216

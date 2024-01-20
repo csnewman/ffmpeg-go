@@ -5,12 +5,15 @@ import (
 	"github.com/go-clang/bootstrap/clang"
 	"log"
 	"path"
+	"path/filepath"
 	"slices"
 	"strings"
 	"unicode"
 )
 
-const AVLibPath = "/opt/homebrew/Cellar/ffmpeg/6.0_1/include/"
+var (
+	AVLibPath, _ = filepath.Abs("include")
+)
 
 var files = []string{
 	"libavcodec/avcodec.h",

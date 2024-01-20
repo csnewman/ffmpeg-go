@@ -388,7 +388,7 @@ func (g *Generator) generateStructs() {
 
 				case *IdentType:
 
-					if iv.Name == "URLContext" || iv.Name == "AVFilterCommand" {
+					if iv.Name == "URLContext" || iv.Name == "AVFilterCommand" || iv.Name == "AVCodecInternal" {
 						o.Commentf("%v skipped due to ptr to ignored type", field.Name)
 						o.Line()
 
@@ -477,7 +477,7 @@ func (g *Generator) generateStructs() {
 							),
 						)
 					} else {
-						log.Panicln("unexpected")
+						log.Panicln("unexpected ", iv.Name)
 					}
 
 				case *FuncType:

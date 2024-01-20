@@ -712,6 +712,14 @@ const (
 	AVCodecIdMedia100 AVCodecID = C.AV_CODEC_ID_MEDIA100
 	// AVCodecIdVqc wraps AV_CODEC_ID_VQC.
 	AVCodecIdVqc AVCodecID = C.AV_CODEC_ID_VQC
+	// AVCodecIdPdv wraps AV_CODEC_ID_PDV.
+	AVCodecIdPdv AVCodecID = C.AV_CODEC_ID_PDV
+	// AVCodecIdEvc wraps AV_CODEC_ID_EVC.
+	AVCodecIdEvc AVCodecID = C.AV_CODEC_ID_EVC
+	// AVCodecIdRtv1 wraps AV_CODEC_ID_RTV1.
+	AVCodecIdRtv1 AVCodecID = C.AV_CODEC_ID_RTV1
+	// AVCodecIdVmix wraps AV_CODEC_ID_VMIX.
+	AVCodecIdVmix AVCodecID = C.AV_CODEC_ID_VMIX
 	// AVCodecIdFirstAudio wraps AV_CODEC_ID_FIRST_AUDIO.
 	//
 	//	A dummy id pointing at the start of audio codecs
@@ -1264,6 +1272,10 @@ const (
 	AVCodecIdWavarc AVCodecID = C.AV_CODEC_ID_WAVARC
 	// AVCodecIdRka wraps AV_CODEC_ID_RKA.
 	AVCodecIdRka AVCodecID = C.AV_CODEC_ID_RKA
+	// AVCodecIdAc4 wraps AV_CODEC_ID_AC4.
+	AVCodecIdAc4 AVCodecID = C.AV_CODEC_ID_AC4
+	// AVCodecIdOsq wraps AV_CODEC_ID_OSQ.
+	AVCodecIdOsq AVCodecID = C.AV_CODEC_ID_OSQ
 	// AVCodecIdFirstSubtitle wraps AV_CODEC_ID_FIRST_SUBTITLE.
 	//
 	//	A dummy ID pointing at the start of subtitle codecs.
@@ -1350,6 +1362,8 @@ const (
 	AVCodecIdTimedId3 AVCodecID = C.AV_CODEC_ID_TIMED_ID3
 	// AVCodecIdBinData wraps AV_CODEC_ID_BIN_DATA.
 	AVCodecIdBinData AVCodecID = C.AV_CODEC_ID_BIN_DATA
+	// AVCodecIdSmpte2038 wraps AV_CODEC_ID_SMPTE_2038.
+	AVCodecIdSmpte2038 AVCodecID = C.AV_CODEC_ID_SMPTE_2038
 	// AVCodecIdProbe wraps AV_CODEC_ID_PROBE.
 	//
 	//	codec_id is not known (like AV_CODEC_ID_NONE) but lavf should attempt to identify it
@@ -2787,6 +2801,16 @@ const (
 	//
 	//	Ambient viewing environment metadata, as defined by H.274.
 	AVFrameDataAmbientViewingEnvironment AVFrameSideDataType = C.AV_FRAME_DATA_AMBIENT_VIEWING_ENVIRONMENT
+	// AVFrameDataVideoHint wraps AV_FRAME_DATA_VIDEO_HINT.
+	/*
+	   Provide encoder-specific hinting information about changed/unchanged
+	   portions of a frame.  It can be used to pass information about which
+	   macroblocks can be skipped because they didn't change from the
+	   corresponding ones in the previous frame. This could be useful for
+	   applications which know this information in advance to speed up
+	   encoding.
+	*/
+	AVFrameDataVideoHint AVFrameSideDataType = C.AV_FRAME_DATA_VIDEO_HINT
 )
 
 // --- Enum AVActiveFormatDescription ---
@@ -4180,6 +4204,30 @@ const (
 	//
 	//	IEEE-754 single precision packed RGBA 32:32:32:32, 128bpp, RGBARGBA..., little-endian
 	AVPixFmtRgbaf32Le AVPixelFormat = C.AV_PIX_FMT_RGBAF32LE
+	// AVPixFmtP212Be wraps AV_PIX_FMT_P212BE.
+	//
+	//	interleaved chroma YUV 4:2:2, 24bpp, data in the high bits, big-endian
+	AVPixFmtP212Be AVPixelFormat = C.AV_PIX_FMT_P212BE
+	// AVPixFmtP212Le wraps AV_PIX_FMT_P212LE.
+	//
+	//	interleaved chroma YUV 4:2:2, 24bpp, data in the high bits, little-endian
+	AVPixFmtP212Le AVPixelFormat = C.AV_PIX_FMT_P212LE
+	// AVPixFmtP412Be wraps AV_PIX_FMT_P412BE.
+	//
+	//	interleaved chroma YUV 4:4:4, 36bpp, data in the high bits, big-endian
+	AVPixFmtP412Be AVPixelFormat = C.AV_PIX_FMT_P412BE
+	// AVPixFmtP412Le wraps AV_PIX_FMT_P412LE.
+	//
+	//	interleaved chroma YUV 4:4:4, 36bpp, data in the high bits, little-endian
+	AVPixFmtP412Le AVPixelFormat = C.AV_PIX_FMT_P412LE
+	// AVPixFmtGbrap14Be wraps AV_PIX_FMT_GBRAP14BE.
+	//
+	//	planar GBR 4:4:4:4 56bpp, big-endian
+	AVPixFmtGbrap14Be AVPixelFormat = C.AV_PIX_FMT_GBRAP14BE
+	// AVPixFmtGbrap14Le wraps AV_PIX_FMT_GBRAP14LE.
+	//
+	//	planar GBR 4:4:4:4 56bpp, little-endian
+	AVPixFmtGbrap14Le AVPixelFormat = C.AV_PIX_FMT_GBRAP14LE
 	// AVPixFmtNb wraps AV_PIX_FMT_NB.
 	//
 	//	number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats might differ between versions
