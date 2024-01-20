@@ -82,6 +82,7 @@ jobs:
 
   darwin_arm64:
     runs-on: macos-13-arm64
+    if: ${{ false }} # Not available in public runners
     steps:
       - uses: actions/checkout@v4
 
