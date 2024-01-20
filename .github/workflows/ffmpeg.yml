@@ -3,6 +3,9 @@ name: FFmpeg library
 on:
   push:
     branches: [ master ]
+    paths:
+      - '.github/workflows/ffmpeg.yml'
+      - 'internal/builder/**'
 
 permissions:
   pull-requests: write
