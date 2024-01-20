@@ -1,0 +1,36 @@
+name: FFmpeg library
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  linux_amd64:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.21
+
+      - name: Install deps
+        run: sudo apt-get install -y yasm
+
+      - run: mkdir build
+
+      - name: Build
+        working-directory: build
+        run: go run ../internal/builder/ ../libffmpeg_linux_amd64.a
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          title: "[CI] Rebuild linux amd64 library"
+          body: Automated changes by CI pipeline.
+          commit-message: "[CI] Rebuild linux amd64 library"
+          committer: GitHub CI <noreply@github.com>
+          author: GitHub CI <noreply@github.com>
+          branch: ci/linux-amd64
+          add-paths: libffmpeg_linux_amd64.a
