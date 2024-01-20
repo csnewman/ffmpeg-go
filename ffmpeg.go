@@ -8,7 +8,9 @@ import (
 
 /*
 #cgo CFLAGS: -I${SRCDIR}/include
+#cgo linux,amd64 LDFLAGS: -L${SRCDIR} -lffmpeg_linux_amd64 -lm
 #cgo linux,arm64 LDFLAGS: -L${SRCDIR} -lffmpeg_linux_arm64 -lm
+#cgo darwin,amd64 LDFLAGS: -L${SRCDIR} -lffmpeg_darwin_amd64 -lm
 #cgo darwin,arm64 LDFLAGS: -L${SRCDIR} -lffmpeg_darwin_arm64 -lm
 
 #include <errno.h>
