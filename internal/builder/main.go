@@ -657,17 +657,17 @@ func buildIconv() {
 		run("[iconv configure]", cmd)
 	}
 
-	{
-		log.Println("Running make")
-
-		cmd := cmd(
-			"make",
-			srcPath,
-			"-j8",
-			"-f", "Makefile.devel",
-		)
-		run("[iconv make]", cmd)
-	}
+	//{
+	//	log.Println("Running make")
+	//
+	//	cmd := cmd(
+	//		"make",
+	//		srcPath,
+	//		"-j8",
+	//		"-f", "Makefile.devel",
+	//	)
+	//	run("[iconv make]", cmd)
+	//}
 
 	{
 		log.Println("Running install")
