@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/schollz/progressbar/v3"
+	"github.com/ulikunitz/xz"
 	"io"
 	"log"
 	"net/http"
@@ -147,7 +148,9 @@ func download(url string, path string) {
 	}
 }
 
-func untar(src string, dest string) {
+func untar(src string, dest string, prefix string) {
+	os.RemoveAll(dest)
+
 	if err := os.MkdirAll(dest, 0755); err != nil {
 		log.Panicln(err)
 	}
@@ -159,9 +162,18 @@ func untar(src string, dest string) {
 
 	defer gzipStream.Close()
 
-	uncompressedStream, err := gzip.NewReader(gzipStream)
-	if err != nil {
-		log.Fatal("ExtractTarGz: NewReader failed")
+	var uncompressedStream io.Reader
+
+	if strings.HasSuffix(src, ".xz") {
+		uncompressedStream, err = xz.NewReader(gzipStream)
+		if err != nil {
+			log.Fatal("ExtractTarXz: NewReader failed")
+		}
+	} else {
+		uncompressedStream, err = gzip.NewReader(gzipStream)
+		if err != nil {
+			log.Fatal("ExtractTarGz: NewReader failed")
+		}
 	}
 
 	tarReader := tar.NewReader(uncompressedStream)
@@ -177,6 +189,12 @@ func untar(src string, dest string) {
 			log.Fatalf("ExtractTarGz: Next() failed: %s", err.Error())
 		}
 
+		header.Name = strings.TrimPrefix(header.Name, prefix)
+
+		if header.Name == "" {
+			continue
+		}
+
 		path := filepath.Join(dest, header.Name)
 
 		switch header.Typeflag {
@@ -185,7 +203,7 @@ func untar(src string, dest string) {
 				log.Fatalf("ExtractTarGz: Mkdir() failed: %s", err.Error())
 			}
 		case tar.TypeReg:
-			outFile, err := os.Create(path)
+			outFile, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, os.FileMode(header.Mode))
 			if err != nil {
 				log.Fatalf("ExtractTarGz: Create() failed: %s", err.Error())
 			}
@@ -205,6 +223,8 @@ func untar(src string, dest string) {
 }
 
 func unzip(src string, dest string) {
+	os.RemoveAll(dest)
+
 	r, err := zip.OpenReader(src)
 	if err != nil {
 		log.Panicln(err)
@@ -287,4 +307,23 @@ func extractAndWriteFile(f *zip.File, dest string) error {
 		}
 	}
 	return nil
+}
+
+func cmd(name string, dir string, args ...string) *exec.Cmd {
+	cmd := exec.Command(name)
+	cmd.Dir = dir
+	cmd.Env = os.Environ()
+
+	cmd.Env = append(
+		cmd.Env,
+		fmt.Sprintf("CFLAGS=-I%v", incDir),
+		fmt.Sprintf("CPPFLAGS=-I%v", incDir),
+		fmt.Sprintf("CXXFLAGS=-I%v", incDir),
+		fmt.Sprintf("LDFLAGS=-L%v", libDir),
+		fmt.Sprintf("PKG_CONFIG_PATH=%v/pkgconfig", libDir),
+	)
+
+	cmd.Args = append(cmd.Args, args...)
+
+	return cmd
 }

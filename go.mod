@@ -8,6 +8,7 @@ require (
 	github.com/go-clang/bootstrap v0.14.0
 	github.com/iancoleman/strcase v0.3.0
 	github.com/schollz/progressbar/v3 v3.14.1
+	github.com/ulikunitz/xz v0.5.11
 )
 
 require (

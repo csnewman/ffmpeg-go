@@ -8,10 +8,15 @@ import (
 
 /*
 #cgo CFLAGS: -I${SRCDIR}/include -Wno-deprecated
-#cgo linux,amd64 LDFLAGS: -L${SRCDIR} -lffmpeg_linux_amd64 -lm
-#cgo linux,arm64 LDFLAGS: -L${SRCDIR} -lffmpeg_linux_arm64 -lm
-#cgo darwin,amd64 LDFLAGS: -L${SRCDIR} -lffmpeg_darwin_amd64 -lm
-#cgo darwin,arm64 LDFLAGS: -L${SRCDIR} -lffmpeg_darwin_arm64 -lm
+
+#cgo linux LDFLAGS: -L${SRCDIR}
+#cgo linux,amd64 LDFLAGS: -lffmpeg_linux_amd64
+#cgo linux,arm64 LDFLAGS: -lffmpeg_linux_arm64
+#cgo linux LDFLAGS: -lm
+
+#cgo darwin LDFLAGS: -L${SRCDIR} -lm -framework ApplicationServices -framework CoreFoundation
+#cgo darwin,amd64 LDFLAGS: -lffmpeg_darwin_amd64
+#cgo darwin,arm64 LDFLAGS: -lffmpeg_darwin_arm64
 
 #include <errno.h>
 #include <stdlib.h>
