@@ -7,7 +7,7 @@ import (
 )
 
 /*
-#cgo CFLAGS: -I${SRCDIR}/include -Wno-deprecated
+#cgo CFLAGS: -I${SRCDIR}/include -Wno-deprecated -Wno-deprecated-declarations
 
 #cgo linux LDFLAGS: -L${SRCDIR}
 #cgo linux,amd64 LDFLAGS: -lffmpeg_linux_amd64
