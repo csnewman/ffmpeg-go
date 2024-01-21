@@ -59,7 +59,7 @@ jobs:
           go-version: 1.21
 
       - name: Install deps
-        run: brew install yasm autoconf ragel meson nasm
+        run: brew install yasm autoconf ragel meson nasm automake libtool
 
       - run: mkdir build
 
