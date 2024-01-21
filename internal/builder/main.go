@@ -7,6 +7,7 @@ import (
 	"path"
 	"path/filepath"
 	"runtime"
+	"strings"
 )
 
 var (
@@ -32,11 +33,18 @@ var (
 		"libfreetype",
 		"libfribidi",
 		"libharfbuzz",
+		"libmp3lame",
+		"libogg",
+		"libopus",
 		"libpng16",
 		"libpostproc",
+		"libspeex",
 		"libswresample",
 		"libswscale",
+		"libtheora",
 		"libunibreak",
+		"libvpx",
+		"libx264",
 		"libz",
 	}
 )
@@ -111,12 +119,385 @@ func main() {
 	buildHarfbuzz()
 	b.buildASS()
 	buildAOM()
+	buildLame()
+	buildOpus()
+	buildOgg()
+	buildVorbis()
+	buildSpeex()
+	buildTheora()
+	buildVpx()
+	buildX264()
+
 	b.buildFFmpeg()
 
 	if b.os == Linux {
 		combineLinux(targetOutput)
 	} else if b.os == MacOS {
 		combineMac(targetOutput)
+	}
+}
+
+func buildX264() {
+	zipPath := path.Join(downloadsDir, "x264.tar.bz2")
+	srcPath := path.Join(buildDir, "x264")
+
+	if !exists(zipPath) {
+		download("https://code.videolan.org/videolan/x264/-/archive/master/x264-master.tar.bz2", zipPath)
+	}
+
+	untar(zipPath, srcPath, "x264-master/")
+
+	{
+		log.Println("Running configure")
+
+		cmd := cmd(
+			path.Join(srcPath, "configure"),
+			srcPath,
+			fmt.Sprintf("--prefix=%v", tgtDir),
+			"--disable-dependency-tracking",
+			"--enable-static",
+			"--disable-shared",
+			"--disable-lsmash",
+			"--disable-swscale",
+			"--disable-ffms",
+			"--enable-strip",
+		)
+
+		run("[x264 configure]", cmd)
+	}
+
+	{
+		log.Println("Running make")
+
+		cmd := cmd(
+			"make",
+			srcPath,
+			"-j8",
+			"install",
+		)
+
+		run("[x264 make]", cmd)
+	}
+}
+
+func buildVpx() {
+	zipPath := path.Join(downloadsDir, "vpx.zip")
+	srcPath := path.Join(buildDir, "vpx")
+	buildDir := path.Join(srcPath, "ffbuild")
+
+	if !exists(zipPath) {
+		download("https://github.com/webmproject/libvpx/archive/refs/tags/v1.14.0.zip", zipPath)
+	}
+
+	unzip(zipPath, srcPath)
+
+	if err := os.MkdirAll(buildDir, 0755); err != nil {
+		log.Panicln(err)
+	}
+
+	{
+		log.Println("Running configure")
+
+		cmd := cmd(
+			path.Join(srcPath, "configure"),
+			buildDir,
+			fmt.Sprintf("--prefix=%v", tgtDir),
+			"--disable-dependency-tracking",
+			"--enable-static",
+			"--disable-shared",
+			"--disable-examples",
+			"--enable-vp9-highbitdepth",
+			"--disable-unit-tests",
+		)
+
+		// TODO: target/cpudetect
+
+		run("[vpx configure]", cmd)
+	}
+
+	{
+		log.Println("Running make")
+
+		cmd := cmd(
+			"make",
+			buildDir,
+			"-j8",
+			"install",
+		)
+
+		run("[vps make]", cmd)
+	}
+}
+
+func buildTheora() {
+	zipPath := path.Join(downloadsDir, "theora.zip")
+	srcPath := path.Join(buildDir, "theora")
+
+	if !exists(zipPath) {
+		download("http://downloads.xiph.org/releases/theora/libtheora-1.1.1.zip", zipPath)
+	}
+
+	unzip(zipPath, srcPath)
+
+	vorbisPath := path.Join(buildDir, "vorbis")
+
+	copyFile(path.Join(srcPath, "config.guess"), path.Join(vorbisPath, "config.guess"))
+	copyFile(path.Join(srcPath, "config.sub"), path.Join(vorbisPath, "config.sub"))
+
+	{
+		log.Println("Running configure")
+
+		cmd := cmd(
+			path.Join(srcPath, "configure"),
+			srcPath,
+			fmt.Sprintf("--prefix=%v", tgtDir),
+			"--disable-dependency-tracking",
+			"--enable-static",
+			"--disable-shared",
+			"--disable-oggtest",
+			"--disable-vorbistest",
+			"--disable-examples",
+			fmt.Sprintf("CFLAGS=-I%v", incDir),
+			fmt.Sprintf("CPPFLAGS=-I%v", incDir),
+			fmt.Sprintf("LDFLAGS=-L%v", libDir),
+		)
+
+		run("[theora configure]", cmd)
+	}
+
+	{
+		log.Println("Running make")
+
+		cmd := cmd(
+			"make",
+			srcPath,
+			"-j8",
+			"install",
+		)
+
+		run("[theora make]", cmd)
+	}
+}
+
+func buildOgg() {
+	zipPath := path.Join(downloadsDir, "ogg.tar.gz")
+	srcPath := path.Join(buildDir, "ogg")
+
+	if !exists(zipPath) {
+		download("http://downloads.xiph.org/releases/ogg/libogg-1.3.1.tar.gz", zipPath)
+	}
+
+	untar(zipPath, srcPath, "libogg-1.3.1/")
+
+	{
+		log.Println("Running configure")
+
+		cmd := cmd(
+			path.Join(srcPath, "configure"),
+			srcPath,
+			fmt.Sprintf("--prefix=%v", tgtDir),
+			"--disable-dependency-tracking",
+			"--enable-static",
+			"--disable-shared",
+			fmt.Sprintf("CFLAGS=-I%v", incDir),
+			fmt.Sprintf("CPPFLAGS=-I%v", incDir),
+			fmt.Sprintf("LDFLAGS=-L%v", libDir),
+		)
+
+		run("[ogg configure]", cmd)
+	}
+
+	{
+		log.Println("Running make")
+
+		cmd := cmd(
+			"make",
+			srcPath,
+			"-j8",
+			"install",
+		)
+
+		run("[ogg make]", cmd)
+	}
+}
+
+func buildVorbis() {
+	zipPath := path.Join(downloadsDir, "vorbis.tar.gz")
+	srcPath := path.Join(buildDir, "vorbis")
+
+	if !exists(zipPath) {
+		download("http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.7.tar.gz", zipPath)
+	}
+
+	untar(zipPath, srcPath, "libvorbis-1.3.7/")
+
+	modify(
+		path.Join(srcPath, "configure"),
+		func(bytes []byte) []byte {
+			return []byte(strings.ReplaceAll(string(bytes), "-force_cpusubtype_ALL", ""))
+		},
+	)
+
+	{
+		log.Println("Running configure")
+
+		cmd := cmd(
+			path.Join(srcPath, "configure"),
+			srcPath,
+			fmt.Sprintf("--prefix=%v", tgtDir),
+			"--disable-dependency-tracking",
+			"--enable-static",
+			"--disable-shared",
+			fmt.Sprintf("CFLAGS=-I%v", incDir),
+			fmt.Sprintf("CPPFLAGS=-I%v", incDir),
+			fmt.Sprintf("LDFLAGS=-L%v", libDir),
+		)
+
+		run("[vorbis configure]", cmd)
+	}
+
+	{
+		log.Println("Running make")
+
+		cmd := cmd(
+			"make",
+			srcPath,
+			"-j8",
+			"install",
+		)
+
+		run("[vorbis make]", cmd)
+	}
+}
+
+func buildSpeex() {
+	zipPath := path.Join(downloadsDir, "speex.tar.gz")
+	srcPath := path.Join(buildDir, "speex")
+
+	if !exists(zipPath) {
+		download("http://downloads.xiph.org/releases/speex/speex-1.2.1.tar.gz", zipPath)
+	}
+
+	untar(zipPath, srcPath, "speex-1.2.1/")
+
+	{
+		log.Println("Running configure")
+
+		cmd := cmd(
+			path.Join(srcPath, "configure"),
+			srcPath,
+			fmt.Sprintf("--prefix=%v", tgtDir),
+			"--disable-dependency-tracking",
+			"--enable-static",
+			"--disable-shared",
+			fmt.Sprintf("CFLAGS=-I%v", incDir),
+			fmt.Sprintf("CPPFLAGS=-I%v", incDir),
+			fmt.Sprintf("LDFLAGS=-L%v", libDir),
+		)
+
+		run("[speex configure]", cmd)
+	}
+
+	{
+		log.Println("Running make")
+
+		cmd := cmd(
+			"make",
+			srcPath,
+			"-j8",
+			"install",
+		)
+
+		run("[speex make]", cmd)
+	}
+}
+
+func buildOpus() {
+	zipPath := path.Join(downloadsDir, "opus.tar.gz")
+	srcPath := path.Join(buildDir, "opus")
+
+	if !exists(zipPath) {
+		download("https://downloads.xiph.org/releases/opus/opus-1.4.tar.gz", zipPath)
+	}
+
+	untar(zipPath, srcPath, "opus-1.4/")
+
+	{
+		log.Println("Running configure")
+
+		cmd := cmd(
+			path.Join(srcPath, "configure"),
+			srcPath,
+			fmt.Sprintf("--prefix=%v", tgtDir),
+			"--disable-dependency-tracking",
+			"--disable-debug",
+			"--disable-doc",
+			"--enable-static",
+			"--disable-shared",
+			fmt.Sprintf("CFLAGS=-I%v", incDir),
+			fmt.Sprintf("CPPFLAGS=-I%v", incDir),
+			fmt.Sprintf("LDFLAGS=-L%v", libDir),
+		)
+
+		run("[opus configure]", cmd)
+	}
+
+	{
+		log.Println("Running make")
+
+		cmd := cmd(
+			"make",
+			srcPath,
+			"-j8",
+			"install",
+		)
+
+		run("[opus make]", cmd)
+	}
+}
+
+func buildLame() {
+	zipPath := path.Join(downloadsDir, "lame.tar.gz")
+	srcPath := path.Join(buildDir, "lame")
+
+	if !exists(zipPath) {
+		download("https://downloads.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz", zipPath)
+	}
+
+	untar(zipPath, srcPath, "lame-3.100/")
+
+	{
+		log.Println("Running configure")
+
+		cmd := cmd(
+			path.Join(srcPath, "configure"),
+			srcPath,
+			fmt.Sprintf("--prefix=%v", tgtDir),
+			"--disable-dependency-tracking",
+			"--disable-debug",
+			"--enable-static",
+			"--disable-shared",
+			// TODO: nasm?
+			//"--enable-nasm",
+			fmt.Sprintf("CFLAGS=-I%v", incDir),
+			fmt.Sprintf("CPPFLAGS=-I%v", incDir),
+			fmt.Sprintf("LDFLAGS=-L%v", libDir),
+		)
+
+		run("[lame configure]", cmd)
+	}
+
+	{
+		log.Println("Running make")
+
+		cmd := cmd(
+			"make",
+			srcPath,
+			"-j8",
+			"install",
+		)
+
+		run("[lame make]", cmd)
 	}
 }
 
@@ -733,6 +1114,14 @@ func (b *Builder) buildFFmpeg() {
 			"--enable-libfreetype",
 			"--enable-libfribidi",
 			"--enable-libharfbuzz",
+			"--enable-libmp3lame",
+			"--enable-libopus",
+			"--enable-libspeex",
+			"--enable-libtheora",
+			"--enable-libvpx",
+			"--enable-libx264",
+
+			//--enable-libx265         enable HEVC encoding via x265 [no]
 		)
 
 		if b.os == Linux {

@@ -4,6 +4,7 @@ import (
 	"archive/tar"
 	"archive/zip"
 	"bufio"
+	"compress/bzip2"
 	"compress/gzip"
 	"errors"
 	"fmt"
@@ -39,29 +40,28 @@ func writeLines(dst string, lines []string) {
 	}
 }
 
-func copyFile(dst string, src string) error {
+func copyFile(dst string, src string) {
 
 	srcF, err := os.Open(src)
 	if err != nil {
-		return err
+		log.Panicln(err)
 	}
 	defer srcF.Close()
 
 	info, err := srcF.Stat()
 	if err != nil {
-		return err
+		log.Panicln(err)
 	}
 
 	dstF, err := os.OpenFile(dst, os.O_RDWR|os.O_CREATE|os.O_TRUNC, info.Mode())
 	if err != nil {
-		return err
+		log.Panicln(err)
 	}
 	defer dstF.Close()
 
 	if _, err := io.Copy(dstF, srcF); err != nil {
-		return err
+		log.Panicln(err)
 	}
-	return nil
 }
 
 func run(prefix string, cmd *exec.Cmd) {
@@ -167,12 +167,14 @@ func untar(src string, dest string, prefix string) {
 	if strings.HasSuffix(src, ".xz") {
 		uncompressedStream, err = xz.NewReader(gzipStream)
 		if err != nil {
-			log.Fatal("ExtractTarXz: NewReader failed")
+			log.Fatal("ExtractTarXz: NewReader failed", err)
 		}
+	} else if strings.HasSuffix(src, ".bz2") {
+		uncompressedStream = bzip2.NewReader(gzipStream)
 	} else {
 		uncompressedStream, err = gzip.NewReader(gzipStream)
 		if err != nil {
-			log.Fatal("ExtractTarGz: NewReader failed")
+			log.Fatal("ExtractTarGz: NewReader failed", err)
 		}
 	}
 
@@ -212,9 +214,12 @@ func untar(src string, dest string, prefix string) {
 			}
 			outFile.Close()
 
+		case tar.TypeXGlobalHeader:
+			log.Println("Ignoring TypeXGlobalHeader")
+			// Ignore?
 		default:
 			log.Fatalf(
-				"ExtractTarGz: uknown type: %s in %s",
+				"ExtractTarGz: uknown type: %v in %s",
 				header.Typeflag,
 				header.Name)
 		}
@@ -326,4 +331,22 @@ func cmd(name string, dir string, args ...string) *exec.Cmd {
 	cmd.Args = append(cmd.Args, args...)
 
 	return cmd
+}
+
+func modify(path string, mod func([]byte) []byte) {
+	s, err := os.Stat(path)
+	if err != nil {
+		log.Panicln(err)
+	}
+
+	content, err := os.ReadFile(path)
+	if err != nil {
+		log.Panicln(err)
+	}
+
+	content = mod(content)
+
+	if err := os.WriteFile(path, content, s.Mode()); err != nil {
+		log.Panicln(err)
+	}
 }
