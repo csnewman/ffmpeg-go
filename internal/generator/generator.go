@@ -1068,6 +1068,20 @@ func convParamName(val string) string {
 }
 
 func (g *Generator) convCamel(val string) string {
+	hasLIB := strings.HasPrefix(val, "lib") || strings.HasPrefix(val, "LIB")
+
+	if hasLIB {
+		val = strings.TrimPrefix(val, "lib")
+		val = strings.TrimPrefix(val, "LIB")
+	}
+
+	hasFF := strings.HasPrefix(val, "ff") || strings.HasPrefix(val, "FF")
+
+	if hasFF {
+		val = strings.TrimPrefix(val, "ff")
+		val = strings.TrimPrefix(val, "FF")
+	}
+
 	hasAV := strings.HasPrefix(val, "av") || strings.HasPrefix(val, "AV")
 
 	if hasAV {
@@ -1090,6 +1104,14 @@ func (g *Generator) convCamel(val string) string {
 
 	if hasAV {
 		val = fmt.Sprintf("AV%v", val)
+	}
+
+	if hasFF {
+		val = fmt.Sprintf("FF%v", val)
+	}
+
+	if hasLIB {
+		val = fmt.Sprintf("Lib%v", val)
 	}
 
 	// Temporary hack

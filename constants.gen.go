@@ -7,11 +7,19 @@ package ffmpeg
 // #include <libavcodec/codec_par.h>
 // #include <libavcodec/defs.h>
 // #include <libavcodec/packet.h>
+// #include <libavcodec/version.h>
+// #include <libavcodec/version_major.h>
+// #include <libavdevice/version.h>
+// #include <libavdevice/version_major.h>
 // #include <libavfilter/avfilter.h>
 // #include <libavfilter/buffersink.h>
 // #include <libavfilter/buffersrc.h>
+// #include <libavfilter/version.h>
+// #include <libavfilter/version_major.h>
 // #include <libavformat/avformat.h>
 // #include <libavformat/avio.h>
+// #include <libavformat/version.h>
+// #include <libavformat/version_major.h>
 // #include <libavutil/avutil.h>
 // #include <libavutil/buffer.h>
 // #include <libavutil/channel_layout.h>
@@ -26,6 +34,13 @@ package ffmpeg
 // #include <libavutil/pixfmt.h>
 // #include <libavutil/rational.h>
 // #include <libavutil/samplefmt.h>
+// #include <libavutil/version.h>
+// #include <libpostproc/version.h>
+// #include <libpostproc/version_major.h>
+// #include <libswresample/version.h>
+// #include <libswresample/version_major.h>
+// #include <libswscale/version.h>
+// #include <libswscale/version_major.h>
 import "C"
 
 // AVInputBufferMinSize wraps AV_INPUT_BUFFER_MIN_SIZE.
@@ -142,59 +157,59 @@ const AVGetBufferFlagRef = C.AV_GET_BUFFER_FLAG_REF
 // AVGetEncodeBufferFlagRef wraps AV_GET_ENCODE_BUFFER_FLAG_REF.
 const AVGetEncodeBufferFlagRef = C.AV_GET_ENCODE_BUFFER_FLAG_REF
 
-// FfCompressionDefault wraps FF_COMPRESSION_DEFAULT.
-const FfCompressionDefault = C.FF_COMPRESSION_DEFAULT
+// FFCompressionDefault wraps FF_COMPRESSION_DEFAULT.
+const FFCompressionDefault = C.FF_COMPRESSION_DEFAULT
 
-// FfCmpSad wraps FF_CMP_SAD.
-const FfCmpSad = C.FF_CMP_SAD
+// FFCmpSad wraps FF_CMP_SAD.
+const FFCmpSad = C.FF_CMP_SAD
 
-// FfCmpSse wraps FF_CMP_SSE.
-const FfCmpSse = C.FF_CMP_SSE
+// FFCmpSse wraps FF_CMP_SSE.
+const FFCmpSse = C.FF_CMP_SSE
 
-// FfCmpSatd wraps FF_CMP_SATD.
-const FfCmpSatd = C.FF_CMP_SATD
+// FFCmpSatd wraps FF_CMP_SATD.
+const FFCmpSatd = C.FF_CMP_SATD
 
-// FfCmpDct wraps FF_CMP_DCT.
-const FfCmpDct = C.FF_CMP_DCT
+// FFCmpDct wraps FF_CMP_DCT.
+const FFCmpDct = C.FF_CMP_DCT
 
-// FfCmpPsnr wraps FF_CMP_PSNR.
-const FfCmpPsnr = C.FF_CMP_PSNR
+// FFCmpPsnr wraps FF_CMP_PSNR.
+const FFCmpPsnr = C.FF_CMP_PSNR
 
-// FfCmpBit wraps FF_CMP_BIT.
-const FfCmpBit = C.FF_CMP_BIT
+// FFCmpBit wraps FF_CMP_BIT.
+const FFCmpBit = C.FF_CMP_BIT
 
-// FfCmpRd wraps FF_CMP_RD.
-const FfCmpRd = C.FF_CMP_RD
+// FFCmpRd wraps FF_CMP_RD.
+const FFCmpRd = C.FF_CMP_RD
 
-// FfCmpZero wraps FF_CMP_ZERO.
-const FfCmpZero = C.FF_CMP_ZERO
+// FFCmpZero wraps FF_CMP_ZERO.
+const FFCmpZero = C.FF_CMP_ZERO
 
-// FfCmpVsad wraps FF_CMP_VSAD.
-const FfCmpVsad = C.FF_CMP_VSAD
+// FFCmpVsad wraps FF_CMP_VSAD.
+const FFCmpVsad = C.FF_CMP_VSAD
 
-// FfCmpVsse wraps FF_CMP_VSSE.
-const FfCmpVsse = C.FF_CMP_VSSE
+// FFCmpVsse wraps FF_CMP_VSSE.
+const FFCmpVsse = C.FF_CMP_VSSE
 
-// FfCmpNsse wraps FF_CMP_NSSE.
-const FfCmpNsse = C.FF_CMP_NSSE
+// FFCmpNsse wraps FF_CMP_NSSE.
+const FFCmpNsse = C.FF_CMP_NSSE
 
-// FfCmpW53 wraps FF_CMP_W53.
-const FfCmpW53 = C.FF_CMP_W53
+// FFCmpW53 wraps FF_CMP_W53.
+const FFCmpW53 = C.FF_CMP_W53
 
-// FfCmpW97 wraps FF_CMP_W97.
-const FfCmpW97 = C.FF_CMP_W97
+// FFCmpW97 wraps FF_CMP_W97.
+const FFCmpW97 = C.FF_CMP_W97
 
-// FfCmpDctmax wraps FF_CMP_DCTMAX.
-const FfCmpDctmax = C.FF_CMP_DCTMAX
+// FFCmpDctmax wraps FF_CMP_DCTMAX.
+const FFCmpDctmax = C.FF_CMP_DCTMAX
 
-// FfCmpDct264 wraps FF_CMP_DCT264.
-const FfCmpDct264 = C.FF_CMP_DCT264
+// FFCmpDct264 wraps FF_CMP_DCT264.
+const FFCmpDct264 = C.FF_CMP_DCT264
 
-// FfCmpMedianSad wraps FF_CMP_MEDIAN_SAD.
-const FfCmpMedianSad = C.FF_CMP_MEDIAN_SAD
+// FFCmpMedianSad wraps FF_CMP_MEDIAN_SAD.
+const FFCmpMedianSad = C.FF_CMP_MEDIAN_SAD
 
-// FfCmpChroma wraps FF_CMP_CHROMA.
-const FfCmpChroma = C.FF_CMP_CHROMA
+// FFCmpChroma wraps FF_CMP_CHROMA.
+const FFCmpChroma = C.FF_CMP_CHROMA
 
 // SliceFlagCodedOrder wraps SLICE_FLAG_CODED_ORDER.
 const SliceFlagCodedOrder = C.SLICE_FLAG_CODED_ORDER
@@ -205,527 +220,527 @@ const SliceFlagAllowField = C.SLICE_FLAG_ALLOW_FIELD
 // SliceFlagAllowPlane wraps SLICE_FLAG_ALLOW_PLANE.
 const SliceFlagAllowPlane = C.SLICE_FLAG_ALLOW_PLANE
 
-// FfMbDecisionSimple wraps FF_MB_DECISION_SIMPLE.
-const FfMbDecisionSimple = C.FF_MB_DECISION_SIMPLE
+// FFMbDecisionSimple wraps FF_MB_DECISION_SIMPLE.
+const FFMbDecisionSimple = C.FF_MB_DECISION_SIMPLE
 
-// FfMbDecisionBits wraps FF_MB_DECISION_BITS.
-const FfMbDecisionBits = C.FF_MB_DECISION_BITS
+// FFMbDecisionBits wraps FF_MB_DECISION_BITS.
+const FFMbDecisionBits = C.FF_MB_DECISION_BITS
 
-// FfMbDecisionRd wraps FF_MB_DECISION_RD.
-const FfMbDecisionRd = C.FF_MB_DECISION_RD
+// FFMbDecisionRd wraps FF_MB_DECISION_RD.
+const FFMbDecisionRd = C.FF_MB_DECISION_RD
 
-// FfBugAutodetect wraps FF_BUG_AUTODETECT.
-const FfBugAutodetect = C.FF_BUG_AUTODETECT
+// FFBugAutodetect wraps FF_BUG_AUTODETECT.
+const FFBugAutodetect = C.FF_BUG_AUTODETECT
 
-// FfBugXvidIlace wraps FF_BUG_XVID_ILACE.
-const FfBugXvidIlace = C.FF_BUG_XVID_ILACE
+// FFBugXvidIlace wraps FF_BUG_XVID_ILACE.
+const FFBugXvidIlace = C.FF_BUG_XVID_ILACE
 
-// FfBugUmp4 wraps FF_BUG_UMP4.
-const FfBugUmp4 = C.FF_BUG_UMP4
+// FFBugUmp4 wraps FF_BUG_UMP4.
+const FFBugUmp4 = C.FF_BUG_UMP4
 
-// FfBugNoPadding wraps FF_BUG_NO_PADDING.
-const FfBugNoPadding = C.FF_BUG_NO_PADDING
+// FFBugNoPadding wraps FF_BUG_NO_PADDING.
+const FFBugNoPadding = C.FF_BUG_NO_PADDING
 
-// FfBugAmv wraps FF_BUG_AMV.
-const FfBugAmv = C.FF_BUG_AMV
+// FFBugAmv wraps FF_BUG_AMV.
+const FFBugAmv = C.FF_BUG_AMV
 
-// FfBugQpelChroma wraps FF_BUG_QPEL_CHROMA.
-const FfBugQpelChroma = C.FF_BUG_QPEL_CHROMA
+// FFBugQpelChroma wraps FF_BUG_QPEL_CHROMA.
+const FFBugQpelChroma = C.FF_BUG_QPEL_CHROMA
 
-// FfBugStdQpel wraps FF_BUG_STD_QPEL.
-const FfBugStdQpel = C.FF_BUG_STD_QPEL
+// FFBugStdQpel wraps FF_BUG_STD_QPEL.
+const FFBugStdQpel = C.FF_BUG_STD_QPEL
 
-// FfBugQpelChroma2 wraps FF_BUG_QPEL_CHROMA2.
-const FfBugQpelChroma2 = C.FF_BUG_QPEL_CHROMA2
+// FFBugQpelChroma2 wraps FF_BUG_QPEL_CHROMA2.
+const FFBugQpelChroma2 = C.FF_BUG_QPEL_CHROMA2
 
-// FfBugDirectBlocksize wraps FF_BUG_DIRECT_BLOCKSIZE.
-const FfBugDirectBlocksize = C.FF_BUG_DIRECT_BLOCKSIZE
+// FFBugDirectBlocksize wraps FF_BUG_DIRECT_BLOCKSIZE.
+const FFBugDirectBlocksize = C.FF_BUG_DIRECT_BLOCKSIZE
 
-// FfBugEdge wraps FF_BUG_EDGE.
-const FfBugEdge = C.FF_BUG_EDGE
+// FFBugEdge wraps FF_BUG_EDGE.
+const FFBugEdge = C.FF_BUG_EDGE
 
-// FfBugHpelChroma wraps FF_BUG_HPEL_CHROMA.
-const FfBugHpelChroma = C.FF_BUG_HPEL_CHROMA
+// FFBugHpelChroma wraps FF_BUG_HPEL_CHROMA.
+const FFBugHpelChroma = C.FF_BUG_HPEL_CHROMA
 
-// FfBugDcClip wraps FF_BUG_DC_CLIP.
-const FfBugDcClip = C.FF_BUG_DC_CLIP
+// FFBugDcClip wraps FF_BUG_DC_CLIP.
+const FFBugDcClip = C.FF_BUG_DC_CLIP
 
-// FfBugMs wraps FF_BUG_MS.
-const FfBugMs = C.FF_BUG_MS
+// FFBugMs wraps FF_BUG_MS.
+const FFBugMs = C.FF_BUG_MS
 
-// FfBugTruncated wraps FF_BUG_TRUNCATED.
-const FfBugTruncated = C.FF_BUG_TRUNCATED
+// FFBugTruncated wraps FF_BUG_TRUNCATED.
+const FFBugTruncated = C.FF_BUG_TRUNCATED
 
-// FfBugIedge wraps FF_BUG_IEDGE.
-const FfBugIedge = C.FF_BUG_IEDGE
+// FFBugIedge wraps FF_BUG_IEDGE.
+const FFBugIedge = C.FF_BUG_IEDGE
 
-// FfEcGuessMvs wraps FF_EC_GUESS_MVS.
-const FfEcGuessMvs = C.FF_EC_GUESS_MVS
+// FFEcGuessMvs wraps FF_EC_GUESS_MVS.
+const FFEcGuessMvs = C.FF_EC_GUESS_MVS
 
-// FfEcDeblock wraps FF_EC_DEBLOCK.
-const FfEcDeblock = C.FF_EC_DEBLOCK
+// FFEcDeblock wraps FF_EC_DEBLOCK.
+const FFEcDeblock = C.FF_EC_DEBLOCK
 
-// FfEcFavorInter wraps FF_EC_FAVOR_INTER.
-const FfEcFavorInter = C.FF_EC_FAVOR_INTER
+// FFEcFavorInter wraps FF_EC_FAVOR_INTER.
+const FFEcFavorInter = C.FF_EC_FAVOR_INTER
 
-// FfDebugPictInfo wraps FF_DEBUG_PICT_INFO.
-const FfDebugPictInfo = C.FF_DEBUG_PICT_INFO
+// FFDebugPictInfo wraps FF_DEBUG_PICT_INFO.
+const FFDebugPictInfo = C.FF_DEBUG_PICT_INFO
 
-// FfDebugRc wraps FF_DEBUG_RC.
-const FfDebugRc = C.FF_DEBUG_RC
+// FFDebugRc wraps FF_DEBUG_RC.
+const FFDebugRc = C.FF_DEBUG_RC
 
-// FfDebugBitstream wraps FF_DEBUG_BITSTREAM.
-const FfDebugBitstream = C.FF_DEBUG_BITSTREAM
+// FFDebugBitstream wraps FF_DEBUG_BITSTREAM.
+const FFDebugBitstream = C.FF_DEBUG_BITSTREAM
 
-// FfDebugMbType wraps FF_DEBUG_MB_TYPE.
-const FfDebugMbType = C.FF_DEBUG_MB_TYPE
+// FFDebugMbType wraps FF_DEBUG_MB_TYPE.
+const FFDebugMbType = C.FF_DEBUG_MB_TYPE
 
-// FfDebugQp wraps FF_DEBUG_QP.
-const FfDebugQp = C.FF_DEBUG_QP
+// FFDebugQp wraps FF_DEBUG_QP.
+const FFDebugQp = C.FF_DEBUG_QP
 
-// FfDebugDctCoeff wraps FF_DEBUG_DCT_COEFF.
-const FfDebugDctCoeff = C.FF_DEBUG_DCT_COEFF
+// FFDebugDctCoeff wraps FF_DEBUG_DCT_COEFF.
+const FFDebugDctCoeff = C.FF_DEBUG_DCT_COEFF
 
-// FfDebugSkip wraps FF_DEBUG_SKIP.
-const FfDebugSkip = C.FF_DEBUG_SKIP
+// FFDebugSkip wraps FF_DEBUG_SKIP.
+const FFDebugSkip = C.FF_DEBUG_SKIP
 
-// FfDebugStartcode wraps FF_DEBUG_STARTCODE.
-const FfDebugStartcode = C.FF_DEBUG_STARTCODE
+// FFDebugStartcode wraps FF_DEBUG_STARTCODE.
+const FFDebugStartcode = C.FF_DEBUG_STARTCODE
 
-// FfDebugEr wraps FF_DEBUG_ER.
-const FfDebugEr = C.FF_DEBUG_ER
+// FFDebugEr wraps FF_DEBUG_ER.
+const FFDebugEr = C.FF_DEBUG_ER
 
-// FfDebugMmco wraps FF_DEBUG_MMCO.
-const FfDebugMmco = C.FF_DEBUG_MMCO
+// FFDebugMmco wraps FF_DEBUG_MMCO.
+const FFDebugMmco = C.FF_DEBUG_MMCO
 
-// FfDebugBugs wraps FF_DEBUG_BUGS.
-const FfDebugBugs = C.FF_DEBUG_BUGS
+// FFDebugBugs wraps FF_DEBUG_BUGS.
+const FFDebugBugs = C.FF_DEBUG_BUGS
 
-// FfDebugBuffers wraps FF_DEBUG_BUFFERS.
-const FfDebugBuffers = C.FF_DEBUG_BUFFERS
+// FFDebugBuffers wraps FF_DEBUG_BUFFERS.
+const FFDebugBuffers = C.FF_DEBUG_BUFFERS
 
-// FfDebugThreads wraps FF_DEBUG_THREADS.
-const FfDebugThreads = C.FF_DEBUG_THREADS
+// FFDebugThreads wraps FF_DEBUG_THREADS.
+const FFDebugThreads = C.FF_DEBUG_THREADS
 
-// FfDebugGreenMd wraps FF_DEBUG_GREEN_MD.
-const FfDebugGreenMd = C.FF_DEBUG_GREEN_MD
+// FFDebugGreenMd wraps FF_DEBUG_GREEN_MD.
+const FFDebugGreenMd = C.FF_DEBUG_GREEN_MD
 
-// FfDebugNomc wraps FF_DEBUG_NOMC.
-const FfDebugNomc = C.FF_DEBUG_NOMC
+// FFDebugNomc wraps FF_DEBUG_NOMC.
+const FFDebugNomc = C.FF_DEBUG_NOMC
 
-// FfDctAuto wraps FF_DCT_AUTO.
-const FfDctAuto = C.FF_DCT_AUTO
+// FFDctAuto wraps FF_DCT_AUTO.
+const FFDctAuto = C.FF_DCT_AUTO
 
-// FfDctFastint wraps FF_DCT_FASTINT.
-const FfDctFastint = C.FF_DCT_FASTINT
+// FFDctFastint wraps FF_DCT_FASTINT.
+const FFDctFastint = C.FF_DCT_FASTINT
 
-// FfDctInt wraps FF_DCT_INT.
-const FfDctInt = C.FF_DCT_INT
+// FFDctInt wraps FF_DCT_INT.
+const FFDctInt = C.FF_DCT_INT
 
-// FfDctMmx wraps FF_DCT_MMX.
-const FfDctMmx = C.FF_DCT_MMX
+// FFDctMmx wraps FF_DCT_MMX.
+const FFDctMmx = C.FF_DCT_MMX
 
-// FfDctAltivec wraps FF_DCT_ALTIVEC.
-const FfDctAltivec = C.FF_DCT_ALTIVEC
+// FFDctAltivec wraps FF_DCT_ALTIVEC.
+const FFDctAltivec = C.FF_DCT_ALTIVEC
 
-// FfDctFaan wraps FF_DCT_FAAN.
-const FfDctFaan = C.FF_DCT_FAAN
+// FFDctFaan wraps FF_DCT_FAAN.
+const FFDctFaan = C.FF_DCT_FAAN
 
-// FfIdctAuto wraps FF_IDCT_AUTO.
-const FfIdctAuto = C.FF_IDCT_AUTO
+// FFIdctAuto wraps FF_IDCT_AUTO.
+const FFIdctAuto = C.FF_IDCT_AUTO
 
-// FfIdctInt wraps FF_IDCT_INT.
-const FfIdctInt = C.FF_IDCT_INT
+// FFIdctInt wraps FF_IDCT_INT.
+const FFIdctInt = C.FF_IDCT_INT
 
-// FfIdctSimple wraps FF_IDCT_SIMPLE.
-const FfIdctSimple = C.FF_IDCT_SIMPLE
+// FFIdctSimple wraps FF_IDCT_SIMPLE.
+const FFIdctSimple = C.FF_IDCT_SIMPLE
 
-// FfIdctSimplemmx wraps FF_IDCT_SIMPLEMMX.
-const FfIdctSimplemmx = C.FF_IDCT_SIMPLEMMX
+// FFIdctSimplemmx wraps FF_IDCT_SIMPLEMMX.
+const FFIdctSimplemmx = C.FF_IDCT_SIMPLEMMX
 
-// FfIdctArm wraps FF_IDCT_ARM.
-const FfIdctArm = C.FF_IDCT_ARM
+// FFIdctArm wraps FF_IDCT_ARM.
+const FFIdctArm = C.FF_IDCT_ARM
 
-// FfIdctAltivec wraps FF_IDCT_ALTIVEC.
-const FfIdctAltivec = C.FF_IDCT_ALTIVEC
+// FFIdctAltivec wraps FF_IDCT_ALTIVEC.
+const FFIdctAltivec = C.FF_IDCT_ALTIVEC
 
-// FfIdctSimplearm wraps FF_IDCT_SIMPLEARM.
-const FfIdctSimplearm = C.FF_IDCT_SIMPLEARM
+// FFIdctSimplearm wraps FF_IDCT_SIMPLEARM.
+const FFIdctSimplearm = C.FF_IDCT_SIMPLEARM
 
-// FfIdctXvid wraps FF_IDCT_XVID.
-const FfIdctXvid = C.FF_IDCT_XVID
+// FFIdctXvid wraps FF_IDCT_XVID.
+const FFIdctXvid = C.FF_IDCT_XVID
 
-// FfIdctSimplearmv5Te wraps FF_IDCT_SIMPLEARMV5TE.
-const FfIdctSimplearmv5Te = C.FF_IDCT_SIMPLEARMV5TE
+// FFIdctSimplearmv5Te wraps FF_IDCT_SIMPLEARMV5TE.
+const FFIdctSimplearmv5Te = C.FF_IDCT_SIMPLEARMV5TE
 
-// FfIdctSimplearmv6 wraps FF_IDCT_SIMPLEARMV6.
-const FfIdctSimplearmv6 = C.FF_IDCT_SIMPLEARMV6
+// FFIdctSimplearmv6 wraps FF_IDCT_SIMPLEARMV6.
+const FFIdctSimplearmv6 = C.FF_IDCT_SIMPLEARMV6
 
-// FfIdctFaan wraps FF_IDCT_FAAN.
-const FfIdctFaan = C.FF_IDCT_FAAN
+// FFIdctFaan wraps FF_IDCT_FAAN.
+const FFIdctFaan = C.FF_IDCT_FAAN
 
-// FfIdctSimpleneon wraps FF_IDCT_SIMPLENEON.
-const FfIdctSimpleneon = C.FF_IDCT_SIMPLENEON
+// FFIdctSimpleneon wraps FF_IDCT_SIMPLENEON.
+const FFIdctSimpleneon = C.FF_IDCT_SIMPLENEON
 
-// FfIdctNone wraps FF_IDCT_NONE.
-const FfIdctNone = C.FF_IDCT_NONE
+// FFIdctNone wraps FF_IDCT_NONE.
+const FFIdctNone = C.FF_IDCT_NONE
 
-// FfIdctSimpleauto wraps FF_IDCT_SIMPLEAUTO.
-const FfIdctSimpleauto = C.FF_IDCT_SIMPLEAUTO
+// FFIdctSimpleauto wraps FF_IDCT_SIMPLEAUTO.
+const FFIdctSimpleauto = C.FF_IDCT_SIMPLEAUTO
 
-// FfThreadFrame wraps FF_THREAD_FRAME.
-const FfThreadFrame = C.FF_THREAD_FRAME
+// FFThreadFrame wraps FF_THREAD_FRAME.
+const FFThreadFrame = C.FF_THREAD_FRAME
 
-// FfThreadSlice wraps FF_THREAD_SLICE.
-const FfThreadSlice = C.FF_THREAD_SLICE
+// FFThreadSlice wraps FF_THREAD_SLICE.
+const FFThreadSlice = C.FF_THREAD_SLICE
 
-// FfProfileUnknown wraps FF_PROFILE_UNKNOWN.
-const FfProfileUnknown = C.FF_PROFILE_UNKNOWN
+// FFProfileUnknown wraps FF_PROFILE_UNKNOWN.
+const FFProfileUnknown = C.FF_PROFILE_UNKNOWN
 
-// FfProfileReserved wraps FF_PROFILE_RESERVED.
-const FfProfileReserved = C.FF_PROFILE_RESERVED
+// FFProfileReserved wraps FF_PROFILE_RESERVED.
+const FFProfileReserved = C.FF_PROFILE_RESERVED
 
-// FfProfileAacMain wraps FF_PROFILE_AAC_MAIN.
-const FfProfileAacMain = C.FF_PROFILE_AAC_MAIN
+// FFProfileAacMain wraps FF_PROFILE_AAC_MAIN.
+const FFProfileAacMain = C.FF_PROFILE_AAC_MAIN
 
-// FfProfileAacLow wraps FF_PROFILE_AAC_LOW.
-const FfProfileAacLow = C.FF_PROFILE_AAC_LOW
+// FFProfileAacLow wraps FF_PROFILE_AAC_LOW.
+const FFProfileAacLow = C.FF_PROFILE_AAC_LOW
 
-// FfProfileAacSsr wraps FF_PROFILE_AAC_SSR.
-const FfProfileAacSsr = C.FF_PROFILE_AAC_SSR
+// FFProfileAacSsr wraps FF_PROFILE_AAC_SSR.
+const FFProfileAacSsr = C.FF_PROFILE_AAC_SSR
 
-// FfProfileAacLtp wraps FF_PROFILE_AAC_LTP.
-const FfProfileAacLtp = C.FF_PROFILE_AAC_LTP
+// FFProfileAacLtp wraps FF_PROFILE_AAC_LTP.
+const FFProfileAacLtp = C.FF_PROFILE_AAC_LTP
 
-// FfProfileAacHe wraps FF_PROFILE_AAC_HE.
-const FfProfileAacHe = C.FF_PROFILE_AAC_HE
+// FFProfileAacHe wraps FF_PROFILE_AAC_HE.
+const FFProfileAacHe = C.FF_PROFILE_AAC_HE
 
-// FfProfileAacHeV2 wraps FF_PROFILE_AAC_HE_V2.
-const FfProfileAacHeV2 = C.FF_PROFILE_AAC_HE_V2
+// FFProfileAacHeV2 wraps FF_PROFILE_AAC_HE_V2.
+const FFProfileAacHeV2 = C.FF_PROFILE_AAC_HE_V2
 
-// FfProfileAacLd wraps FF_PROFILE_AAC_LD.
-const FfProfileAacLd = C.FF_PROFILE_AAC_LD
+// FFProfileAacLd wraps FF_PROFILE_AAC_LD.
+const FFProfileAacLd = C.FF_PROFILE_AAC_LD
 
-// FfProfileAacEld wraps FF_PROFILE_AAC_ELD.
-const FfProfileAacEld = C.FF_PROFILE_AAC_ELD
+// FFProfileAacEld wraps FF_PROFILE_AAC_ELD.
+const FFProfileAacEld = C.FF_PROFILE_AAC_ELD
 
-// FfProfileMpeg2AacLow wraps FF_PROFILE_MPEG2_AAC_LOW.
-const FfProfileMpeg2AacLow = C.FF_PROFILE_MPEG2_AAC_LOW
+// FFProfileMpeg2AacLow wraps FF_PROFILE_MPEG2_AAC_LOW.
+const FFProfileMpeg2AacLow = C.FF_PROFILE_MPEG2_AAC_LOW
 
-// FfProfileMpeg2AacHe wraps FF_PROFILE_MPEG2_AAC_HE.
-const FfProfileMpeg2AacHe = C.FF_PROFILE_MPEG2_AAC_HE
+// FFProfileMpeg2AacHe wraps FF_PROFILE_MPEG2_AAC_HE.
+const FFProfileMpeg2AacHe = C.FF_PROFILE_MPEG2_AAC_HE
 
-// FfProfileDnxhd wraps FF_PROFILE_DNXHD.
-const FfProfileDnxhd = C.FF_PROFILE_DNXHD
+// FFProfileDnxhd wraps FF_PROFILE_DNXHD.
+const FFProfileDnxhd = C.FF_PROFILE_DNXHD
 
-// FfProfileDnxhrLb wraps FF_PROFILE_DNXHR_LB.
-const FfProfileDnxhrLb = C.FF_PROFILE_DNXHR_LB
+// FFProfileDnxhrLb wraps FF_PROFILE_DNXHR_LB.
+const FFProfileDnxhrLb = C.FF_PROFILE_DNXHR_LB
 
-// FfProfileDnxhrSq wraps FF_PROFILE_DNXHR_SQ.
-const FfProfileDnxhrSq = C.FF_PROFILE_DNXHR_SQ
+// FFProfileDnxhrSq wraps FF_PROFILE_DNXHR_SQ.
+const FFProfileDnxhrSq = C.FF_PROFILE_DNXHR_SQ
 
-// FfProfileDnxhrHq wraps FF_PROFILE_DNXHR_HQ.
-const FfProfileDnxhrHq = C.FF_PROFILE_DNXHR_HQ
+// FFProfileDnxhrHq wraps FF_PROFILE_DNXHR_HQ.
+const FFProfileDnxhrHq = C.FF_PROFILE_DNXHR_HQ
 
-// FfProfileDnxhrHqx wraps FF_PROFILE_DNXHR_HQX.
-const FfProfileDnxhrHqx = C.FF_PROFILE_DNXHR_HQX
+// FFProfileDnxhrHqx wraps FF_PROFILE_DNXHR_HQX.
+const FFProfileDnxhrHqx = C.FF_PROFILE_DNXHR_HQX
 
-// FfProfileDnxhr444 wraps FF_PROFILE_DNXHR_444.
-const FfProfileDnxhr444 = C.FF_PROFILE_DNXHR_444
+// FFProfileDnxhr444 wraps FF_PROFILE_DNXHR_444.
+const FFProfileDnxhr444 = C.FF_PROFILE_DNXHR_444
 
-// FfProfileDts wraps FF_PROFILE_DTS.
-const FfProfileDts = C.FF_PROFILE_DTS
+// FFProfileDts wraps FF_PROFILE_DTS.
+const FFProfileDts = C.FF_PROFILE_DTS
 
-// FfProfileDtsEs wraps FF_PROFILE_DTS_ES.
-const FfProfileDtsEs = C.FF_PROFILE_DTS_ES
+// FFProfileDtsEs wraps FF_PROFILE_DTS_ES.
+const FFProfileDtsEs = C.FF_PROFILE_DTS_ES
 
-// FfProfileDts9624 wraps FF_PROFILE_DTS_96_24.
-const FfProfileDts9624 = C.FF_PROFILE_DTS_96_24
+// FFProfileDts9624 wraps FF_PROFILE_DTS_96_24.
+const FFProfileDts9624 = C.FF_PROFILE_DTS_96_24
 
-// FfProfileDtsHdHra wraps FF_PROFILE_DTS_HD_HRA.
-const FfProfileDtsHdHra = C.FF_PROFILE_DTS_HD_HRA
+// FFProfileDtsHdHra wraps FF_PROFILE_DTS_HD_HRA.
+const FFProfileDtsHdHra = C.FF_PROFILE_DTS_HD_HRA
 
-// FfProfileDtsHdMa wraps FF_PROFILE_DTS_HD_MA.
-const FfProfileDtsHdMa = C.FF_PROFILE_DTS_HD_MA
+// FFProfileDtsHdMa wraps FF_PROFILE_DTS_HD_MA.
+const FFProfileDtsHdMa = C.FF_PROFILE_DTS_HD_MA
 
-// FfProfileDtsExpress wraps FF_PROFILE_DTS_EXPRESS.
-const FfProfileDtsExpress = C.FF_PROFILE_DTS_EXPRESS
+// FFProfileDtsExpress wraps FF_PROFILE_DTS_EXPRESS.
+const FFProfileDtsExpress = C.FF_PROFILE_DTS_EXPRESS
 
-// FfProfileDtsHdMaX wraps FF_PROFILE_DTS_HD_MA_X.
-const FfProfileDtsHdMaX = C.FF_PROFILE_DTS_HD_MA_X
+// FFProfileDtsHdMaX wraps FF_PROFILE_DTS_HD_MA_X.
+const FFProfileDtsHdMaX = C.FF_PROFILE_DTS_HD_MA_X
 
-// FfProfileDtsHdMaXImax wraps FF_PROFILE_DTS_HD_MA_X_IMAX.
-const FfProfileDtsHdMaXImax = C.FF_PROFILE_DTS_HD_MA_X_IMAX
+// FFProfileDtsHdMaXImax wraps FF_PROFILE_DTS_HD_MA_X_IMAX.
+const FFProfileDtsHdMaXImax = C.FF_PROFILE_DTS_HD_MA_X_IMAX
 
-// FfProfileEac3DdpAtmos wraps FF_PROFILE_EAC3_DDP_ATMOS.
-const FfProfileEac3DdpAtmos = C.FF_PROFILE_EAC3_DDP_ATMOS
+// FFProfileEac3DdpAtmos wraps FF_PROFILE_EAC3_DDP_ATMOS.
+const FFProfileEac3DdpAtmos = C.FF_PROFILE_EAC3_DDP_ATMOS
 
-// FfProfileTruehdAtmos wraps FF_PROFILE_TRUEHD_ATMOS.
-const FfProfileTruehdAtmos = C.FF_PROFILE_TRUEHD_ATMOS
+// FFProfileTruehdAtmos wraps FF_PROFILE_TRUEHD_ATMOS.
+const FFProfileTruehdAtmos = C.FF_PROFILE_TRUEHD_ATMOS
 
-// FfProfileMpeg2422 wraps FF_PROFILE_MPEG2_422.
-const FfProfileMpeg2422 = C.FF_PROFILE_MPEG2_422
+// FFProfileMpeg2422 wraps FF_PROFILE_MPEG2_422.
+const FFProfileMpeg2422 = C.FF_PROFILE_MPEG2_422
 
-// FfProfileMpeg2High wraps FF_PROFILE_MPEG2_HIGH.
-const FfProfileMpeg2High = C.FF_PROFILE_MPEG2_HIGH
+// FFProfileMpeg2High wraps FF_PROFILE_MPEG2_HIGH.
+const FFProfileMpeg2High = C.FF_PROFILE_MPEG2_HIGH
 
-// FfProfileMpeg2Ss wraps FF_PROFILE_MPEG2_SS.
-const FfProfileMpeg2Ss = C.FF_PROFILE_MPEG2_SS
+// FFProfileMpeg2Ss wraps FF_PROFILE_MPEG2_SS.
+const FFProfileMpeg2Ss = C.FF_PROFILE_MPEG2_SS
 
-// FfProfileMpeg2SnrScalable wraps FF_PROFILE_MPEG2_SNR_SCALABLE.
-const FfProfileMpeg2SnrScalable = C.FF_PROFILE_MPEG2_SNR_SCALABLE
+// FFProfileMpeg2SnrScalable wraps FF_PROFILE_MPEG2_SNR_SCALABLE.
+const FFProfileMpeg2SnrScalable = C.FF_PROFILE_MPEG2_SNR_SCALABLE
 
-// FfProfileMpeg2Main wraps FF_PROFILE_MPEG2_MAIN.
-const FfProfileMpeg2Main = C.FF_PROFILE_MPEG2_MAIN
+// FFProfileMpeg2Main wraps FF_PROFILE_MPEG2_MAIN.
+const FFProfileMpeg2Main = C.FF_PROFILE_MPEG2_MAIN
 
-// FfProfileMpeg2Simple wraps FF_PROFILE_MPEG2_SIMPLE.
-const FfProfileMpeg2Simple = C.FF_PROFILE_MPEG2_SIMPLE
+// FFProfileMpeg2Simple wraps FF_PROFILE_MPEG2_SIMPLE.
+const FFProfileMpeg2Simple = C.FF_PROFILE_MPEG2_SIMPLE
 
-// FfProfileH264Constrained wraps FF_PROFILE_H264_CONSTRAINED.
-const FfProfileH264Constrained = C.FF_PROFILE_H264_CONSTRAINED
+// FFProfileH264Constrained wraps FF_PROFILE_H264_CONSTRAINED.
+const FFProfileH264Constrained = C.FF_PROFILE_H264_CONSTRAINED
 
-// FfProfileH264Intra wraps FF_PROFILE_H264_INTRA.
-const FfProfileH264Intra = C.FF_PROFILE_H264_INTRA
+// FFProfileH264Intra wraps FF_PROFILE_H264_INTRA.
+const FFProfileH264Intra = C.FF_PROFILE_H264_INTRA
 
-// FfProfileH264Baseline wraps FF_PROFILE_H264_BASELINE.
-const FfProfileH264Baseline = C.FF_PROFILE_H264_BASELINE
+// FFProfileH264Baseline wraps FF_PROFILE_H264_BASELINE.
+const FFProfileH264Baseline = C.FF_PROFILE_H264_BASELINE
 
-// FfProfileH264ConstrainedBaseline wraps FF_PROFILE_H264_CONSTRAINED_BASELINE.
-const FfProfileH264ConstrainedBaseline = C.FF_PROFILE_H264_CONSTRAINED_BASELINE
+// FFProfileH264ConstrainedBaseline wraps FF_PROFILE_H264_CONSTRAINED_BASELINE.
+const FFProfileH264ConstrainedBaseline = C.FF_PROFILE_H264_CONSTRAINED_BASELINE
 
-// FfProfileH264Main wraps FF_PROFILE_H264_MAIN.
-const FfProfileH264Main = C.FF_PROFILE_H264_MAIN
+// FFProfileH264Main wraps FF_PROFILE_H264_MAIN.
+const FFProfileH264Main = C.FF_PROFILE_H264_MAIN
 
-// FfProfileH264Extended wraps FF_PROFILE_H264_EXTENDED.
-const FfProfileH264Extended = C.FF_PROFILE_H264_EXTENDED
+// FFProfileH264Extended wraps FF_PROFILE_H264_EXTENDED.
+const FFProfileH264Extended = C.FF_PROFILE_H264_EXTENDED
 
-// FfProfileH264High wraps FF_PROFILE_H264_HIGH.
-const FfProfileH264High = C.FF_PROFILE_H264_HIGH
+// FFProfileH264High wraps FF_PROFILE_H264_HIGH.
+const FFProfileH264High = C.FF_PROFILE_H264_HIGH
 
-// FfProfileH264High10 wraps FF_PROFILE_H264_HIGH_10.
-const FfProfileH264High10 = C.FF_PROFILE_H264_HIGH_10
+// FFProfileH264High10 wraps FF_PROFILE_H264_HIGH_10.
+const FFProfileH264High10 = C.FF_PROFILE_H264_HIGH_10
 
-// FfProfileH264High10Intra wraps FF_PROFILE_H264_HIGH_10_INTRA.
-const FfProfileH264High10Intra = C.FF_PROFILE_H264_HIGH_10_INTRA
+// FFProfileH264High10Intra wraps FF_PROFILE_H264_HIGH_10_INTRA.
+const FFProfileH264High10Intra = C.FF_PROFILE_H264_HIGH_10_INTRA
 
-// FfProfileH264MultiviewHigh wraps FF_PROFILE_H264_MULTIVIEW_HIGH.
-const FfProfileH264MultiviewHigh = C.FF_PROFILE_H264_MULTIVIEW_HIGH
+// FFProfileH264MultiviewHigh wraps FF_PROFILE_H264_MULTIVIEW_HIGH.
+const FFProfileH264MultiviewHigh = C.FF_PROFILE_H264_MULTIVIEW_HIGH
 
-// FfProfileH264High422 wraps FF_PROFILE_H264_HIGH_422.
-const FfProfileH264High422 = C.FF_PROFILE_H264_HIGH_422
+// FFProfileH264High422 wraps FF_PROFILE_H264_HIGH_422.
+const FFProfileH264High422 = C.FF_PROFILE_H264_HIGH_422
 
-// FfProfileH264High422Intra wraps FF_PROFILE_H264_HIGH_422_INTRA.
-const FfProfileH264High422Intra = C.FF_PROFILE_H264_HIGH_422_INTRA
+// FFProfileH264High422Intra wraps FF_PROFILE_H264_HIGH_422_INTRA.
+const FFProfileH264High422Intra = C.FF_PROFILE_H264_HIGH_422_INTRA
 
-// FfProfileH264StereoHigh wraps FF_PROFILE_H264_STEREO_HIGH.
-const FfProfileH264StereoHigh = C.FF_PROFILE_H264_STEREO_HIGH
+// FFProfileH264StereoHigh wraps FF_PROFILE_H264_STEREO_HIGH.
+const FFProfileH264StereoHigh = C.FF_PROFILE_H264_STEREO_HIGH
 
-// FfProfileH264High444 wraps FF_PROFILE_H264_HIGH_444.
-const FfProfileH264High444 = C.FF_PROFILE_H264_HIGH_444
+// FFProfileH264High444 wraps FF_PROFILE_H264_HIGH_444.
+const FFProfileH264High444 = C.FF_PROFILE_H264_HIGH_444
 
-// FfProfileH264High444Predictive wraps FF_PROFILE_H264_HIGH_444_PREDICTIVE.
-const FfProfileH264High444Predictive = C.FF_PROFILE_H264_HIGH_444_PREDICTIVE
+// FFProfileH264High444Predictive wraps FF_PROFILE_H264_HIGH_444_PREDICTIVE.
+const FFProfileH264High444Predictive = C.FF_PROFILE_H264_HIGH_444_PREDICTIVE
 
-// FfProfileH264High444Intra wraps FF_PROFILE_H264_HIGH_444_INTRA.
-const FfProfileH264High444Intra = C.FF_PROFILE_H264_HIGH_444_INTRA
+// FFProfileH264High444Intra wraps FF_PROFILE_H264_HIGH_444_INTRA.
+const FFProfileH264High444Intra = C.FF_PROFILE_H264_HIGH_444_INTRA
 
-// FfProfileH264Cavlc444 wraps FF_PROFILE_H264_CAVLC_444.
-const FfProfileH264Cavlc444 = C.FF_PROFILE_H264_CAVLC_444
+// FFProfileH264Cavlc444 wraps FF_PROFILE_H264_CAVLC_444.
+const FFProfileH264Cavlc444 = C.FF_PROFILE_H264_CAVLC_444
 
-// FfProfileVc1Simple wraps FF_PROFILE_VC1_SIMPLE.
-const FfProfileVc1Simple = C.FF_PROFILE_VC1_SIMPLE
+// FFProfileVc1Simple wraps FF_PROFILE_VC1_SIMPLE.
+const FFProfileVc1Simple = C.FF_PROFILE_VC1_SIMPLE
 
-// FfProfileVc1Main wraps FF_PROFILE_VC1_MAIN.
-const FfProfileVc1Main = C.FF_PROFILE_VC1_MAIN
+// FFProfileVc1Main wraps FF_PROFILE_VC1_MAIN.
+const FFProfileVc1Main = C.FF_PROFILE_VC1_MAIN
 
-// FfProfileVc1Complex wraps FF_PROFILE_VC1_COMPLEX.
-const FfProfileVc1Complex = C.FF_PROFILE_VC1_COMPLEX
+// FFProfileVc1Complex wraps FF_PROFILE_VC1_COMPLEX.
+const FFProfileVc1Complex = C.FF_PROFILE_VC1_COMPLEX
 
-// FfProfileVc1Advanced wraps FF_PROFILE_VC1_ADVANCED.
-const FfProfileVc1Advanced = C.FF_PROFILE_VC1_ADVANCED
+// FFProfileVc1Advanced wraps FF_PROFILE_VC1_ADVANCED.
+const FFProfileVc1Advanced = C.FF_PROFILE_VC1_ADVANCED
 
-// FfProfileMpeg4Simple wraps FF_PROFILE_MPEG4_SIMPLE.
-const FfProfileMpeg4Simple = C.FF_PROFILE_MPEG4_SIMPLE
+// FFProfileMpeg4Simple wraps FF_PROFILE_MPEG4_SIMPLE.
+const FFProfileMpeg4Simple = C.FF_PROFILE_MPEG4_SIMPLE
 
-// FfProfileMpeg4SimpleScalable wraps FF_PROFILE_MPEG4_SIMPLE_SCALABLE.
-const FfProfileMpeg4SimpleScalable = C.FF_PROFILE_MPEG4_SIMPLE_SCALABLE
+// FFProfileMpeg4SimpleScalable wraps FF_PROFILE_MPEG4_SIMPLE_SCALABLE.
+const FFProfileMpeg4SimpleScalable = C.FF_PROFILE_MPEG4_SIMPLE_SCALABLE
 
-// FfProfileMpeg4Core wraps FF_PROFILE_MPEG4_CORE.
-const FfProfileMpeg4Core = C.FF_PROFILE_MPEG4_CORE
+// FFProfileMpeg4Core wraps FF_PROFILE_MPEG4_CORE.
+const FFProfileMpeg4Core = C.FF_PROFILE_MPEG4_CORE
 
-// FfProfileMpeg4Main wraps FF_PROFILE_MPEG4_MAIN.
-const FfProfileMpeg4Main = C.FF_PROFILE_MPEG4_MAIN
+// FFProfileMpeg4Main wraps FF_PROFILE_MPEG4_MAIN.
+const FFProfileMpeg4Main = C.FF_PROFILE_MPEG4_MAIN
 
-// FfProfileMpeg4NBit wraps FF_PROFILE_MPEG4_N_BIT.
-const FfProfileMpeg4NBit = C.FF_PROFILE_MPEG4_N_BIT
+// FFProfileMpeg4NBit wraps FF_PROFILE_MPEG4_N_BIT.
+const FFProfileMpeg4NBit = C.FF_PROFILE_MPEG4_N_BIT
 
-// FfProfileMpeg4ScalableTexture wraps FF_PROFILE_MPEG4_SCALABLE_TEXTURE.
-const FfProfileMpeg4ScalableTexture = C.FF_PROFILE_MPEG4_SCALABLE_TEXTURE
+// FFProfileMpeg4ScalableTexture wraps FF_PROFILE_MPEG4_SCALABLE_TEXTURE.
+const FFProfileMpeg4ScalableTexture = C.FF_PROFILE_MPEG4_SCALABLE_TEXTURE
 
-// FfProfileMpeg4SimpleFaceAnimation wraps FF_PROFILE_MPEG4_SIMPLE_FACE_ANIMATION.
-const FfProfileMpeg4SimpleFaceAnimation = C.FF_PROFILE_MPEG4_SIMPLE_FACE_ANIMATION
+// FFProfileMpeg4SimpleFaceAnimation wraps FF_PROFILE_MPEG4_SIMPLE_FACE_ANIMATION.
+const FFProfileMpeg4SimpleFaceAnimation = C.FF_PROFILE_MPEG4_SIMPLE_FACE_ANIMATION
 
-// FfProfileMpeg4BasicAnimatedTexture wraps FF_PROFILE_MPEG4_BASIC_ANIMATED_TEXTURE.
-const FfProfileMpeg4BasicAnimatedTexture = C.FF_PROFILE_MPEG4_BASIC_ANIMATED_TEXTURE
+// FFProfileMpeg4BasicAnimatedTexture wraps FF_PROFILE_MPEG4_BASIC_ANIMATED_TEXTURE.
+const FFProfileMpeg4BasicAnimatedTexture = C.FF_PROFILE_MPEG4_BASIC_ANIMATED_TEXTURE
 
-// FfProfileMpeg4Hybrid wraps FF_PROFILE_MPEG4_HYBRID.
-const FfProfileMpeg4Hybrid = C.FF_PROFILE_MPEG4_HYBRID
+// FFProfileMpeg4Hybrid wraps FF_PROFILE_MPEG4_HYBRID.
+const FFProfileMpeg4Hybrid = C.FF_PROFILE_MPEG4_HYBRID
 
-// FfProfileMpeg4AdvancedRealTime wraps FF_PROFILE_MPEG4_ADVANCED_REAL_TIME.
-const FfProfileMpeg4AdvancedRealTime = C.FF_PROFILE_MPEG4_ADVANCED_REAL_TIME
+// FFProfileMpeg4AdvancedRealTime wraps FF_PROFILE_MPEG4_ADVANCED_REAL_TIME.
+const FFProfileMpeg4AdvancedRealTime = C.FF_PROFILE_MPEG4_ADVANCED_REAL_TIME
 
-// FfProfileMpeg4CoreScalable wraps FF_PROFILE_MPEG4_CORE_SCALABLE.
-const FfProfileMpeg4CoreScalable = C.FF_PROFILE_MPEG4_CORE_SCALABLE
+// FFProfileMpeg4CoreScalable wraps FF_PROFILE_MPEG4_CORE_SCALABLE.
+const FFProfileMpeg4CoreScalable = C.FF_PROFILE_MPEG4_CORE_SCALABLE
 
-// FfProfileMpeg4AdvancedCoding wraps FF_PROFILE_MPEG4_ADVANCED_CODING.
-const FfProfileMpeg4AdvancedCoding = C.FF_PROFILE_MPEG4_ADVANCED_CODING
+// FFProfileMpeg4AdvancedCoding wraps FF_PROFILE_MPEG4_ADVANCED_CODING.
+const FFProfileMpeg4AdvancedCoding = C.FF_PROFILE_MPEG4_ADVANCED_CODING
 
-// FfProfileMpeg4AdvancedCore wraps FF_PROFILE_MPEG4_ADVANCED_CORE.
-const FfProfileMpeg4AdvancedCore = C.FF_PROFILE_MPEG4_ADVANCED_CORE
+// FFProfileMpeg4AdvancedCore wraps FF_PROFILE_MPEG4_ADVANCED_CORE.
+const FFProfileMpeg4AdvancedCore = C.FF_PROFILE_MPEG4_ADVANCED_CORE
 
-// FfProfileMpeg4AdvancedScalableTexture wraps FF_PROFILE_MPEG4_ADVANCED_SCALABLE_TEXTURE.
-const FfProfileMpeg4AdvancedScalableTexture = C.FF_PROFILE_MPEG4_ADVANCED_SCALABLE_TEXTURE
+// FFProfileMpeg4AdvancedScalableTexture wraps FF_PROFILE_MPEG4_ADVANCED_SCALABLE_TEXTURE.
+const FFProfileMpeg4AdvancedScalableTexture = C.FF_PROFILE_MPEG4_ADVANCED_SCALABLE_TEXTURE
 
-// FfProfileMpeg4SimpleStudio wraps FF_PROFILE_MPEG4_SIMPLE_STUDIO.
-const FfProfileMpeg4SimpleStudio = C.FF_PROFILE_MPEG4_SIMPLE_STUDIO
+// FFProfileMpeg4SimpleStudio wraps FF_PROFILE_MPEG4_SIMPLE_STUDIO.
+const FFProfileMpeg4SimpleStudio = C.FF_PROFILE_MPEG4_SIMPLE_STUDIO
 
-// FfProfileMpeg4AdvancedSimple wraps FF_PROFILE_MPEG4_ADVANCED_SIMPLE.
-const FfProfileMpeg4AdvancedSimple = C.FF_PROFILE_MPEG4_ADVANCED_SIMPLE
+// FFProfileMpeg4AdvancedSimple wraps FF_PROFILE_MPEG4_ADVANCED_SIMPLE.
+const FFProfileMpeg4AdvancedSimple = C.FF_PROFILE_MPEG4_ADVANCED_SIMPLE
 
-// FfProfileJpeg2000CstreamRestriction0 wraps FF_PROFILE_JPEG2000_CSTREAM_RESTRICTION_0.
-const FfProfileJpeg2000CstreamRestriction0 = C.FF_PROFILE_JPEG2000_CSTREAM_RESTRICTION_0
+// FFProfileJpeg2000CstreamRestriction0 wraps FF_PROFILE_JPEG2000_CSTREAM_RESTRICTION_0.
+const FFProfileJpeg2000CstreamRestriction0 = C.FF_PROFILE_JPEG2000_CSTREAM_RESTRICTION_0
 
-// FfProfileJpeg2000CstreamRestriction1 wraps FF_PROFILE_JPEG2000_CSTREAM_RESTRICTION_1.
-const FfProfileJpeg2000CstreamRestriction1 = C.FF_PROFILE_JPEG2000_CSTREAM_RESTRICTION_1
+// FFProfileJpeg2000CstreamRestriction1 wraps FF_PROFILE_JPEG2000_CSTREAM_RESTRICTION_1.
+const FFProfileJpeg2000CstreamRestriction1 = C.FF_PROFILE_JPEG2000_CSTREAM_RESTRICTION_1
 
-// FfProfileJpeg2000CstreamNoRestriction wraps FF_PROFILE_JPEG2000_CSTREAM_NO_RESTRICTION.
-const FfProfileJpeg2000CstreamNoRestriction = C.FF_PROFILE_JPEG2000_CSTREAM_NO_RESTRICTION
+// FFProfileJpeg2000CstreamNoRestriction wraps FF_PROFILE_JPEG2000_CSTREAM_NO_RESTRICTION.
+const FFProfileJpeg2000CstreamNoRestriction = C.FF_PROFILE_JPEG2000_CSTREAM_NO_RESTRICTION
 
-// FfProfileJpeg2000Dcinema2K wraps FF_PROFILE_JPEG2000_DCINEMA_2K.
-const FfProfileJpeg2000Dcinema2K = C.FF_PROFILE_JPEG2000_DCINEMA_2K
+// FFProfileJpeg2000Dcinema2K wraps FF_PROFILE_JPEG2000_DCINEMA_2K.
+const FFProfileJpeg2000Dcinema2K = C.FF_PROFILE_JPEG2000_DCINEMA_2K
 
-// FfProfileJpeg2000Dcinema4K wraps FF_PROFILE_JPEG2000_DCINEMA_4K.
-const FfProfileJpeg2000Dcinema4K = C.FF_PROFILE_JPEG2000_DCINEMA_4K
+// FFProfileJpeg2000Dcinema4K wraps FF_PROFILE_JPEG2000_DCINEMA_4K.
+const FFProfileJpeg2000Dcinema4K = C.FF_PROFILE_JPEG2000_DCINEMA_4K
 
-// FfProfileVp90 wraps FF_PROFILE_VP9_0.
-const FfProfileVp90 = C.FF_PROFILE_VP9_0
+// FFProfileVp90 wraps FF_PROFILE_VP9_0.
+const FFProfileVp90 = C.FF_PROFILE_VP9_0
 
-// FfProfileVp91 wraps FF_PROFILE_VP9_1.
-const FfProfileVp91 = C.FF_PROFILE_VP9_1
+// FFProfileVp91 wraps FF_PROFILE_VP9_1.
+const FFProfileVp91 = C.FF_PROFILE_VP9_1
 
-// FfProfileVp92 wraps FF_PROFILE_VP9_2.
-const FfProfileVp92 = C.FF_PROFILE_VP9_2
+// FFProfileVp92 wraps FF_PROFILE_VP9_2.
+const FFProfileVp92 = C.FF_PROFILE_VP9_2
 
-// FfProfileVp93 wraps FF_PROFILE_VP9_3.
-const FfProfileVp93 = C.FF_PROFILE_VP9_3
+// FFProfileVp93 wraps FF_PROFILE_VP9_3.
+const FFProfileVp93 = C.FF_PROFILE_VP9_3
 
-// FfProfileHevcMain wraps FF_PROFILE_HEVC_MAIN.
-const FfProfileHevcMain = C.FF_PROFILE_HEVC_MAIN
+// FFProfileHevcMain wraps FF_PROFILE_HEVC_MAIN.
+const FFProfileHevcMain = C.FF_PROFILE_HEVC_MAIN
 
-// FfProfileHevcMain10 wraps FF_PROFILE_HEVC_MAIN_10.
-const FfProfileHevcMain10 = C.FF_PROFILE_HEVC_MAIN_10
+// FFProfileHevcMain10 wraps FF_PROFILE_HEVC_MAIN_10.
+const FFProfileHevcMain10 = C.FF_PROFILE_HEVC_MAIN_10
 
-// FfProfileHevcMainStillPicture wraps FF_PROFILE_HEVC_MAIN_STILL_PICTURE.
-const FfProfileHevcMainStillPicture = C.FF_PROFILE_HEVC_MAIN_STILL_PICTURE
+// FFProfileHevcMainStillPicture wraps FF_PROFILE_HEVC_MAIN_STILL_PICTURE.
+const FFProfileHevcMainStillPicture = C.FF_PROFILE_HEVC_MAIN_STILL_PICTURE
 
-// FfProfileHevcRext wraps FF_PROFILE_HEVC_REXT.
-const FfProfileHevcRext = C.FF_PROFILE_HEVC_REXT
+// FFProfileHevcRext wraps FF_PROFILE_HEVC_REXT.
+const FFProfileHevcRext = C.FF_PROFILE_HEVC_REXT
 
-// FfProfileHevcScc wraps FF_PROFILE_HEVC_SCC.
-const FfProfileHevcScc = C.FF_PROFILE_HEVC_SCC
+// FFProfileHevcScc wraps FF_PROFILE_HEVC_SCC.
+const FFProfileHevcScc = C.FF_PROFILE_HEVC_SCC
 
-// FfProfileVvcMain10 wraps FF_PROFILE_VVC_MAIN_10.
-const FfProfileVvcMain10 = C.FF_PROFILE_VVC_MAIN_10
+// FFProfileVvcMain10 wraps FF_PROFILE_VVC_MAIN_10.
+const FFProfileVvcMain10 = C.FF_PROFILE_VVC_MAIN_10
 
-// FfProfileVvcMain10444 wraps FF_PROFILE_VVC_MAIN_10_444.
-const FfProfileVvcMain10444 = C.FF_PROFILE_VVC_MAIN_10_444
+// FFProfileVvcMain10444 wraps FF_PROFILE_VVC_MAIN_10_444.
+const FFProfileVvcMain10444 = C.FF_PROFILE_VVC_MAIN_10_444
 
-// FfProfileAv1Main wraps FF_PROFILE_AV1_MAIN.
-const FfProfileAv1Main = C.FF_PROFILE_AV1_MAIN
+// FFProfileAv1Main wraps FF_PROFILE_AV1_MAIN.
+const FFProfileAv1Main = C.FF_PROFILE_AV1_MAIN
 
-// FfProfileAv1High wraps FF_PROFILE_AV1_HIGH.
-const FfProfileAv1High = C.FF_PROFILE_AV1_HIGH
+// FFProfileAv1High wraps FF_PROFILE_AV1_HIGH.
+const FFProfileAv1High = C.FF_PROFILE_AV1_HIGH
 
-// FfProfileAv1Professional wraps FF_PROFILE_AV1_PROFESSIONAL.
-const FfProfileAv1Professional = C.FF_PROFILE_AV1_PROFESSIONAL
+// FFProfileAv1Professional wraps FF_PROFILE_AV1_PROFESSIONAL.
+const FFProfileAv1Professional = C.FF_PROFILE_AV1_PROFESSIONAL
 
-// FfProfileMjpegHuffmanBaselineDct wraps FF_PROFILE_MJPEG_HUFFMAN_BASELINE_DCT.
-const FfProfileMjpegHuffmanBaselineDct = C.FF_PROFILE_MJPEG_HUFFMAN_BASELINE_DCT
+// FFProfileMjpegHuffmanBaselineDct wraps FF_PROFILE_MJPEG_HUFFMAN_BASELINE_DCT.
+const FFProfileMjpegHuffmanBaselineDct = C.FF_PROFILE_MJPEG_HUFFMAN_BASELINE_DCT
 
-// FfProfileMjpegHuffmanExtendedSequentialDct wraps FF_PROFILE_MJPEG_HUFFMAN_EXTENDED_SEQUENTIAL_DCT.
-const FfProfileMjpegHuffmanExtendedSequentialDct = C.FF_PROFILE_MJPEG_HUFFMAN_EXTENDED_SEQUENTIAL_DCT
+// FFProfileMjpegHuffmanExtendedSequentialDct wraps FF_PROFILE_MJPEG_HUFFMAN_EXTENDED_SEQUENTIAL_DCT.
+const FFProfileMjpegHuffmanExtendedSequentialDct = C.FF_PROFILE_MJPEG_HUFFMAN_EXTENDED_SEQUENTIAL_DCT
 
-// FfProfileMjpegHuffmanProgressiveDct wraps FF_PROFILE_MJPEG_HUFFMAN_PROGRESSIVE_DCT.
-const FfProfileMjpegHuffmanProgressiveDct = C.FF_PROFILE_MJPEG_HUFFMAN_PROGRESSIVE_DCT
+// FFProfileMjpegHuffmanProgressiveDct wraps FF_PROFILE_MJPEG_HUFFMAN_PROGRESSIVE_DCT.
+const FFProfileMjpegHuffmanProgressiveDct = C.FF_PROFILE_MJPEG_HUFFMAN_PROGRESSIVE_DCT
 
-// FfProfileMjpegHuffmanLossless wraps FF_PROFILE_MJPEG_HUFFMAN_LOSSLESS.
-const FfProfileMjpegHuffmanLossless = C.FF_PROFILE_MJPEG_HUFFMAN_LOSSLESS
+// FFProfileMjpegHuffmanLossless wraps FF_PROFILE_MJPEG_HUFFMAN_LOSSLESS.
+const FFProfileMjpegHuffmanLossless = C.FF_PROFILE_MJPEG_HUFFMAN_LOSSLESS
 
-// FfProfileMjpegJpegLs wraps FF_PROFILE_MJPEG_JPEG_LS.
-const FfProfileMjpegJpegLs = C.FF_PROFILE_MJPEG_JPEG_LS
+// FFProfileMjpegJpegLs wraps FF_PROFILE_MJPEG_JPEG_LS.
+const FFProfileMjpegJpegLs = C.FF_PROFILE_MJPEG_JPEG_LS
 
-// FfProfileSbcMsbc wraps FF_PROFILE_SBC_MSBC.
-const FfProfileSbcMsbc = C.FF_PROFILE_SBC_MSBC
+// FFProfileSbcMsbc wraps FF_PROFILE_SBC_MSBC.
+const FFProfileSbcMsbc = C.FF_PROFILE_SBC_MSBC
 
-// FfProfileProresProxy wraps FF_PROFILE_PRORES_PROXY.
-const FfProfileProresProxy = C.FF_PROFILE_PRORES_PROXY
+// FFProfileProresProxy wraps FF_PROFILE_PRORES_PROXY.
+const FFProfileProresProxy = C.FF_PROFILE_PRORES_PROXY
 
-// FfProfileProresLt wraps FF_PROFILE_PRORES_LT.
-const FfProfileProresLt = C.FF_PROFILE_PRORES_LT
+// FFProfileProresLt wraps FF_PROFILE_PRORES_LT.
+const FFProfileProresLt = C.FF_PROFILE_PRORES_LT
 
-// FfProfileProresStandard wraps FF_PROFILE_PRORES_STANDARD.
-const FfProfileProresStandard = C.FF_PROFILE_PRORES_STANDARD
+// FFProfileProresStandard wraps FF_PROFILE_PRORES_STANDARD.
+const FFProfileProresStandard = C.FF_PROFILE_PRORES_STANDARD
 
-// FfProfileProresHq wraps FF_PROFILE_PRORES_HQ.
-const FfProfileProresHq = C.FF_PROFILE_PRORES_HQ
+// FFProfileProresHq wraps FF_PROFILE_PRORES_HQ.
+const FFProfileProresHq = C.FF_PROFILE_PRORES_HQ
 
-// FfProfileProres4444 wraps FF_PROFILE_PRORES_4444.
-const FfProfileProres4444 = C.FF_PROFILE_PRORES_4444
+// FFProfileProres4444 wraps FF_PROFILE_PRORES_4444.
+const FFProfileProres4444 = C.FF_PROFILE_PRORES_4444
 
-// FfProfileProresXq wraps FF_PROFILE_PRORES_XQ.
-const FfProfileProresXq = C.FF_PROFILE_PRORES_XQ
+// FFProfileProresXq wraps FF_PROFILE_PRORES_XQ.
+const FFProfileProresXq = C.FF_PROFILE_PRORES_XQ
 
-// FfProfileAribProfileA wraps FF_PROFILE_ARIB_PROFILE_A.
-const FfProfileAribProfileA = C.FF_PROFILE_ARIB_PROFILE_A
+// FFProfileAribProfileA wraps FF_PROFILE_ARIB_PROFILE_A.
+const FFProfileAribProfileA = C.FF_PROFILE_ARIB_PROFILE_A
 
-// FfProfileAribProfileC wraps FF_PROFILE_ARIB_PROFILE_C.
-const FfProfileAribProfileC = C.FF_PROFILE_ARIB_PROFILE_C
+// FFProfileAribProfileC wraps FF_PROFILE_ARIB_PROFILE_C.
+const FFProfileAribProfileC = C.FF_PROFILE_ARIB_PROFILE_C
 
-// FfProfileKlvaSync wraps FF_PROFILE_KLVA_SYNC.
-const FfProfileKlvaSync = C.FF_PROFILE_KLVA_SYNC
+// FFProfileKlvaSync wraps FF_PROFILE_KLVA_SYNC.
+const FFProfileKlvaSync = C.FF_PROFILE_KLVA_SYNC
 
-// FfProfileKlvaAsync wraps FF_PROFILE_KLVA_ASYNC.
-const FfProfileKlvaAsync = C.FF_PROFILE_KLVA_ASYNC
+// FFProfileKlvaAsync wraps FF_PROFILE_KLVA_ASYNC.
+const FFProfileKlvaAsync = C.FF_PROFILE_KLVA_ASYNC
 
-// FfProfileEvcBaseline wraps FF_PROFILE_EVC_BASELINE.
-const FfProfileEvcBaseline = C.FF_PROFILE_EVC_BASELINE
+// FFProfileEvcBaseline wraps FF_PROFILE_EVC_BASELINE.
+const FFProfileEvcBaseline = C.FF_PROFILE_EVC_BASELINE
 
-// FfProfileEvcMain wraps FF_PROFILE_EVC_MAIN.
-const FfProfileEvcMain = C.FF_PROFILE_EVC_MAIN
+// FFProfileEvcMain wraps FF_PROFILE_EVC_MAIN.
+const FFProfileEvcMain = C.FF_PROFILE_EVC_MAIN
 
-// FfLevelUnknown wraps FF_LEVEL_UNKNOWN.
-const FfLevelUnknown = C.FF_LEVEL_UNKNOWN
+// FFLevelUnknown wraps FF_LEVEL_UNKNOWN.
+const FFLevelUnknown = C.FF_LEVEL_UNKNOWN
 
-// FfSubCharencModeDoNothing wraps FF_SUB_CHARENC_MODE_DO_NOTHING.
-const FfSubCharencModeDoNothing = C.FF_SUB_CHARENC_MODE_DO_NOTHING
+// FFSubCharencModeDoNothing wraps FF_SUB_CHARENC_MODE_DO_NOTHING.
+const FFSubCharencModeDoNothing = C.FF_SUB_CHARENC_MODE_DO_NOTHING
 
-// FfSubCharencModeAutomatic wraps FF_SUB_CHARENC_MODE_AUTOMATIC.
-const FfSubCharencModeAutomatic = C.FF_SUB_CHARENC_MODE_AUTOMATIC
+// FFSubCharencModeAutomatic wraps FF_SUB_CHARENC_MODE_AUTOMATIC.
+const FFSubCharencModeAutomatic = C.FF_SUB_CHARENC_MODE_AUTOMATIC
 
-// FfSubCharencModePreDecoder wraps FF_SUB_CHARENC_MODE_PRE_DECODER.
-const FfSubCharencModePreDecoder = C.FF_SUB_CHARENC_MODE_PRE_DECODER
+// FFSubCharencModePreDecoder wraps FF_SUB_CHARENC_MODE_PRE_DECODER.
+const FFSubCharencModePreDecoder = C.FF_SUB_CHARENC_MODE_PRE_DECODER
 
-// FfSubCharencModeIgnore wraps FF_SUB_CHARENC_MODE_IGNORE.
-const FfSubCharencModeIgnore = C.FF_SUB_CHARENC_MODE_IGNORE
+// FFSubCharencModeIgnore wraps FF_SUB_CHARENC_MODE_IGNORE.
+const FFSubCharencModeIgnore = C.FF_SUB_CHARENC_MODE_IGNORE
 
-// FfCodecPropertyLossless wraps FF_CODEC_PROPERTY_LOSSLESS.
-const FfCodecPropertyLossless = C.FF_CODEC_PROPERTY_LOSSLESS
+// FFCodecPropertyLossless wraps FF_CODEC_PROPERTY_LOSSLESS.
+const FFCodecPropertyLossless = C.FF_CODEC_PROPERTY_LOSSLESS
 
-// FfCodecPropertyClosedCaptions wraps FF_CODEC_PROPERTY_CLOSED_CAPTIONS.
-const FfCodecPropertyClosedCaptions = C.FF_CODEC_PROPERTY_CLOSED_CAPTIONS
+// FFCodecPropertyClosedCaptions wraps FF_CODEC_PROPERTY_CLOSED_CAPTIONS.
+const FFCodecPropertyClosedCaptions = C.FF_CODEC_PROPERTY_CLOSED_CAPTIONS
 
-// FfCodecPropertyFilmGrain wraps FF_CODEC_PROPERTY_FILM_GRAIN.
-const FfCodecPropertyFilmGrain = C.FF_CODEC_PROPERTY_FILM_GRAIN
+// FFCodecPropertyFilmGrain wraps FF_CODEC_PROPERTY_FILM_GRAIN.
+const FFCodecPropertyFilmGrain = C.FF_CODEC_PROPERTY_FILM_GRAIN
 
 // AVHwaccelCodecCapExperimental wraps AV_HWACCEL_CODEC_CAP_EXPERIMENTAL.
 const AVHwaccelCodecCapExperimental = C.AV_HWACCEL_CODEC_CAP_EXPERIMENTAL
@@ -883,20 +898,20 @@ const AVEfCompliant = C.AV_EF_COMPLIANT
 // AVEfAggressive wraps AV_EF_AGGRESSIVE.
 const AVEfAggressive = C.AV_EF_AGGRESSIVE
 
-// FfComplianceVeryStrict wraps FF_COMPLIANCE_VERY_STRICT.
-const FfComplianceVeryStrict = C.FF_COMPLIANCE_VERY_STRICT
+// FFComplianceVeryStrict wraps FF_COMPLIANCE_VERY_STRICT.
+const FFComplianceVeryStrict = C.FF_COMPLIANCE_VERY_STRICT
 
-// FfComplianceStrict wraps FF_COMPLIANCE_STRICT.
-const FfComplianceStrict = C.FF_COMPLIANCE_STRICT
+// FFComplianceStrict wraps FF_COMPLIANCE_STRICT.
+const FFComplianceStrict = C.FF_COMPLIANCE_STRICT
 
-// FfComplianceNormal wraps FF_COMPLIANCE_NORMAL.
-const FfComplianceNormal = C.FF_COMPLIANCE_NORMAL
+// FFComplianceNormal wraps FF_COMPLIANCE_NORMAL.
+const FFComplianceNormal = C.FF_COMPLIANCE_NORMAL
 
-// FfComplianceUnofficial wraps FF_COMPLIANCE_UNOFFICIAL.
-const FfComplianceUnofficial = C.FF_COMPLIANCE_UNOFFICIAL
+// FFComplianceUnofficial wraps FF_COMPLIANCE_UNOFFICIAL.
+const FFComplianceUnofficial = C.FF_COMPLIANCE_UNOFFICIAL
 
-// FfComplianceExperimental wraps FF_COMPLIANCE_EXPERIMENTAL.
-const FfComplianceExperimental = C.FF_COMPLIANCE_EXPERIMENTAL
+// FFComplianceExperimental wraps FF_COMPLIANCE_EXPERIMENTAL.
+const FFComplianceExperimental = C.FF_COMPLIANCE_EXPERIMENTAL
 
 // AVProfileUnknown wraps AV_PROFILE_UNKNOWN.
 const AVProfileUnknown = C.AV_PROFILE_UNKNOWN
@@ -1243,6 +1258,81 @@ const AVPktFlagTrusted = C.AV_PKT_FLAG_TRUSTED
 // AVPktFlagDisposable wraps AV_PKT_FLAG_DISPOSABLE.
 const AVPktFlagDisposable = C.AV_PKT_FLAG_DISPOSABLE
 
+// LibAVCodecVersionMinor wraps LIBAVCODEC_VERSION_MINOR.
+const LibAVCodecVersionMinor = C.LIBAVCODEC_VERSION_MINOR
+
+// LibAVCodecVersionMicro wraps LIBAVCODEC_VERSION_MICRO.
+const LibAVCodecVersionMicro = C.LIBAVCODEC_VERSION_MICRO
+
+// LibAVCodecVersionInt wraps LIBAVCODEC_VERSION_INT.
+const LibAVCodecVersionInt = C.LIBAVCODEC_VERSION_INT
+
+// LibAVCodecBuild wraps LIBAVCODEC_BUILD.
+const LibAVCodecBuild = C.LIBAVCODEC_BUILD
+
+// LibAVCodecVersionMajor wraps LIBAVCODEC_VERSION_MAJOR.
+const LibAVCodecVersionMajor = C.LIBAVCODEC_VERSION_MAJOR
+
+// FFApiInitPacket wraps FF_API_INIT_PACKET.
+const FFApiInitPacket = C.FF_API_INIT_PACKET
+
+// FFApiIdctNone wraps FF_API_IDCT_NONE.
+const FFApiIdctNone = C.FF_API_IDCT_NONE
+
+// FFApiSvtav1Opts wraps FF_API_SVTAV1_OPTS.
+const FFApiSvtav1Opts = C.FF_API_SVTAV1_OPTS
+
+// FFApiAyuvCodecid wraps FF_API_AYUV_CODECID.
+const FFApiAyuvCodecid = C.FF_API_AYUV_CODECID
+
+// FFApiVtOutputCallback wraps FF_API_VT_OUTPUT_CALLBACK.
+const FFApiVtOutputCallback = C.FF_API_VT_OUTPUT_CALLBACK
+
+// FFApiAvcodecChromaPos wraps FF_API_AVCODEC_CHROMA_POS.
+const FFApiAvcodecChromaPos = C.FF_API_AVCODEC_CHROMA_POS
+
+// FFApiVtHwaccelContext wraps FF_API_VT_HWACCEL_CONTEXT.
+const FFApiVtHwaccelContext = C.FF_API_VT_HWACCEL_CONTEXT
+
+// FFApiAvctxFrameNumber wraps FF_API_AVCTX_FRAME_NUMBER.
+const FFApiAvctxFrameNumber = C.FF_API_AVCTX_FRAME_NUMBER
+
+// FFApiSliceOffset wraps FF_API_SLICE_OFFSET.
+const FFApiSliceOffset = C.FF_API_SLICE_OFFSET
+
+// FFApiSubframes wraps FF_API_SUBFRAMES.
+const FFApiSubframes = C.FF_API_SUBFRAMES
+
+// FFApiTicksPerFrame wraps FF_API_TICKS_PER_FRAME.
+const FFApiTicksPerFrame = C.FF_API_TICKS_PER_FRAME
+
+// FFApiDropchanged wraps FF_API_DROPCHANGED.
+const FFApiDropchanged = C.FF_API_DROPCHANGED
+
+// FFApiAvfft wraps FF_API_AVFFT.
+const FFApiAvfft = C.FF_API_AVFFT
+
+// FFApiFfProfileLevel wraps FF_API_FF_PROFILE_LEVEL.
+const FFApiFfProfileLevel = C.FF_API_FF_PROFILE_LEVEL
+
+// FFCodecCrystalHd wraps FF_CODEC_CRYSTAL_HD.
+const FFCodecCrystalHd = C.FF_CODEC_CRYSTAL_HD
+
+// LibAVDeviceVersionMinor wraps LIBAVDEVICE_VERSION_MINOR.
+const LibAVDeviceVersionMinor = C.LIBAVDEVICE_VERSION_MINOR
+
+// LibAVDeviceVersionMicro wraps LIBAVDEVICE_VERSION_MICRO.
+const LibAVDeviceVersionMicro = C.LIBAVDEVICE_VERSION_MICRO
+
+// LibAVDeviceVersionInt wraps LIBAVDEVICE_VERSION_INT.
+const LibAVDeviceVersionInt = C.LIBAVDEVICE_VERSION_INT
+
+// LibAVDeviceBuild wraps LIBAVDEVICE_BUILD.
+const LibAVDeviceBuild = C.LIBAVDEVICE_BUILD
+
+// LibAVDeviceVersionMajor wraps LIBAVDEVICE_VERSION_MAJOR.
+const LibAVDeviceVersionMajor = C.LIBAVDEVICE_VERSION_MAJOR
+
 // AVFilterFlagDynamicInputs wraps AVFILTER_FLAG_DYNAMIC_INPUTS.
 const AVFilterFlagDynamicInputs = C.AVFILTER_FLAG_DYNAMIC_INPUTS
 
@@ -1305,6 +1395,24 @@ const AVBuffersrcFlagPush = C.AV_BUFFERSRC_FLAG_PUSH
 
 // AVBuffersrcFlagKeepRef wraps AV_BUFFERSRC_FLAG_KEEP_REF.
 const AVBuffersrcFlagKeepRef = C.AV_BUFFERSRC_FLAG_KEEP_REF
+
+// LibAVFilterVersionMinor wraps LIBAVFILTER_VERSION_MINOR.
+const LibAVFilterVersionMinor = C.LIBAVFILTER_VERSION_MINOR
+
+// LibAVFilterVersionMicro wraps LIBAVFILTER_VERSION_MICRO.
+const LibAVFilterVersionMicro = C.LIBAVFILTER_VERSION_MICRO
+
+// LibAVFilterVersionInt wraps LIBAVFILTER_VERSION_INT.
+const LibAVFilterVersionInt = C.LIBAVFILTER_VERSION_INT
+
+// LibAVFilterBuild wraps LIBAVFILTER_BUILD.
+const LibAVFilterBuild = C.LIBAVFILTER_BUILD
+
+// LibAVFilterVersionMajor wraps LIBAVFILTER_VERSION_MAJOR.
+const LibAVFilterVersionMajor = C.LIBAVFILTER_VERSION_MAJOR
+
+// FFApiLibplaceboOpts wraps FF_API_LIBPLACEBO_OPTS.
+const FFApiLibplaceboOpts = C.FF_API_LIBPLACEBO_OPTS
 
 // AVProbeScoreRetry wraps AVPROBE_SCORE_RETRY.
 const AVProbeScoreRetry = C.AVPROBE_SCORE_RETRY
@@ -1507,8 +1615,8 @@ const AVFmtFlagShortest = C.AVFMT_FLAG_SHORTEST
 // AVFmtFlagAutoBsf wraps AVFMT_FLAG_AUTO_BSF.
 const AVFmtFlagAutoBsf = C.AVFMT_FLAG_AUTO_BSF
 
-// FfFdebugTs wraps FF_FDEBUG_TS.
-const FfFdebugTs = C.FF_FDEBUG_TS
+// FFFdebugTs wraps FF_FDEBUG_TS.
+const FFFdebugTs = C.FF_FDEBUG_TS
 
 // AVFmtEventFlagMetadataUpdated wraps AVFMT_EVENT_FLAG_METADATA_UPDATED.
 const AVFmtEventFlagMetadataUpdated = C.AVFMT_EVENT_FLAG_METADATA_UPDATED
@@ -1573,20 +1681,62 @@ const AVIOFlagNonblock = C.AVIO_FLAG_NONBLOCK
 // AVIOFlagDirect wraps AVIO_FLAG_DIRECT.
 const AVIOFlagDirect = C.AVIO_FLAG_DIRECT
 
-// FfLambdaShift wraps FF_LAMBDA_SHIFT.
-const FfLambdaShift = C.FF_LAMBDA_SHIFT
+// LibAVFormatVersionMinor wraps LIBAVFORMAT_VERSION_MINOR.
+const LibAVFormatVersionMinor = C.LIBAVFORMAT_VERSION_MINOR
 
-// FfLambdaScale wraps FF_LAMBDA_SCALE.
-const FfLambdaScale = C.FF_LAMBDA_SCALE
+// LibAVFormatVersionMicro wraps LIBAVFORMAT_VERSION_MICRO.
+const LibAVFormatVersionMicro = C.LIBAVFORMAT_VERSION_MICRO
 
-// FfQp2Lambda wraps FF_QP2LAMBDA.
-const FfQp2Lambda = C.FF_QP2LAMBDA
+// LibAVFormatVersionInt wraps LIBAVFORMAT_VERSION_INT.
+const LibAVFormatVersionInt = C.LIBAVFORMAT_VERSION_INT
 
-// FfLambdaMax wraps FF_LAMBDA_MAX.
-const FfLambdaMax = C.FF_LAMBDA_MAX
+// LibAVFormatBuild wraps LIBAVFORMAT_BUILD.
+const LibAVFormatBuild = C.LIBAVFORMAT_BUILD
 
-// FfQualityScale wraps FF_QUALITY_SCALE.
-const FfQualityScale = C.FF_QUALITY_SCALE
+// LibAVFormatVersionMajor wraps LIBAVFORMAT_VERSION_MAJOR.
+const LibAVFormatVersionMajor = C.LIBAVFORMAT_VERSION_MAJOR
+
+// FFApiComputePktFields2 wraps FF_API_COMPUTE_PKT_FIELDS2.
+const FFApiComputePktFields2 = C.FF_API_COMPUTE_PKT_FIELDS2
+
+// FFApiGetEndPts wraps FF_API_GET_END_PTS.
+const FFApiGetEndPts = C.FF_API_GET_END_PTS
+
+// FFApiAviodircontext wraps FF_API_AVIODIRCONTEXT.
+const FFApiAviodircontext = C.FF_API_AVIODIRCONTEXT
+
+// FFApiAvformatIoClose wraps FF_API_AVFORMAT_IO_CLOSE.
+const FFApiAvformatIoClose = C.FF_API_AVFORMAT_IO_CLOSE
+
+// FFApiAvioWriteNonconst wraps FF_API_AVIO_WRITE_NONCONST.
+const FFApiAvioWriteNonconst = C.FF_API_AVIO_WRITE_NONCONST
+
+// FFApiLavfShortest wraps FF_API_LAVF_SHORTEST.
+const FFApiLavfShortest = C.FF_API_LAVF_SHORTEST
+
+// FFApiAllowFlush wraps FF_API_ALLOW_FLUSH.
+const FFApiAllowFlush = C.FF_API_ALLOW_FLUSH
+
+// FFApiAvstreamSideData wraps FF_API_AVSTREAM_SIDE_DATA.
+const FFApiAvstreamSideData = C.FF_API_AVSTREAM_SIDE_DATA
+
+// FFApiRFrameRate wraps FF_API_R_FRAME_RATE.
+const FFApiRFrameRate = C.FF_API_R_FRAME_RATE
+
+// FFLambdaShift wraps FF_LAMBDA_SHIFT.
+const FFLambdaShift = C.FF_LAMBDA_SHIFT
+
+// FFLambdaScale wraps FF_LAMBDA_SCALE.
+const FFLambdaScale = C.FF_LAMBDA_SCALE
+
+// FFQp2Lambda wraps FF_QP2LAMBDA.
+const FFQp2Lambda = C.FF_QP2LAMBDA
+
+// FFLambdaMax wraps FF_LAMBDA_MAX.
+const FFLambdaMax = C.FF_LAMBDA_MAX
+
+// FFQualityScale wraps FF_QUALITY_SCALE.
+const FFQualityScale = C.FF_QUALITY_SCALE
 
 // AVNoptsValue wraps AV_NOPTS_VALUE.
 const AVNoptsValue = C.AV_NOPTS_VALUE
@@ -1921,17 +2071,17 @@ const AVFrameFlagInterlaced = C.AV_FRAME_FLAG_INTERLACED
 // AVFrameFlagTopFieldFirst wraps AV_FRAME_FLAG_TOP_FIELD_FIRST.
 const AVFrameFlagTopFieldFirst = C.AV_FRAME_FLAG_TOP_FIELD_FIRST
 
-// FfDecodeErrorInvalidBitstream wraps FF_DECODE_ERROR_INVALID_BITSTREAM.
-const FfDecodeErrorInvalidBitstream = C.FF_DECODE_ERROR_INVALID_BITSTREAM
+// FFDecodeErrorInvalidBitstream wraps FF_DECODE_ERROR_INVALID_BITSTREAM.
+const FFDecodeErrorInvalidBitstream = C.FF_DECODE_ERROR_INVALID_BITSTREAM
 
-// FfDecodeErrorMissingReference wraps FF_DECODE_ERROR_MISSING_REFERENCE.
-const FfDecodeErrorMissingReference = C.FF_DECODE_ERROR_MISSING_REFERENCE
+// FFDecodeErrorMissingReference wraps FF_DECODE_ERROR_MISSING_REFERENCE.
+const FFDecodeErrorMissingReference = C.FF_DECODE_ERROR_MISSING_REFERENCE
 
-// FfDecodeErrorConcealmentActive wraps FF_DECODE_ERROR_CONCEALMENT_ACTIVE.
-const FfDecodeErrorConcealmentActive = C.FF_DECODE_ERROR_CONCEALMENT_ACTIVE
+// FFDecodeErrorConcealmentActive wraps FF_DECODE_ERROR_CONCEALMENT_ACTIVE.
+const FFDecodeErrorConcealmentActive = C.FF_DECODE_ERROR_CONCEALMENT_ACTIVE
 
-// FfDecodeErrorDecodeSlices wraps FF_DECODE_ERROR_DECODE_SLICES.
-const FfDecodeErrorDecodeSlices = C.FF_DECODE_ERROR_DECODE_SLICES
+// FFDecodeErrorDecodeSlices wraps FF_DECODE_ERROR_DECODE_SLICES.
+const FFDecodeErrorDecodeSlices = C.FF_DECODE_ERROR_DECODE_SLICES
 
 // AVFrameCropUnaligned wraps AV_FRAME_CROP_UNALIGNED.
 const AVFrameCropUnaligned = C.AV_FRAME_CROP_UNALIGNED
@@ -2352,3 +2502,105 @@ const AVPixFmtRgbf32 = C.AV_PIX_FMT_RGBF32
 
 // AVPixFmtRgbaf32 wraps AV_PIX_FMT_RGBAF32.
 const AVPixFmtRgbaf32 = C.AV_PIX_FMT_RGBAF32
+
+// LibAVUtilVersionMajor wraps LIBAVUTIL_VERSION_MAJOR.
+const LibAVUtilVersionMajor = C.LIBAVUTIL_VERSION_MAJOR
+
+// LibAVUtilVersionMinor wraps LIBAVUTIL_VERSION_MINOR.
+const LibAVUtilVersionMinor = C.LIBAVUTIL_VERSION_MINOR
+
+// LibAVUtilVersionMicro wraps LIBAVUTIL_VERSION_MICRO.
+const LibAVUtilVersionMicro = C.LIBAVUTIL_VERSION_MICRO
+
+// LibAVUtilVersionInt wraps LIBAVUTIL_VERSION_INT.
+const LibAVUtilVersionInt = C.LIBAVUTIL_VERSION_INT
+
+// LibAVUtilBuild wraps LIBAVUTIL_BUILD.
+const LibAVUtilBuild = C.LIBAVUTIL_BUILD
+
+// FFApiFifoPeek2 wraps FF_API_FIFO_PEEK2.
+const FFApiFifoPeek2 = C.FF_API_FIFO_PEEK2
+
+// FFApiFifoOldApi wraps FF_API_FIFO_OLD_API.
+const FFApiFifoOldApi = C.FF_API_FIFO_OLD_API
+
+// FFApiXvmc wraps FF_API_XVMC.
+const FFApiXvmc = C.FF_API_XVMC
+
+// FFApiOldChannelLayout wraps FF_API_OLD_CHANNEL_LAYOUT.
+const FFApiOldChannelLayout = C.FF_API_OLD_CHANNEL_LAYOUT
+
+// FFApiAvFopenUtf8 wraps FF_API_AV_FOPEN_UTF8.
+const FFApiAvFopenUtf8 = C.FF_API_AV_FOPEN_UTF8
+
+// FFApiPktDuration wraps FF_API_PKT_DURATION.
+const FFApiPktDuration = C.FF_API_PKT_DURATION
+
+// FFApiReorderedOpaque wraps FF_API_REORDERED_OPAQUE.
+const FFApiReorderedOpaque = C.FF_API_REORDERED_OPAQUE
+
+// FFApiFramePictureNumber wraps FF_API_FRAME_PICTURE_NUMBER.
+const FFApiFramePictureNumber = C.FF_API_FRAME_PICTURE_NUMBER
+
+// FFApiHdrVividThreeSpline wraps FF_API_HDR_VIVID_THREE_SPLINE.
+const FFApiHdrVividThreeSpline = C.FF_API_HDR_VIVID_THREE_SPLINE
+
+// FFApiFramePkt wraps FF_API_FRAME_PKT.
+const FFApiFramePkt = C.FF_API_FRAME_PKT
+
+// FFApiInterlacedFrame wraps FF_API_INTERLACED_FRAME.
+const FFApiInterlacedFrame = C.FF_API_INTERLACED_FRAME
+
+// FFApiFrameKey wraps FF_API_FRAME_KEY.
+const FFApiFrameKey = C.FF_API_FRAME_KEY
+
+// FFApiPaletteHasChanged wraps FF_API_PALETTE_HAS_CHANGED.
+const FFApiPaletteHasChanged = C.FF_API_PALETTE_HAS_CHANGED
+
+// FFApiVulkanContiguousMemory wraps FF_API_VULKAN_CONTIGUOUS_MEMORY.
+const FFApiVulkanContiguousMemory = C.FF_API_VULKAN_CONTIGUOUS_MEMORY
+
+// LibPostprocVersionMinor wraps LIBPOSTPROC_VERSION_MINOR.
+const LibPostprocVersionMinor = C.LIBPOSTPROC_VERSION_MINOR
+
+// LibPostprocVersionMicro wraps LIBPOSTPROC_VERSION_MICRO.
+const LibPostprocVersionMicro = C.LIBPOSTPROC_VERSION_MICRO
+
+// LibPostprocVersionInt wraps LIBPOSTPROC_VERSION_INT.
+const LibPostprocVersionInt = C.LIBPOSTPROC_VERSION_INT
+
+// LibPostprocBuild wraps LIBPOSTPROC_BUILD.
+const LibPostprocBuild = C.LIBPOSTPROC_BUILD
+
+// LibPostprocVersionMajor wraps LIBPOSTPROC_VERSION_MAJOR.
+const LibPostprocVersionMajor = C.LIBPOSTPROC_VERSION_MAJOR
+
+// LibSwresampleVersionMinor wraps LIBSWRESAMPLE_VERSION_MINOR.
+const LibSwresampleVersionMinor = C.LIBSWRESAMPLE_VERSION_MINOR
+
+// LibSwresampleVersionMicro wraps LIBSWRESAMPLE_VERSION_MICRO.
+const LibSwresampleVersionMicro = C.LIBSWRESAMPLE_VERSION_MICRO
+
+// LibSwresampleVersionInt wraps LIBSWRESAMPLE_VERSION_INT.
+const LibSwresampleVersionInt = C.LIBSWRESAMPLE_VERSION_INT
+
+// LibSwresampleBuild wraps LIBSWRESAMPLE_BUILD.
+const LibSwresampleBuild = C.LIBSWRESAMPLE_BUILD
+
+// LibSwresampleVersionMajor wraps LIBSWRESAMPLE_VERSION_MAJOR.
+const LibSwresampleVersionMajor = C.LIBSWRESAMPLE_VERSION_MAJOR
+
+// LibSwscaleVersionMinor wraps LIBSWSCALE_VERSION_MINOR.
+const LibSwscaleVersionMinor = C.LIBSWSCALE_VERSION_MINOR
+
+// LibSwscaleVersionMicro wraps LIBSWSCALE_VERSION_MICRO.
+const LibSwscaleVersionMicro = C.LIBSWSCALE_VERSION_MICRO
+
+// LibSwscaleVersionInt wraps LIBSWSCALE_VERSION_INT.
+const LibSwscaleVersionInt = C.LIBSWSCALE_VERSION_INT
+
+// LibSwscaleBuild wraps LIBSWSCALE_BUILD.
+const LibSwscaleBuild = C.LIBSWSCALE_BUILD
+
+// LibSwscaleVersionMajor wraps LIBSWSCALE_VERSION_MAJOR.
+const LibSwscaleVersionMajor = C.LIBSWSCALE_VERSION_MAJOR

@@ -9,11 +9,19 @@ import "unsafe"
 // #include <libavcodec/codec_par.h>
 // #include <libavcodec/defs.h>
 // #include <libavcodec/packet.h>
+// #include <libavcodec/version.h>
+// #include <libavcodec/version_major.h>
+// #include <libavdevice/version.h>
+// #include <libavdevice/version_major.h>
 // #include <libavfilter/avfilter.h>
 // #include <libavfilter/buffersink.h>
 // #include <libavfilter/buffersrc.h>
+// #include <libavfilter/version.h>
+// #include <libavfilter/version_major.h>
 // #include <libavformat/avformat.h>
 // #include <libavformat/avio.h>
+// #include <libavformat/version.h>
+// #include <libavformat/version_major.h>
 // #include <libavutil/avutil.h>
 // #include <libavutil/buffer.h>
 // #include <libavutil/channel_layout.h>
@@ -28,6 +36,13 @@ import "unsafe"
 // #include <libavutil/pixfmt.h>
 // #include <libavutil/rational.h>
 // #include <libavutil/samplefmt.h>
+// #include <libavutil/version.h>
+// #include <libpostproc/version.h>
+// #include <libpostproc/version_major.h>
+// #include <libswresample/version.h>
+// #include <libswresample/version_major.h>
+// #include <libswscale/version.h>
+// #include <libswscale/version_major.h>
 import "C"
 
 // --- Struct RcOverride ---

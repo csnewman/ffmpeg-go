@@ -23,11 +23,19 @@ var files = []string{
 	"libavcodec/codec_par.h",
 	"libavcodec/defs.h",
 	"libavcodec/packet.h",
+	"libavcodec/version.h",
+	"libavcodec/version_major.h",
+	"libavdevice/version.h",
+	"libavdevice/version_major.h",
 	"libavfilter/avfilter.h",
 	"libavfilter/buffersink.h",
 	"libavfilter/buffersrc.h",
+	"libavfilter/version.h",
+	"libavfilter/version_major.h",
 	"libavformat/avformat.h",
 	"libavformat/avio.h",
+	"libavformat/version.h",
+	"libavformat/version_major.h",
 	"libavutil/avutil.h",
 	"libavutil/buffer.h",
 	"libavutil/channel_layout.h",
@@ -42,6 +50,13 @@ var files = []string{
 	"libavutil/pixfmt.h",
 	"libavutil/rational.h",
 	"libavutil/samplefmt.h",
+	"libavutil/version.h",
+	"libpostproc/version.h",
+	"libpostproc/version_major.h",
+	"libswresample/version.h",
+	"libswresample/version_major.h",
+	"libswscale/version.h",
+	"libswscale/version_major.h",
 }
 
 func Parse() *Module {
@@ -141,6 +156,10 @@ func (p *Parser) parseTopLevel(indent string, c clang.Cursor) {
 		}
 
 		if strings.HasPrefix(name, "AV_CHANNEL_LAYOUT_") {
+			return
+		}
+
+		if strings.HasSuffix(name, "_VERSION") || strings.HasSuffix(name, "_IDENT") {
 			return
 		}
 
