@@ -1,11 +1,27 @@
 # ffmpeg-go
-Go bindings for FFmpeg AV libraries.
+Go bindings for the FFmpeg AV libraries.
 
 ### Features
 
+- Static build (does still require some system libraries, such as `m`).
+- Linux (arm64, amd64) and macOS (arm64, amd64) support.
 - Auto generated.
 - Thin layer over the C API.
 - Doc comments retained (where supported by clang).
+- GPL version of FFmpeg (allows for x264 etc).
+
+### TODO
+
+- [ ] Expose more headers.
+- [ ] Ensure acceleration enabled in builds.
+- [ ] Expose platform specific headers.
+- [ ] Cleanup internal packages.
+
+### Setup
+
+```
+go get github.com/csnewman/ffmpeg-go
+```
 
 ### Example
 
@@ -119,3 +135,38 @@ Input #0, mov,mp4,m4a,3gp,3g2,mj2, from './bbb.mp4':
 2024/01/15 21:39:43 INFO     Meta key=handler_name value="GPAC ISO Audio Handler"
 2024/01/15 21:39:43 INFO     Meta key=vendor_id value=[0][0][0][0]
 ```
+
+### FAQ
+
+- Q: Why is FFmpeg statically bundled?
+  - A: The version of FFmpeg varies by platform, making a one-size fits all style binding difficult with the Go build
+    system and its lack of a build.go file.
+- Q: Why are the arm packages not built by CI?
+  - A: Ideally they would be. However, the free GitHub plan does not include arm builders.
+- Q: Why is library `xyz` not enabled?
+  - A: Libraries have been added on a as-needed basis. Feel free to create a PR enabling any additional libraries.
+- Q: I have some C code that I can't convert to Go, due to a missing binding feature
+  - A: Create an issue with a C sample, and we can go from there.
+
+### Library versions
+
+| Library  | Version |
+|----------|---------|
+| FFmpeg   | 6.1     |
+| aom      | 3.8.1   |
+| ass      | 0.17.1  |
+| brotli   | 1.1     |
+| bz2      | 1.0.8   |
+| freetype | 2.13.2  |
+| fribidi  | 1.0.13  |
+| harfbuzz | 8.3.0   |
+| mp3lame  | 3.1000  |
+| ogg      | 1.3.1   |
+| opus     | 1.4     |
+| png      | head    |
+| speex    | 1.2.1   |
+| theora   | 1.1.1   |
+| unibreak | 5.1     |
+| vpx      | 1.14.0  |
+| x264     | head    |
+| zlib     | 1.3     |
