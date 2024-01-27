@@ -1129,6 +1129,13 @@ func (b *Builder) buildFFmpeg() {
 				cmd.Args,
 				"--enable-libfontconfig",
 			)
+		} else if b.os == MacOS {
+			cmd.Args = append(
+				cmd.Args,
+				"--enable-avfoundation",
+				"--enable-audiotoolbox",
+				"--enable-videotoolbox",
+			)
 		}
 
 		run("[ffmpeg configure]", cmd)

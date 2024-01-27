@@ -14,7 +14,7 @@ import (
 #cgo linux,arm64 LDFLAGS: -lffmpeg_linux_arm64
 #cgo linux LDFLAGS: -lm -ldl
 
-#cgo darwin LDFLAGS: -L${SRCDIR} -lm -framework ApplicationServices -framework CoreFoundation
+#cgo darwin LDFLAGS: -L${SRCDIR} -lm -framework ApplicationServices -framework CoreVideo -framework CoreMedia -framework VideoToolbox -framework AudioToolbox
 #cgo darwin,amd64 LDFLAGS: -lffmpeg_darwin_amd64
 #cgo darwin,arm64 LDFLAGS: -lffmpeg_darwin_arm64
 
