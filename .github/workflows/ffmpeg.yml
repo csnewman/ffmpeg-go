@@ -81,8 +81,7 @@ jobs:
           add-paths: libffmpeg_darwin_amd64.a
 
   darwin_arm64:
-    runs-on: macos-13-arm64
-    if: ${{ false }} # Not available in public runners
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
 
