@@ -608,7 +608,7 @@ func AVCodecReceivePacket(avctx *AVCodecContext, avpkt *AVPacket) (int, error) {
 
 // --- Function avcodec_get_hw_frames_parameters ---
 
-// AVCodecGetHwFramesParameters wraps avcodec_get_hw_frames_parameters.
+// AVCodecGetHWFramesParameters wraps avcodec_get_hw_frames_parameters.
 /*
   Create and return a AVHWFramesContext with values adequate for hardware
   decoding. This is meant to get called from the get_format callback, and is
@@ -706,7 +706,7 @@ func AVCodecReceivePacket(avctx *AVCodecContext, avpkt *AVPacket) (int, error) {
                         this configuration, or the device_ref is not supported
                         for the hwaccel referenced by hw_pix_fmt.
 */
-func AVCodecGetHwFramesParameters(avctx *AVCodecContext, deviceRef *AVBufferRef, hwPixFmt AVPixelFormat, outFramesRef **AVBufferRef) (int, error) {
+func AVCodecGetHWFramesParameters(avctx *AVCodecContext, deviceRef *AVBufferRef, hwPixFmt AVPixelFormat, outFramesRef **AVBufferRef) (int, error) {
 	var tmpavctx *C.AVCodecContext
 	if avctx != nil {
 		tmpavctx = avctx.ptr
@@ -1065,7 +1065,7 @@ func AVGetProfileName(codec *AVCodec, profile int) *CStr {
 
 // --- Function avcodec_get_hw_config ---
 
-// AVCodecGetHwConfig wraps avcodec_get_hw_config.
+// AVCodecGetHWConfig wraps avcodec_get_hw_config.
 /*
   Retrieve supported hardware configurations for a codec.
 
@@ -1073,7 +1073,7 @@ func AVGetProfileName(codec *AVCodec, profile int) *CStr {
   descriptor; all other values return NULL.  If the codec does not support
   any hardware configurations then it will always return NULL.
 */
-func AVCodecGetHwConfig(codec *AVCodec, index int) *AVCodecHWConfig {
+func AVCodecGetHWConfig(codec *AVCodec, index int) *AVCodecHWConfig {
 	var tmpcodec *C.AVCodec
 	if codec != nil {
 		tmpcodec = codec.ptr
@@ -3315,8 +3315,8 @@ func AVBuffersinkGetSampleRate(ctx *AVFilterContext) (int, error) {
 
 // --- Function av_buffersink_get_hw_frames_ctx ---
 
-// AVBuffersinkGetHwFramesCtx wraps av_buffersink_get_hw_frames_ctx.
-func AVBuffersinkGetHwFramesCtx(ctx *AVFilterContext) *AVBufferRef {
+// AVBuffersinkGetHWFramesCtx wraps av_buffersink_get_hw_frames_ctx.
+func AVBuffersinkGetHWFramesCtx(ctx *AVFilterContext) *AVBufferRef {
 	var tmpctx *C.AVFilterContext
 	if ctx != nil {
 		tmpctx = ctx.ptr
@@ -8615,7 +8615,7 @@ func AVFrameSideDataName(_type AVFrameSideDataType) *CStr {
 
 // --- Function av_hwdevice_find_type_by_name ---
 
-// AVHwdeviceFindTypeByName wraps av_hwdevice_find_type_by_name.
+// AVHWDeviceFindTypeByName wraps av_hwdevice_find_type_by_name.
 /*
   Look up an AVHWDeviceType by name.
 
@@ -8623,7 +8623,7 @@ func AVFrameSideDataName(_type AVFrameSideDataType) *CStr {
   @return The type from enum AVHWDeviceType, or AV_HWDEVICE_TYPE_NONE if
           not found.
 */
-func AVHwdeviceFindTypeByName(name *CStr) AVHWDeviceType {
+func AVHWDeviceFindTypeByName(name *CStr) AVHWDeviceType {
 	var tmpname *C.char
 	if name != nil {
 		tmpname = name.ptr
@@ -8634,7 +8634,7 @@ func AVHwdeviceFindTypeByName(name *CStr) AVHWDeviceType {
 
 // --- Function av_hwdevice_get_type_name ---
 
-// AVHwdeviceGetTypeName wraps av_hwdevice_get_type_name.
+// AVHWDeviceGetTypeName wraps av_hwdevice_get_type_name.
 /*
   Get the string name of an AVHWDeviceType.
 
@@ -8642,14 +8642,14 @@ func AVHwdeviceFindTypeByName(name *CStr) AVHWDeviceType {
   @return Pointer to a static string containing the name, or NULL if the type
           is not valid.
 */
-func AVHwdeviceGetTypeName(_type AVHWDeviceType) *CStr {
+func AVHWDeviceGetTypeName(_type AVHWDeviceType) *CStr {
 	ret := C.av_hwdevice_get_type_name(C.enum_AVHWDeviceType(_type))
 	return wrapCStr(ret)
 }
 
 // --- Function av_hwdevice_iterate_types ---
 
-// AVHwdeviceIterateTypes wraps av_hwdevice_iterate_types.
+// AVHWDeviceIterateTypes wraps av_hwdevice_iterate_types.
 /*
   Iterate over supported device types.
 
@@ -8658,14 +8658,14 @@ func AVHwdeviceGetTypeName(_type AVHWDeviceType) *CStr {
   @return The next usable device type from enum AVHWDeviceType, or
           AV_HWDEVICE_TYPE_NONE if there are no more.
 */
-func AVHwdeviceIterateTypes(prev AVHWDeviceType) AVHWDeviceType {
+func AVHWDeviceIterateTypes(prev AVHWDeviceType) AVHWDeviceType {
 	ret := C.av_hwdevice_iterate_types(C.enum_AVHWDeviceType(prev))
 	return AVHWDeviceType(ret)
 }
 
 // --- Function av_hwdevice_ctx_alloc ---
 
-// AVHwdeviceCtxAlloc wraps av_hwdevice_ctx_alloc.
+// AVHWDeviceCtxAlloc wraps av_hwdevice_ctx_alloc.
 /*
   Allocate an AVHWDeviceContext for a given hardware type.
 
@@ -8673,7 +8673,7 @@ func AVHwdeviceIterateTypes(prev AVHWDeviceType) AVHWDeviceType {
   @return a reference to the newly created AVHWDeviceContext on success or NULL
           on failure.
 */
-func AVHwdeviceCtxAlloc(_type AVHWDeviceType) *AVBufferRef {
+func AVHWDeviceCtxAlloc(_type AVHWDeviceType) *AVBufferRef {
 	ret := C.av_hwdevice_ctx_alloc(C.enum_AVHWDeviceType(_type))
 	var retMapped *AVBufferRef
 	if ret != nil {
@@ -8684,7 +8684,7 @@ func AVHwdeviceCtxAlloc(_type AVHWDeviceType) *AVBufferRef {
 
 // --- Function av_hwdevice_ctx_init ---
 
-// AVHwdeviceCtxInit wraps av_hwdevice_ctx_init.
+// AVHWDeviceCtxInit wraps av_hwdevice_ctx_init.
 /*
   Finalize the device context before use. This function must be called after
   the context is filled with all the required information and before it is
@@ -8693,7 +8693,7 @@ func AVHwdeviceCtxAlloc(_type AVHWDeviceType) *AVBufferRef {
   @param ref a reference to the AVHWDeviceContext
   @return 0 on success, a negative AVERROR code on failure
 */
-func AVHwdeviceCtxInit(ref *AVBufferRef) (int, error) {
+func AVHWDeviceCtxInit(ref *AVBufferRef) (int, error) {
 	var tmpref *C.AVBufferRef
 	if ref != nil {
 		tmpref = ref.ptr
@@ -8704,7 +8704,7 @@ func AVHwdeviceCtxInit(ref *AVBufferRef) (int, error) {
 
 // --- Function av_hwdevice_ctx_create ---
 
-// AVHwdeviceCtxCreate wraps av_hwdevice_ctx_create.
+// AVHWDeviceCtxCreate wraps av_hwdevice_ctx_create.
 /*
   Open a device of the specified type and create an AVHWDeviceContext for it.
 
@@ -8730,7 +8730,7 @@ func AVHwdeviceCtxInit(ref *AVBufferRef) (int, error) {
 
   @return 0 on success, a negative AVERROR code on failure.
 */
-func AVHwdeviceCtxCreate(deviceCtx **AVBufferRef, _type AVHWDeviceType, device *CStr, opts *AVDictionary, flags int) (int, error) {
+func AVHWDeviceCtxCreate(deviceCtx **AVBufferRef, _type AVHWDeviceType, device *CStr, opts *AVDictionary, flags int) (int, error) {
 	var ptrdeviceCtx **C.AVBufferRef
 	var tmpdeviceCtx *C.AVBufferRef
 	var oldTmpdeviceCtx *C.AVBufferRef
@@ -8763,7 +8763,7 @@ func AVHwdeviceCtxCreate(deviceCtx **AVBufferRef, _type AVHWDeviceType, device *
 
 // --- Function av_hwdevice_ctx_create_derived ---
 
-// AVHwdeviceCtxCreateDerived wraps av_hwdevice_ctx_create_derived.
+// AVHWDeviceCtxCreateDerived wraps av_hwdevice_ctx_create_derived.
 /*
   Create a new device of the specified type from an existing device.
 
@@ -8785,7 +8785,7 @@ func AVHwdeviceCtxCreate(deviceCtx **AVBufferRef, _type AVHWDeviceType, device *
   @param flags   Currently unused; should be set to zero.
   @return        Zero on success, a negative AVERROR code on failure.
 */
-func AVHwdeviceCtxCreateDerived(dstCtx **AVBufferRef, _type AVHWDeviceType, srcCtx *AVBufferRef, flags int) (int, error) {
+func AVHWDeviceCtxCreateDerived(dstCtx **AVBufferRef, _type AVHWDeviceType, srcCtx *AVBufferRef, flags int) (int, error) {
 	var ptrdstCtx **C.AVBufferRef
 	var tmpdstCtx *C.AVBufferRef
 	var oldTmpdstCtx *C.AVBufferRef
@@ -8814,7 +8814,7 @@ func AVHwdeviceCtxCreateDerived(dstCtx **AVBufferRef, _type AVHWDeviceType, srcC
 
 // --- Function av_hwdevice_ctx_create_derived_opts ---
 
-// AVHwdeviceCtxCreateDerivedOpts wraps av_hwdevice_ctx_create_derived_opts.
+// AVHWDeviceCtxCreateDerivedOpts wraps av_hwdevice_ctx_create_derived_opts.
 /*
   Create a new device of the specified type from an existing device.
 
@@ -8831,7 +8831,7 @@ func AVHwdeviceCtxCreateDerived(dstCtx **AVBufferRef, _type AVHWDeviceType, srcC
   @param flags   Currently unused; should be set to zero.
   @return        Zero on success, a negative AVERROR code on failure.
 */
-func AVHwdeviceCtxCreateDerivedOpts(dstCtx **AVBufferRef, _type AVHWDeviceType, srcCtx *AVBufferRef, options *AVDictionary, flags int) (int, error) {
+func AVHWDeviceCtxCreateDerivedOpts(dstCtx **AVBufferRef, _type AVHWDeviceType, srcCtx *AVBufferRef, options *AVDictionary, flags int) (int, error) {
 	var ptrdstCtx **C.AVBufferRef
 	var tmpdstCtx *C.AVBufferRef
 	var oldTmpdstCtx *C.AVBufferRef
@@ -8864,7 +8864,7 @@ func AVHwdeviceCtxCreateDerivedOpts(dstCtx **AVBufferRef, _type AVHWDeviceType, 
 
 // --- Function av_hwframe_ctx_alloc ---
 
-// AVHwframeCtxAlloc wraps av_hwframe_ctx_alloc.
+// AVHWFrameCtxAlloc wraps av_hwframe_ctx_alloc.
 /*
   Allocate an AVHWFramesContext tied to a given device context.
 
@@ -8874,7 +8874,7 @@ func AVHwdeviceCtxCreateDerivedOpts(dstCtx **AVBufferRef, _type AVHWDeviceType, 
   @return a reference to the newly created AVHWFramesContext on success or NULL
           on failure.
 */
-func AVHwframeCtxAlloc(deviceCtx *AVBufferRef) *AVBufferRef {
+func AVHWFrameCtxAlloc(deviceCtx *AVBufferRef) *AVBufferRef {
 	var tmpdeviceCtx *C.AVBufferRef
 	if deviceCtx != nil {
 		tmpdeviceCtx = deviceCtx.ptr
@@ -8889,7 +8889,7 @@ func AVHwframeCtxAlloc(deviceCtx *AVBufferRef) *AVBufferRef {
 
 // --- Function av_hwframe_ctx_init ---
 
-// AVHwframeCtxInit wraps av_hwframe_ctx_init.
+// AVHWFrameCtxInit wraps av_hwframe_ctx_init.
 /*
   Finalize the context before use. This function must be called after the
   context is filled with all the required information and before it is attached
@@ -8898,7 +8898,7 @@ func AVHwframeCtxAlloc(deviceCtx *AVBufferRef) *AVBufferRef {
   @param ref a reference to the AVHWFramesContext
   @return 0 on success, a negative AVERROR code on failure
 */
-func AVHwframeCtxInit(ref *AVBufferRef) (int, error) {
+func AVHWFrameCtxInit(ref *AVBufferRef) (int, error) {
 	var tmpref *C.AVBufferRef
 	if ref != nil {
 		tmpref = ref.ptr
@@ -8909,7 +8909,7 @@ func AVHwframeCtxInit(ref *AVBufferRef) (int, error) {
 
 // --- Function av_hwframe_get_buffer ---
 
-// AVHwframeGetBuffer wraps av_hwframe_get_buffer.
+// AVHWFrameGetBuffer wraps av_hwframe_get_buffer.
 /*
   Allocate a new frame attached to the given AVHWFramesContext.
 
@@ -8919,7 +8919,7 @@ func AVHwframeCtxInit(ref *AVBufferRef) (int, error) {
   @param flags currently unused, should be set to zero
   @return 0 on success, a negative AVERROR code on failure
 */
-func AVHwframeGetBuffer(hwframeCtx *AVBufferRef, frame *AVFrame, flags int) (int, error) {
+func AVHWFrameGetBuffer(hwframeCtx *AVBufferRef, frame *AVFrame, flags int) (int, error) {
 	var tmphwframeCtx *C.AVBufferRef
 	if hwframeCtx != nil {
 		tmphwframeCtx = hwframeCtx.ptr
@@ -8934,7 +8934,7 @@ func AVHwframeGetBuffer(hwframeCtx *AVBufferRef, frame *AVFrame, flags int) (int
 
 // --- Function av_hwframe_transfer_data ---
 
-// AVHwframeTransferData wraps av_hwframe_transfer_data.
+// AVHWFrameTransferData wraps av_hwframe_transfer_data.
 /*
   Copy data to or from a hw surface. At least one of dst/src must have an
   AVHWFramesContext attached.
@@ -8964,7 +8964,7 @@ func AVHwframeGetBuffer(hwframeCtx *AVBufferRef, frame *AVFrame, flags int) (int
   @param flags currently unused, should be set to zero
   @return 0 on success, a negative AVERROR error code on failure.
 */
-func AVHwframeTransferData(dst *AVFrame, src *AVFrame, flags int) (int, error) {
+func AVHWFrameTransferData(dst *AVFrame, src *AVFrame, flags int) (int, error) {
 	var tmpdst *C.AVFrame
 	if dst != nil {
 		tmpdst = dst.ptr
@@ -8983,7 +8983,7 @@ func AVHwframeTransferData(dst *AVFrame, src *AVFrame, flags int) (int, error) {
 
 // --- Function av_hwdevice_hwconfig_alloc ---
 
-// AVHwdeviceHwconfigAlloc wraps av_hwdevice_hwconfig_alloc.
+// AVHWDeviceHWConfigAlloc wraps av_hwdevice_hwconfig_alloc.
 /*
   Allocate a HW-specific configuration structure for a given HW device.
   After use, the user must free all members as required by the specific
@@ -8994,7 +8994,7 @@ func AVHwframeTransferData(dst *AVFrame, src *AVFrame, flags int) (int, error) {
   @return The newly created HW-specific configuration structure on
           success or NULL on failure.
 */
-func AVHwdeviceHwconfigAlloc(deviceCtx *AVBufferRef) unsafe.Pointer {
+func AVHWDeviceHWConfigAlloc(deviceCtx *AVBufferRef) unsafe.Pointer {
 	var tmpdeviceCtx *C.AVBufferRef
 	if deviceCtx != nil {
 		tmpdeviceCtx = deviceCtx.ptr
@@ -9005,7 +9005,7 @@ func AVHwdeviceHwconfigAlloc(deviceCtx *AVBufferRef) unsafe.Pointer {
 
 // --- Function av_hwdevice_get_hwframe_constraints ---
 
-// AVHwdeviceGetHwframeConstraints wraps av_hwdevice_get_hwframe_constraints.
+// AVHWDeviceGetHWFrameConstraints wraps av_hwdevice_get_hwframe_constraints.
 /*
   Get the constraints on HW frames given a device and the HW-specific
   configuration to be used with that device.  If no HW-specific
@@ -9018,7 +9018,7 @@ func AVHwdeviceHwconfigAlloc(deviceCtx *AVBufferRef) unsafe.Pointer {
   @return AVHWFramesConstraints structure describing the constraints
           on the device, or NULL if not available.
 */
-func AVHwdeviceGetHwframeConstraints(ref *AVBufferRef, hwconfig unsafe.Pointer) *AVHWFramesConstraints {
+func AVHWDeviceGetHWFrameConstraints(ref *AVBufferRef, hwconfig unsafe.Pointer) *AVHWFramesConstraints {
 	var tmpref *C.AVBufferRef
 	if ref != nil {
 		tmpref = ref.ptr
@@ -9033,13 +9033,13 @@ func AVHwdeviceGetHwframeConstraints(ref *AVBufferRef, hwconfig unsafe.Pointer) 
 
 // --- Function av_hwframe_constraints_free ---
 
-// AVHwframeConstraintsFree wraps av_hwframe_constraints_free.
+// AVHWFrameConstraintsFree wraps av_hwframe_constraints_free.
 /*
   Free an AVHWFrameConstraints structure.
 
   @param constraints The (filled or unfilled) AVHWFrameConstraints structure.
 */
-func AVHwframeConstraintsFree(constraints **AVHWFramesConstraints) {
+func AVHWFrameConstraintsFree(constraints **AVHWFramesConstraints) {
 	var ptrconstraints **C.AVHWFramesConstraints
 	var tmpconstraints *C.AVHWFramesConstraints
 	var oldTmpconstraints *C.AVHWFramesConstraints
@@ -9063,7 +9063,7 @@ func AVHwframeConstraintsFree(constraints **AVHWFramesConstraints) {
 
 // --- Function av_hwframe_map ---
 
-// AVHwframeMap wraps av_hwframe_map.
+// AVHWFrameMap wraps av_hwframe_map.
 /*
   Map a hardware frame.
 
@@ -9104,7 +9104,7 @@ func AVHwframeConstraintsFree(constraints **AVHWFramesConstraints) {
   @param flags Some combination of AV_HWFRAME_MAP_* flags.
   @return Zero on success, negative AVERROR code on failure.
 */
-func AVHwframeMap(dst *AVFrame, src *AVFrame, flags int) (int, error) {
+func AVHWFrameMap(dst *AVFrame, src *AVFrame, flags int) (int, error) {
 	var tmpdst *C.AVFrame
 	if dst != nil {
 		tmpdst = dst.ptr
@@ -9119,7 +9119,7 @@ func AVHwframeMap(dst *AVFrame, src *AVFrame, flags int) (int, error) {
 
 // --- Function av_hwframe_ctx_create_derived ---
 
-// AVHwframeCtxCreateDerived wraps av_hwframe_ctx_create_derived.
+// AVHWFrameCtxCreateDerived wraps av_hwframe_ctx_create_derived.
 /*
   Create and initialise an AVHWFramesContext as a mapping of another existing
   AVHWFramesContext on a different device.
@@ -9138,7 +9138,7 @@ func AVHwframeMap(dst *AVFrame, src *AVFrame, flags int) (int, error) {
                 in the derived device.
   @return       Zero on success, negative AVERROR code on failure.
 */
-func AVHwframeCtxCreateDerived(derivedFrameCtx **AVBufferRef, format AVPixelFormat, derivedDeviceCtx *AVBufferRef, sourceFrameCtx *AVBufferRef, flags int) (int, error) {
+func AVHWFrameCtxCreateDerived(derivedFrameCtx **AVBufferRef, format AVPixelFormat, derivedDeviceCtx *AVBufferRef, sourceFrameCtx *AVBufferRef, flags int) (int, error) {
 	var ptrderivedFrameCtx **C.AVBufferRef
 	var tmpderivedFrameCtx *C.AVBufferRef
 	var oldTmpderivedFrameCtx *C.AVBufferRef

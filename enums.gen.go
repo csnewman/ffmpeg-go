@@ -261,8 +261,8 @@ const (
 	AVCodecIdAsv1 AVCodecID = C.AV_CODEC_ID_ASV1
 	// AVCodecIdAsv2 wraps AV_CODEC_ID_ASV2.
 	AVCodecIdAsv2 AVCodecID = C.AV_CODEC_ID_ASV2
-	// AVCodecIdFfv1 wraps AV_CODEC_ID_FFV1.
-	AVCodecIdFfv1 AVCodecID = C.AV_CODEC_ID_FFV1
+	// AVCodecIdFFV1 wraps AV_CODEC_ID_FFV1.
+	AVCodecIdFFV1 AVCodecID = C.AV_CODEC_ID_FFV1
 	// AVCodecId4Xm wraps AV_CODEC_ID_4XM.
 	AVCodecId4Xm AVCodecID = C.AV_CODEC_ID_4XM
 	// AVCodecIdVcr1 wraps AV_CODEC_ID_VCR1.
@@ -329,8 +329,8 @@ const (
 	AVCodecIdPgmyuv AVCodecID = C.AV_CODEC_ID_PGMYUV
 	// AVCodecIdPam wraps AV_CODEC_ID_PAM.
 	AVCodecIdPam AVCodecID = C.AV_CODEC_ID_PAM
-	// AVCodecIdFfvhuff wraps AV_CODEC_ID_FFVHUFF.
-	AVCodecIdFfvhuff AVCodecID = C.AV_CODEC_ID_FFVHUFF
+	// AVCodecIdFFVhuff wraps AV_CODEC_ID_FFVHUFF.
+	AVCodecIdFFVhuff AVCodecID = C.AV_CODEC_ID_FFVHUFF
 	// AVCodecIdRv30 wraps AV_CODEC_ID_RV30.
 	AVCodecIdRv30 AVCodecID = C.AV_CODEC_ID_RV30
 	// AVCodecIdRv40 wraps AV_CODEC_ID_RV40.
@@ -359,8 +359,8 @@ const (
 	AVCodecIdMmvideo AVCodecID = C.AV_CODEC_ID_MMVIDEO
 	// AVCodecIdZmbv wraps AV_CODEC_ID_ZMBV.
 	AVCodecIdZmbv AVCodecID = C.AV_CODEC_ID_ZMBV
-	// AVCodecIdAvs wraps AV_CODEC_ID_AVS.
-	AVCodecIdAvs AVCodecID = C.AV_CODEC_ID_AVS
+	// AVCodecIdAVS wraps AV_CODEC_ID_AVS.
+	AVCodecIdAVS AVCodecID = C.AV_CODEC_ID_AVS
 	// AVCodecIdSmackvideo wraps AV_CODEC_ID_SMACKVIDEO.
 	AVCodecIdSmackvideo AVCodecID = C.AV_CODEC_ID_SMACKVIDEO
 	// AVCodecIdNuv wraps AV_CODEC_ID_NUV.
@@ -579,24 +579,24 @@ const (
 	AVCodecIdScreenpresso AVCodecID = C.AV_CODEC_ID_SCREENPRESSO
 	// AVCodecIdRscc wraps AV_CODEC_ID_RSCC.
 	AVCodecIdRscc AVCodecID = C.AV_CODEC_ID_RSCC
-	// AVCodecIdAvs2 wraps AV_CODEC_ID_AVS2.
-	AVCodecIdAvs2 AVCodecID = C.AV_CODEC_ID_AVS2
+	// AVCodecIdAVS2 wraps AV_CODEC_ID_AVS2.
+	AVCodecIdAVS2 AVCodecID = C.AV_CODEC_ID_AVS2
 	// AVCodecIdPgx wraps AV_CODEC_ID_PGX.
 	AVCodecIdPgx AVCodecID = C.AV_CODEC_ID_PGX
-	// AVCodecIdAvs3 wraps AV_CODEC_ID_AVS3.
-	AVCodecIdAvs3 AVCodecID = C.AV_CODEC_ID_AVS3
+	// AVCodecIdAVS3 wraps AV_CODEC_ID_AVS3.
+	AVCodecIdAVS3 AVCodecID = C.AV_CODEC_ID_AVS3
 	// AVCodecIdMsp2 wraps AV_CODEC_ID_MSP2.
 	AVCodecIdMsp2 AVCodecID = C.AV_CODEC_ID_MSP2
 	// AVCodecIdVvc wraps AV_CODEC_ID_VVC.
 	AVCodecIdVvc AVCodecID = C.AV_CODEC_ID_VVC
 	// AVCodecIdY41P wraps AV_CODEC_ID_Y41P.
 	AVCodecIdY41P AVCodecID = C.AV_CODEC_ID_Y41P
-	// AVCodecIdAvrp wraps AV_CODEC_ID_AVRP.
-	AVCodecIdAvrp AVCodecID = C.AV_CODEC_ID_AVRP
+	// AVCodecIdAVRp wraps AV_CODEC_ID_AVRP.
+	AVCodecIdAVRp AVCodecID = C.AV_CODEC_ID_AVRP
 	// AVCodecId012V wraps AV_CODEC_ID_012V.
 	AVCodecId012V AVCodecID = C.AV_CODEC_ID_012V
-	// AVCodecIdAvui wraps AV_CODEC_ID_AVUI.
-	AVCodecIdAvui AVCodecID = C.AV_CODEC_ID_AVUI
+	// AVCodecIdAVUi wraps AV_CODEC_ID_AVUI.
+	AVCodecIdAVUi AVCodecID = C.AV_CODEC_ID_AVUI
 	// AVCodecIdAyuv wraps AV_CODEC_ID_AYUV.
 	AVCodecIdAyuv AVCodecID = C.AV_CODEC_ID_AYUV
 	// AVCodecIdTargaY216 wraps AV_CODEC_ID_TARGA_Y216.
@@ -607,8 +607,8 @@ const (
 	AVCodecIdV408 AVCodecID = C.AV_CODEC_ID_V408
 	// AVCodecIdYuv4 wraps AV_CODEC_ID_YUV4.
 	AVCodecIdYuv4 AVCodecID = C.AV_CODEC_ID_YUV4
-	// AVCodecIdAvrn wraps AV_CODEC_ID_AVRN.
-	AVCodecIdAvrn AVCodecID = C.AV_CODEC_ID_AVRN
+	// AVCodecIdAVRn wraps AV_CODEC_ID_AVRN.
+	AVCodecIdAVRn AVCodecID = C.AV_CODEC_ID_AVRN
 	// AVCodecIdCpia wraps AV_CODEC_ID_CPIA.
 	AVCodecIdCpia AVCodecID = C.AV_CODEC_ID_CPIA
 	// AVCodecIdXface wraps AV_CODEC_ID_XFACE.
@@ -647,8 +647,8 @@ const (
 	AVCodecIdClearvideo AVCodecID = C.AV_CODEC_ID_CLEARVIDEO
 	// AVCodecIdXpm wraps AV_CODEC_ID_XPM.
 	AVCodecIdXpm AVCodecID = C.AV_CODEC_ID_XPM
-	// AVCodecIdAv1 wraps AV_CODEC_ID_AV1.
-	AVCodecIdAv1 AVCodecID = C.AV_CODEC_ID_AV1
+	// AVCodecIdAV1 wraps AV_CODEC_ID_AV1.
+	AVCodecIdAV1 AVCodecID = C.AV_CODEC_ID_AV1
 	// AVCodecIdBitpacked wraps AV_CODEC_ID_BITPACKED.
 	AVCodecIdBitpacked AVCodecID = C.AV_CODEC_ID_BITPACKED
 	// AVCodecIdMscc wraps AV_CODEC_ID_MSCC.
@@ -1211,14 +1211,14 @@ const (
 	AVCodecIdMetasound AVCodecID = C.AV_CODEC_ID_METASOUND
 	// AVCodecIdPafAudio wraps AV_CODEC_ID_PAF_AUDIO.
 	AVCodecIdPafAudio AVCodecID = C.AV_CODEC_ID_PAF_AUDIO
-	// AVCodecIdOn2Avc wraps AV_CODEC_ID_ON2AVC.
-	AVCodecIdOn2Avc AVCodecID = C.AV_CODEC_ID_ON2AVC
+	// AVCodecIdOn2AVC wraps AV_CODEC_ID_ON2AVC.
+	AVCodecIdOn2AVC AVCodecID = C.AV_CODEC_ID_ON2AVC
 	// AVCodecIdDssSp wraps AV_CODEC_ID_DSS_SP.
 	AVCodecIdDssSp AVCodecID = C.AV_CODEC_ID_DSS_SP
 	// AVCodecIdCodec2 wraps AV_CODEC_ID_CODEC2.
 	AVCodecIdCodec2 AVCodecID = C.AV_CODEC_ID_CODEC2
-	// AVCodecIdFfwavesynth wraps AV_CODEC_ID_FFWAVESYNTH.
-	AVCodecIdFfwavesynth AVCodecID = C.AV_CODEC_ID_FFWAVESYNTH
+	// AVCodecIdFFWavesynth wraps AV_CODEC_ID_FFWAVESYNTH.
+	AVCodecIdFFWavesynth AVCodecID = C.AV_CODEC_ID_FFWAVESYNTH
 	// AVCodecIdSonic wraps AV_CODEC_ID_SONIC.
 	AVCodecIdSonic AVCodecID = C.AV_CODEC_ID_SONIC
 	// AVCodecIdSonicLs wraps AV_CODEC_ID_SONIC_LS.
@@ -1395,14 +1395,14 @@ const (
 	   stream (only used by libavformat)
 	*/
 	AVCodecIdMpeg4Systems AVCodecID = C.AV_CODEC_ID_MPEG4SYSTEMS
-	// AVCodecIdFfmetadata wraps AV_CODEC_ID_FFMETADATA.
+	// AVCodecIdFFMetadata wraps AV_CODEC_ID_FFMETADATA.
 	//
 	//	Dummy codec for streams containing only metadata information.
-	AVCodecIdFfmetadata AVCodecID = C.AV_CODEC_ID_FFMETADATA
-	// AVCodecIdWrappedAvframe wraps AV_CODEC_ID_WRAPPED_AVFRAME.
+	AVCodecIdFFMetadata AVCodecID = C.AV_CODEC_ID_FFMETADATA
+	// AVCodecIdWrappedAVFrame wraps AV_CODEC_ID_WRAPPED_AVFRAME.
 	//
 	//	Passthrough codec, AVFrames wrapped in AVPacket
-	AVCodecIdWrappedAvframe AVCodecID = C.AV_CODEC_ID_WRAPPED_AVFRAME
+	AVCodecIdWrappedAVFrame AVCodecID = C.AV_CODEC_ID_WRAPPED_AVFRAME
 	// AVCodecIdVnull wraps AV_CODEC_ID_VNULL.
 	/*
 	   Dummy null video codec, useful mainly for development and debugging.
@@ -2906,30 +2906,30 @@ func AllocAVHWDeviceTypeArray(size uint64) *Array[AVHWDeviceType] {
 }
 
 const (
-	// AVHwdeviceTypeNone wraps AV_HWDEVICE_TYPE_NONE.
-	AVHwdeviceTypeNone AVHWDeviceType = C.AV_HWDEVICE_TYPE_NONE
-	// AVHwdeviceTypeVdpau wraps AV_HWDEVICE_TYPE_VDPAU.
-	AVHwdeviceTypeVdpau AVHWDeviceType = C.AV_HWDEVICE_TYPE_VDPAU
-	// AVHwdeviceTypeCuda wraps AV_HWDEVICE_TYPE_CUDA.
-	AVHwdeviceTypeCuda AVHWDeviceType = C.AV_HWDEVICE_TYPE_CUDA
-	// AVHwdeviceTypeVaapi wraps AV_HWDEVICE_TYPE_VAAPI.
-	AVHwdeviceTypeVaapi AVHWDeviceType = C.AV_HWDEVICE_TYPE_VAAPI
-	// AVHwdeviceTypeDxva2 wraps AV_HWDEVICE_TYPE_DXVA2.
-	AVHwdeviceTypeDxva2 AVHWDeviceType = C.AV_HWDEVICE_TYPE_DXVA2
-	// AVHwdeviceTypeQsv wraps AV_HWDEVICE_TYPE_QSV.
-	AVHwdeviceTypeQsv AVHWDeviceType = C.AV_HWDEVICE_TYPE_QSV
-	// AVHwdeviceTypeVideotoolbox wraps AV_HWDEVICE_TYPE_VIDEOTOOLBOX.
-	AVHwdeviceTypeVideotoolbox AVHWDeviceType = C.AV_HWDEVICE_TYPE_VIDEOTOOLBOX
-	// AVHwdeviceTypeD3D11Va wraps AV_HWDEVICE_TYPE_D3D11VA.
-	AVHwdeviceTypeD3D11Va AVHWDeviceType = C.AV_HWDEVICE_TYPE_D3D11VA
-	// AVHwdeviceTypeDrm wraps AV_HWDEVICE_TYPE_DRM.
-	AVHwdeviceTypeDrm AVHWDeviceType = C.AV_HWDEVICE_TYPE_DRM
-	// AVHwdeviceTypeOpencl wraps AV_HWDEVICE_TYPE_OPENCL.
-	AVHwdeviceTypeOpencl AVHWDeviceType = C.AV_HWDEVICE_TYPE_OPENCL
-	// AVHwdeviceTypeMediacodec wraps AV_HWDEVICE_TYPE_MEDIACODEC.
-	AVHwdeviceTypeMediacodec AVHWDeviceType = C.AV_HWDEVICE_TYPE_MEDIACODEC
-	// AVHwdeviceTypeVulkan wraps AV_HWDEVICE_TYPE_VULKAN.
-	AVHwdeviceTypeVulkan AVHWDeviceType = C.AV_HWDEVICE_TYPE_VULKAN
+	// AVHWDeviceTypeNone wraps AV_HWDEVICE_TYPE_NONE.
+	AVHWDeviceTypeNone AVHWDeviceType = C.AV_HWDEVICE_TYPE_NONE
+	// AVHWDeviceTypeVdpau wraps AV_HWDEVICE_TYPE_VDPAU.
+	AVHWDeviceTypeVdpau AVHWDeviceType = C.AV_HWDEVICE_TYPE_VDPAU
+	// AVHWDeviceTypeCuda wraps AV_HWDEVICE_TYPE_CUDA.
+	AVHWDeviceTypeCuda AVHWDeviceType = C.AV_HWDEVICE_TYPE_CUDA
+	// AVHWDeviceTypeVaapi wraps AV_HWDEVICE_TYPE_VAAPI.
+	AVHWDeviceTypeVaapi AVHWDeviceType = C.AV_HWDEVICE_TYPE_VAAPI
+	// AVHWDeviceTypeDxva2 wraps AV_HWDEVICE_TYPE_DXVA2.
+	AVHWDeviceTypeDxva2 AVHWDeviceType = C.AV_HWDEVICE_TYPE_DXVA2
+	// AVHWDeviceTypeQsv wraps AV_HWDEVICE_TYPE_QSV.
+	AVHWDeviceTypeQsv AVHWDeviceType = C.AV_HWDEVICE_TYPE_QSV
+	// AVHWDeviceTypeVideotoolbox wraps AV_HWDEVICE_TYPE_VIDEOTOOLBOX.
+	AVHWDeviceTypeVideotoolbox AVHWDeviceType = C.AV_HWDEVICE_TYPE_VIDEOTOOLBOX
+	// AVHWDeviceTypeD3D11Va wraps AV_HWDEVICE_TYPE_D3D11VA.
+	AVHWDeviceTypeD3D11Va AVHWDeviceType = C.AV_HWDEVICE_TYPE_D3D11VA
+	// AVHWDeviceTypeDrm wraps AV_HWDEVICE_TYPE_DRM.
+	AVHWDeviceTypeDrm AVHWDeviceType = C.AV_HWDEVICE_TYPE_DRM
+	// AVHWDeviceTypeOpencl wraps AV_HWDEVICE_TYPE_OPENCL.
+	AVHWDeviceTypeOpencl AVHWDeviceType = C.AV_HWDEVICE_TYPE_OPENCL
+	// AVHWDeviceTypeMediacodec wraps AV_HWDEVICE_TYPE_MEDIACODEC.
+	AVHWDeviceTypeMediacodec AVHWDeviceType = C.AV_HWDEVICE_TYPE_MEDIACODEC
+	// AVHWDeviceTypeVulkan wraps AV_HWDEVICE_TYPE_VULKAN.
+	AVHWDeviceTypeVulkan AVHWDeviceType = C.AV_HWDEVICE_TYPE_VULKAN
 )
 
 // --- Enum AVHWFrameTransferDirection ---
@@ -2963,14 +2963,14 @@ func AllocAVHWFrameTransferDirectionArray(size uint64) *Array[AVHWFrameTransferD
 }
 
 const (
-	// AVHwframeTransferDirectionFrom wraps AV_HWFRAME_TRANSFER_DIRECTION_FROM.
+	// AVHWFrameTransferDirectionFrom wraps AV_HWFRAME_TRANSFER_DIRECTION_FROM.
 	//
 	//	Transfer the data from the queried hw frame.
-	AVHwframeTransferDirectionFrom AVHWFrameTransferDirection = C.AV_HWFRAME_TRANSFER_DIRECTION_FROM
-	// AVHwframeTransferDirectionTo wraps AV_HWFRAME_TRANSFER_DIRECTION_TO.
+	AVHWFrameTransferDirectionFrom AVHWFrameTransferDirection = C.AV_HWFRAME_TRANSFER_DIRECTION_FROM
+	// AVHWFrameTransferDirectionTo wraps AV_HWFRAME_TRANSFER_DIRECTION_TO.
 	//
 	//	Transfer the data to the queried hw frame.
-	AVHwframeTransferDirectionTo AVHWFrameTransferDirection = C.AV_HWFRAME_TRANSFER_DIRECTION_TO
+	AVHWFrameTransferDirectionTo AVHWFrameTransferDirection = C.AV_HWFRAME_TRANSFER_DIRECTION_TO
 )
 
 // --- Enum AVClassCategory ---

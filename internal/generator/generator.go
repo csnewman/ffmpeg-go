@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"reflect"
+	"regexp"
 	"slices"
 	"strings"
 
@@ -1067,57 +1068,61 @@ func convParamName(val string) string {
 	return val
 }
 
-func (g *Generator) convCamel(val string) string {
-	hasLIB := strings.HasPrefix(val, "lib") || strings.HasPrefix(val, "LIB")
+var acronyms = []string{
+	"av", "hw", "lib", "ff", "io", "api",
+}
 
-	if hasLIB {
-		val = strings.TrimPrefix(val, "lib")
-		val = strings.TrimPrefix(val, "LIB")
+func (g *Generator) convPart(val string) string {
+	val = strings.ToLower(val)
+
+	removed := true
+
+	var prefixes []string
+
+	for removed {
+		removed = false
+
+		for _, acronym := range acronyms {
+			if strings.HasPrefix(val, acronym) {
+				val = strings.TrimPrefix(val, acronym)
+				prefixes = append(prefixes, acronym)
+
+				removed = true
+			}
+		}
 	}
 
-	hasFF := strings.HasPrefix(val, "ff") || strings.HasPrefix(val, "FF")
-
-	if hasFF {
-		val = strings.TrimPrefix(val, "ff")
-		val = strings.TrimPrefix(val, "FF")
+	if len(val) > 0 {
+		a := val[0:1]
+		b := val[1:]
+		val = strings.ToUpper(a) + b
 	}
 
-	hasAV := strings.HasPrefix(val, "av") || strings.HasPrefix(val, "AV")
-
-	if hasAV {
-		val = strings.TrimPrefix(val, "av")
-		val = strings.TrimPrefix(val, "AV")
-	}
-
-	hasIO := strings.HasPrefix(val, "io") || strings.HasPrefix(val, "IO")
-
-	if hasIO {
-		val = strings.TrimPrefix(val, "io")
-		val = strings.TrimPrefix(val, "IO")
-	}
-
-	val = strcase.ToCamel(val)
-
-	if hasIO {
-		val = fmt.Sprintf("IO%v", val)
-	}
-
-	if hasAV {
-		val = fmt.Sprintf("AV%v", val)
-	}
-
-	if hasFF {
-		val = fmt.Sprintf("FF%v", val)
-	}
-
-	if hasLIB {
-		val = fmt.Sprintf("Lib%v", val)
-	}
-
-	// Temporary hack
-	if _, ok := g.input.structs[val]; ok {
-		val = fmt.Sprintf("%v_", val)
+	for i := len(prefixes) - 1; i >= 0; i-- {
+		val = strings.ToUpper(prefixes[i]) + val
 	}
 
 	return val
+}
+
+var digitRegex = regexp.MustCompile(`(\d)`)
+
+func (g *Generator) convCamel(val string) string {
+	divs := digitRegex.ReplaceAllString(val, "${1}_")
+	parts := strings.Split(divs, "_")
+
+	var newParts []string
+
+	for _, part := range parts {
+		newParts = append(newParts, g.convPart(part))
+	}
+
+	res := strings.Join(newParts, "")
+
+	// Temporary hack
+	if _, ok := g.input.structs[res]; ok {
+		res = fmt.Sprintf("%v_", res)
+	}
+
+	return res
 }
