@@ -9,5 +9,5 @@ import (
 
 func TestVersions(t *testing.T) {
 	assert.Equal(t, 3940198, int(ffmpeg.AVCodecVersion()), "AVCodec version should match expected")
-	assert.Equal(t, ffmpeg.LibAVCodecVersionInt, int(ffmpeg.AVCodecVersion()), "AVCodec version func and const should match")
+	assert.Equal(t, ffmpeg.LIBAVCodecVersionInt, int(ffmpeg.AVCodecVersion()), "AVCodec version func and const should match")
 }
