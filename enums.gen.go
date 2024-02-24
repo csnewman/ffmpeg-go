@@ -2475,8 +2475,8 @@ const (
 	AVChanAmbisonicBase AVChannel = C.AV_CHAN_AMBISONIC_BASE
 	// AVChanAmbisonicEnd wraps AV_CHAN_AMBISONIC_END.
 	/*
-	   // leave space for 1024 ids, which correspond to maximum order-32 harmonics,
-	   // which should be enough for the foreseeable use cases
+	   leave space for 1024 ids, which correspond to maximum order-32 harmonics,
+	   which should be enough for the foreseeable use cases
 	*/
 	AVChanAmbisonicEnd AVChannel = C.AV_CHAN_AMBISONIC_END
 )
@@ -3109,16 +3109,16 @@ const (
 
 	   @code{.c}
 	   av_rescale_rnd(3, 1, 2, AV_ROUND_UP | AV_ROUND_PASS_MINMAX);
-	   // Rescaling 3:
-	   //     Calculating 3 * 1 / 2
-	   //     3 / 2 is rounded up to 2
-	   //     => 2
+	   Rescaling 3:
+	       Calculating 3 * 1 / 2
+	       3 / 2 is rounded up to 2
+	       => 2
 
 	   av_rescale_rnd(AV_NOPTS_VALUE, 1, 2, AV_ROUND_UP | AV_ROUND_PASS_MINMAX);
-	   // Rescaling AV_NOPTS_VALUE:
-	   //     AV_NOPTS_VALUE == INT64_MIN
-	   //     AV_NOPTS_VALUE is passed through
-	   //     => AV_NOPTS_VALUE
+	   Rescaling AV_NOPTS_VALUE:
+	       AV_NOPTS_VALUE == INT64_MIN
+	       AV_NOPTS_VALUE is passed through
+	       => AV_NOPTS_VALUE
 	   @endcode
 	*/
 	AVRoundPassMinmax AVRounding = C.AV_ROUND_PASS_MINMAX
@@ -3565,7 +3565,7 @@ const (
 	AVPixFmtGbrp AVPixelFormat = C.AV_PIX_FMT_GBRP
 	// AVPixFmtGbr24P wraps AV_PIX_FMT_GBR24P.
 	//
-	//	// alias for #AV_PIX_FMT_GBRP
+	//	alias for #AV_PIX_FMT_GBRP
 	AVPixFmtGbr24P AVPixelFormat = C.AV_PIX_FMT_GBR24P
 	// AVPixFmtGbrp9Be wraps AV_PIX_FMT_GBRP9BE.
 	//

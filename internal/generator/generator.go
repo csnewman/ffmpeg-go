@@ -646,6 +646,11 @@ func (g *Generator) generateStructs() {
 			}
 
 			o.Commentf("%v gets the %v field.", fName, field.Name)
+
+			if field.Comment != "" {
+				o.Comment(field.Comment)
+			}
+
 			o.Func().
 				Params(jen.Id("s").Op("*").Id(goName)).
 				Id(fName).
@@ -657,6 +662,11 @@ func (g *Generator) generateStructs() {
 
 			if len(setBody) > 0 {
 				o.Commentf("Set%v sets the %v field.", fName, field.Name)
+
+				if field.Comment != "" {
+					o.Comment(field.Comment)
+				}
+
 				o.Func().
 					Params(jen.Id("s").Op("*").Id(goName)).
 					Id(fmt.Sprintf("Set%v", fName)).

@@ -53,6 +53,7 @@ type Field struct {
 	Name     string
 	Type     Type
 	BitWidth int32
+	Comment  string
 }
 
 type Enum struct {

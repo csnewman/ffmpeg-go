@@ -292,6 +292,8 @@ func processComment(in string) string {
 		s = strings.TrimPrefix(s, "* ")
 		s = strings.TrimPrefix(s, "/// ")
 		s = strings.TrimPrefix(s, "///")
+		s = strings.TrimPrefix(s, "// ")
+		s = strings.TrimPrefix(s, "//")
 
 		if strings.HasPrefix(s, "/**") {
 			rebuilt = nil
@@ -501,6 +503,8 @@ func (p *Parser) parseStruct(indent string, c clang.Cursor, typedef bool) {
 				log.Fatal("no field name")
 			}
 
+			cmt := processComment(cursor.RawCommentText())
+
 			fIndent := fmt.Sprintf("%v[%v]", indent, name)
 
 			ty := p.parseType(fIndent, cursor.Type())
@@ -509,6 +513,7 @@ func (p *Parser) parseStruct(indent string, c clang.Cursor, typedef bool) {
 				Name:     name,
 				Type:     ty,
 				BitWidth: cursor.FieldDeclBitWidth(),
+				Comment:  cmt,
 			})
 		}
 

@@ -9669,14 +9669,14 @@ func AVFree(ptr unsafe.Pointer) {
   @code{.c}
   uint8_t *buf = av_malloc(16);
   av_free(buf);
-  // buf now contains a dangling pointer to freed memory, and accidental
-  // dereference of buf will result in a use-after-free, which may be a
-  // security risk.
+  buf now contains a dangling pointer to freed memory, and accidental
+  dereference of buf will result in a use-after-free, which may be a
+  security risk.
 
   uint8_t *buf = av_malloc(16);
   av_freep(&buf);
-  // buf is now NULL, and accidental dereference will only result in a
-  // NULL-pointer dereference.
+  buf is now NULL, and accidental dereference will only result in a
+  NULL-pointer dereference.
   @endcode
 
   @param ptr Pointer to the pointer to the memory block which should be freed
