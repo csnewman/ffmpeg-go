@@ -19,3 +19,7 @@ func AVOptSetSlice[T any](obj unsafe.Pointer, name *CStr, val []T, searchFlags i
 func (s *AVRational) String() string {
 	return fmt.Sprintf("%v/%v (%v)", s.Num(), s.Den(), s.Num()/s.Den())
 }
+
+func FFIOWFourCC(s *AVIOContext, a uint8, b uint8, c uint8, d uint8) {
+	AVIOWl32(s, uint(a)|(uint(b)<<8)|(uint(c)<<16)|(uint(d)<<24))
+}
