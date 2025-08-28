@@ -9,7 +9,7 @@ require (
 	github.com/iancoleman/strcase v0.3.0
 	github.com/schollz/progressbar/v3 v3.14.2
 	github.com/stretchr/testify v1.8.4
-	github.com/ulikunitz/xz v0.5.11
+	github.com/ulikunitz/xz v0.5.14
 )
 
 require (
